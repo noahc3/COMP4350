@@ -1,7 +1,7 @@
-import { Box, Button, ButtonGroup, Center, Flex, Grid, Icon, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalContent, ModalOverlay, SimpleGrid, Spacer, Spinner, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import { Button, Center, Flex, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Spacer, Spinner, WrapItem } from "@chakra-ui/react";
 import { observer } from "mobx-react"
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
-import { AccountBank, AccountType, IAccount } from "../../models/Account";
+import { IAccount } from "../../models/Account";
 import { AccountCard } from "./AccountCard";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
