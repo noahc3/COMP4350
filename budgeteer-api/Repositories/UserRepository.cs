@@ -8,17 +8,16 @@ namespace BudgeteerAPI.Repositories {
         public UserRepository(BudgeteerDbContext dbContext) : base(dbContext) {
         }
 
-        public async Task<User?> GetUser(User user) {
-            User? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
-            return dbUser == default ? null : dbUser;
+        public async Task<User?> GetUserAsync(User user) {
+            return await GetUserAsync(user.Id);
         }
 
-        public async Task<User?> GetUser(string userId) {
+        public async Task<User?> GetUserAsync(string userId) {
             User? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
             return dbUser == default ? null : dbUser;
         }
 
-        public async Task InsertUser(User user) {
+        public async Task InsertUserAsync(User user) {
             await db.Users.AddAsync(user);
             await db.SaveChangesAsync();
         }

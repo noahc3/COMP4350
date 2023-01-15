@@ -7,10 +7,10 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
 import React from "react";
 import { EditAccountModal } from "./EditAccountModal";
-import { userStore } from "../../stores/UserStore";
+import { accountStore } from "../../stores/AccountStore";
 
 export const AccountsPage = observer(() => {
-    const accounts = userStore.accounts
+    const accounts = accountStore.accounts
     const [showEditModal, setShowEditModal] = React.useState(false)
     const [accountToEdit, setAccountToEdit] = React.useState<IAccount | undefined>(undefined)
     const setShowEditModalWrapper = (showModal: boolean) => {
@@ -18,7 +18,7 @@ export const AccountsPage = observer(() => {
         if (!showModal) setAccountToEdit(undefined)
     }
 
-    React.useEffect(() => {userStore.getAccounts()}, [])
+    React.useEffect(() => {accountStore.getAccounts()}, [])
 
     const cards = accounts?.map((account) => {
         return (

@@ -50,7 +50,8 @@ namespace BudgeteerAPI.Middleware {
 
                             context.SetUserProfile(new UserProfile {
                                 Id = user.Id,
-                                Email = res.Claims[ClaimTypes.Email] as string ?? ""
+                                Email = res.Claims[ClaimTypes.Email] as string ?? "",
+                                User = user
                             });
 
                             isValid = true;

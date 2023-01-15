@@ -11,17 +11,17 @@ namespace BudgeteerAPI.Services {
             this.userRepository = new UserRepository(context);
         }
 
-        public async Task<User?> GetUser(string userId) {
-            return await this.userRepository.GetUser(userId);
+        public async Task<User?> GetUserAsync(string userId) {
+            return await this.userRepository.GetUserAsync(userId);
         }
 
-        public async Task<User?> GetUser(User user) {
-            return await this.userRepository.GetUser(user);
+        public async Task<User?> GetUserAsync(User user) {
+            return await this.userRepository.GetUserAsync(user);
         }
 
-        public async Task<User> CreateUser() {
+        public async Task<User> CreateUserAsync() {
             User user = new User();
-            await this.userRepository.InsertUser(user);
+            await this.userRepository.InsertUserAsync(user);
             return user;
         }
 
@@ -31,10 +31,10 @@ namespace BudgeteerAPI.Services {
             UserAuthLink? ual = await ualService.GetUserAuthLinkAsync(authId, source);
 
             if (ual == null) {
-                user = await CreateUser();
-                await ualService.AddUserAuthLink(user.Id, authId, source);
+                user = await CreateUserAsync();
+                await ualService.AddUserAuthLinkAsync(user.Id, authId, source);
             } else {
-                user = await GetUser(ual.UserId);
+                user = await GetUserAsync(ual.UserId);
             }
 
             if (user == null)

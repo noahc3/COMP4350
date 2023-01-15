@@ -14,13 +14,13 @@ namespace BudgeteerAPI.Services
 
         public async Task<UserAuthLink?> GetUserAuthLinkAsync(string authId, AuthSource authSource)
         {
-            return await this.ualRepository.GetUserAuthLink(authId, authSource);
+            return await this.ualRepository.GetUserAuthLinkAsync(authId, authSource);
         }
 
-        public async Task<UserAuthLink> AddUserAuthLink(string userId, string authId, AuthSource authSource)
+        public async Task<UserAuthLink> AddUserAuthLinkAsync(string userId, string authId, AuthSource authSource)
         {
             UserAuthLink ual = new UserAuthLink() { AuthId = authId, AuthSource = authSource, UserId = userId };
-            await ualRepository.InsertUserAuthLink(ual);
+            await ualRepository.InsertUserAuthLinkAsync(ual);
             return ual;
         }
 

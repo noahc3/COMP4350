@@ -5,7 +5,6 @@ import { IoMdCloudUpload, IoMdSettings } from "react-icons/io";
 import { MdSavings } from "react-icons/md";
 import { HiCreditCard } from "react-icons/hi";
 import { FaMoneyBill } from "react-icons/fa";
-import { AiFillBank } from "react-icons/ai";
 import './AccountCard.scss'
 
 interface IAccountCard {

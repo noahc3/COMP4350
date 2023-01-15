@@ -38,6 +38,7 @@ namespace BudgeteerAPI {
             builder.Services.AddDbContext<BudgeteerDbContext>();
             builder.Services.AddScoped<UserAuthLinkService>();
             builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<AccountService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -46,8 +47,8 @@ namespace BudgeteerAPI {
                 options.AddSecurityDefinition("oidc", scheme);
                 options.OperationFilter<AuthRequirementFilter>(scheme);
             });
-            builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-            builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumMemberConverter()));
+            builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumMemberConverter()));
 
             var app = builder.Build();
 

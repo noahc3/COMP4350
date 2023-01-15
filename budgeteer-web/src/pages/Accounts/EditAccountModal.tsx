@@ -3,7 +3,7 @@ import { reaction } from "mobx";
 import { observer } from "mobx-react"
 import React from "react";
 import { AccountBank, AccountType, IAccount } from "../../models/Account";
-import { userStore } from "../../stores/UserStore";
+import { accountStore } from "../../stores/AccountStore";
 
 interface IEditAccountModal {
     isOpen: boolean;
@@ -53,9 +53,9 @@ export const EditAccountModal = observer(({ isOpen, setIsOpen, accountToEdit }: 
             console.log(account)
     
             if (accountToEdit) {
-                await userStore.updateAccount(account)
+                await accountStore.updateAccount(account)
             } else {
-                await userStore.addAccount(account)
+                await accountStore.addAccount(account)
             }
 
             setIsSaving(false)
@@ -66,7 +66,7 @@ export const EditAccountModal = observer(({ isOpen, setIsOpen, accountToEdit }: 
     const deleteAccount = async () => {
         if (accountToEdit) {
             setIsDeleting(true)
-            await userStore.deleteAccount(accountToEdit)
+            await accountStore.deleteAccount(accountToEdit)
             setIsDeleting(false)
             setIsOpen(false);
         }

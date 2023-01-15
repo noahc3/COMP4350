@@ -8,12 +8,12 @@ namespace BudgeteerAPI.Repositories {
         public UserAuthLinkRepository(BudgeteerDbContext dbContext) : base(dbContext) {
         }
 
-        public async Task<UserAuthLink?> GetUserAuthLink(string authId, AuthSource source) {
+        public async Task<UserAuthLink?> GetUserAuthLinkAsync(string authId, AuthSource source) {
             UserAuthLink? dbUal = await db.UserAuthLinks.FirstOrDefaultAsync(ual => ual.AuthSource == source && ual.AuthId == authId);
             return dbUal == default ? null : dbUal;
         }
 
-        public async Task InsertUserAuthLink(UserAuthLink ual) {
+        public async Task InsertUserAuthLinkAsync(UserAuthLink ual) {
             await db.UserAuthLinks.AddAsync(ual);
             await db.SaveChangesAsync();
         }
