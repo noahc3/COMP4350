@@ -8,5 +8,5 @@
 | 01/21/2023 | 1.5   | Nate    | Added project proposal documentation                                |
 | 01/22/2023 | 0.25  | Cody    | Created issues/milestones in GitHub                                 |
 | 01/22/2023 | 0.25  | Anthony | Brainstormed possible naming conventions for the app                |
-| 01/22/2023 | 0.25  | Nate   | Added dev log                                                        |
+| 01/22/2023 | 0.25  | Nate    | Added dev log                                                       |
 
