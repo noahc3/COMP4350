@@ -34,15 +34,15 @@ Users should be able to create, edit, and destroy threads. Users should also be 
 
 ### Organize Threads
 
-Users should be able to create and subscribe to communities so that they can see related threads in an organized fashion. Community creators should have privileges in the communities that they create.
+Users should be able to create and subscribe to spools so that they can see related threads in an organized fashion. Spool creators should have privileges in the spools that they create.
 
 ### Home Feed
 
-Users should be able to see a personalized feed containing threads from communities that they are subscribed to. Users should be able to sort their feed to maximize their browsing experience.
+Users should be able to see a personalized feed containing threads from spools that they are subscribed to. Users should be able to sort their feed to maximize their browsing experience.
 
-### Community Suggestions
+### Spool Suggestions
 
-Users should have communities suggested to them based on the communities that they are subscribed to. When a user first creates an account they should receive community suggestions based on their interests.
+Users should have spools suggested to them based on the spools that they are already subscribed to. When a user first creates an account they should receive spool suggestions based on their interests.
 
 ### Non-functional Feature
 
@@ -75,16 +75,16 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ### Organize Threads
 
-1. As a user I want to create a community so that I can organize related threads
-2. As a user I want to subscribe to a community so that I can stay up to date with related content
-3. As a moderator I want to have special privileges in a community so that I can ensure content is relevant
+1. As a user I want to create a spool so that I can organize related threads
+2. As a user I want to subscribe to a spool so that I can stay up to date with related content
+3. As a spool creator, I want to be able to give others special privileges over the spool so that I do not have to manage everything alone
 
 ### Home Feed
 
 1. As a user I want to be able to see a personalized feed of threads so that I can browse content easily
 2. As a user I want to be able to sort and filter my feed so that I can adjust which content I see first
 
-### Community Suggestions
+### Spool Suggestions
 
-1. As a user I want to have communities suggested to me based on my interests so that I can subscribe to new communities
-2. As a first-time user I want to receive community suggestions based on my interests so that I can immediately begin exploring
+1. As a user I want to have spools suggested to me based on my interests so that I can subscribe to new spools
+2. As a first-time user I want to receive spool suggestions based on my interests so that I can immediately begin exploring
