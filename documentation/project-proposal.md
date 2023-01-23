@@ -77,7 +77,7 @@ This application should be able to respond to 1000 requests across 100 users per
 
 1. As a user I want to create a community so that I can organize related threads
 2. As a user I want to subscribe to a community so that I can stay up to date with related content
-3. As a community creator I want to have special privileges so that I can moderate that community
+3. As a moderator I want to have special privileges in a community so that I can ensure content is relevant
 
 ### Home Feed
 
