@@ -20,7 +20,7 @@
 
 | Date| Time | Length
 | --- | --- | --- |
-| 21 Jan, 2023 | 11:00-12:00am | 1 hour |
+| 21 Jan, 2023 | 11:00-12:00pm | 1 hour |
 
 **Attendance:** Anthony, Cody, Nathan, Noah
 
