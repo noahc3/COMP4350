@@ -36,3 +36,23 @@
 - Nathan: add meeting and proposal documentation
 - Noah: draw architectural diagram
 - Everyone: critique project proposal
+
+## Meeting 3
+
+| Date| Time | Length
+| --- | --- | --- |
+| 24 Jan, 2023 | 10:30-11:30pm | 1 hour |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Review sprint 1 work
+
+**Notes:**
+- Finalized team name
+
+**Assigned Tasks:**
+- Anthony: add acceptance criteria and time estimates to user stories
+- Cody: meet with TA
+- Nathan: finalize project proposal
+- Noah: update user stories (issues) on GitHub
