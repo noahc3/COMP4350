@@ -123,7 +123,7 @@ This application should be able to respond to 1000 requests across 100 users per
     Points: 18  
 2. As a user I want to subscribe (spin) to a spool so that I can stay up to date with related content  
     AC: Given I am a user who wants to subscribe to a spool  
-        When I click the spin spool button  
+        When I click the subscribe button  
         Then I should expect to see the spool added to my subscriptions and subscription feed  
     Priority: High  
     Points: 16  
@@ -158,7 +158,7 @@ This application should be able to respond to 1000 requests across 100 users per
 ### Spool Suggestions
 
 1. As a user I want to have spools suggested to me based on my interests so that I can subscribe to new spools  
-    AC: Given I am a user who wants to get suggested spools based off interest  
+    AC: Given I am a user who wants to get suggested spools based on my interests 
         When I am browsing Threadit  
         Then I should expect to see accurate suggestions on spools based on my interests  
     Priority: Low  
