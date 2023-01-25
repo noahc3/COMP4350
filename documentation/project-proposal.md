@@ -61,8 +61,8 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ### User Profiles
 
-1. As a new user, I want to create an account so that I can begin exploring Threadit  
-    AC: Given that I want to create an account on Threadit  
+1. As a new user, I want to create an account so that I can begin exploring Threadit and have information saved  
+    AC: Given that I want to create an account on Threadit   
         When I follow the account creation process  
         Then I should have successfully created a new account and gain access to Threadit  
     Priority: High  
@@ -82,14 +82,14 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ### Create And Interact With Threads
 
-1. As a user I want to create a thread so that I can share content with other users  
+1. As a user, I want to be able to create a thread so that I can share my thoughts and views with other users  
     AC: Given I am a user who wants to create a thread  
         When I click the create thread button  
         Then I should be prompted with a thread creation page with the appropriate fields required  
     Priority: High  
     Points: 18  
-2. As a user I want to edit a thread so that I can modify what I have previously shared  
-    AC: Given I am a user who wants to edit a thread    
+2. As a user, I want to be able to edit and delete my own threads so that I can modify what I have previously shared or remove posts that I  have previously shared  
+    AC: Given I am a user who wants to edit a thread      
         When I click on the edit thread button  
         Then I should be brought to a edit thread page where I can adjust my thread to my liking  
     Priority: Medium  
@@ -100,7 +100,7 @@ This application should be able to respond to 1000 requests across 100 users per
         Then I should be prompted to write a comment on the thread  
     Priority: High  
     Points: 16  
-4. As a user I want to upvote or downvote a thread so that I can contribute to what others see  
+4. As a user I want to upvote(stitch) or downvote(rip) a thread so that I can contribute to what others see  
     AC: Given I am a user who wants to upvote or downvote a thread  
         When I click on the upvote or downvote button  
         Then I should expect to see the vote count to change based on input  
@@ -115,15 +115,15 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ### Organize Threads
 
-1. As a user I want to create a spool so that I can organize related threads  
-    AC: Given I am a user who wants to create a spool  
+1. As a user I want to create a spool so that I can organize related threads    
+    AC: Given I am a user who wants to create a spool    
         When I click the create spool button  
         Then I should be redirected to a page where I can add various threads to my spools  
-    Priority: High
-    Points: 18
-2. As a user I want to subscribe to a spool so that I can stay up to date with related content  
+    Priority: High  
+    Points: 18  
+2. As a user I want to subscribe (spin) to a spool so that I can stay up to date with related content  
     AC: Given I am a user who wants to subscribe to a spool  
-        When I click the subscribe on the spool  
+        When I click the spin spool button  
         Then I should expect to see the spool added to my subscriptions and subscription feed  
     Priority: High  
     Points: 16  
@@ -148,6 +148,12 @@ This application should be able to respond to 1000 requests across 100 users per
         Then I should see my feed get sorted and organized in accordance with the selections  
     Priority: Low  
     Points: 10  
+3. As a user, I want to be able to collapse the sidebar so I have more screen space    
+    AC: Given I am a user   
+        When I click into my home page and click the arrow on the menu  
+        the menu should collapse  
+        Priority: Low  
+        Points: 8  
 
 ### Spool Suggestions
 
@@ -157,7 +163,7 @@ This application should be able to respond to 1000 requests across 100 users per
         Then I should expect to see accurate suggestions on spools based on my interests  
     Priority: Low  
     Points: 10  
-2. As a first-time user I want to receive spool suggestions based on my interests so that I can immediately begin exploring  
+2. As a developer, I want users to complete a simple quiz to populate suggested spools with options  
     AC: Given I am a first time user of Threadit  
         When I first log into Threadit  
         Then I should be prompted with a quick quiz to gauge my interests for suggestions, and then see suggestions based off the answers given  
