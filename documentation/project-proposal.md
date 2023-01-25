@@ -158,7 +158,7 @@ This application should be able to respond to 1000 requests across 100 users per
 ### Spool Suggestions
 
 1. As a user I want to have spools suggested to me based on my interests so that I can subscribe to new spools  
-    AC: Given I am a user who wants to get suggested spools based on my interests 
+    AC: Given I am a user who wants to get suggested spools based on my interests  
         When I am browsing Threadit  
         Then I should expect to see accurate suggestions on spools based on my interests  
     Priority: Low  
