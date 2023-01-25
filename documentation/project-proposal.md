@@ -3,7 +3,7 @@
 **Project Name:** Threadit  
 **Instructor:** Shaowei Wang  
 **TA:** Ridham Shah  
-**Group Name:** <insert>  
+**Group Name:** AnonCo  
 **Group Members:**
 - Nathan Poppe
 - Anthony Phung
