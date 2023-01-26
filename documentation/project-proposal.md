@@ -12,11 +12,11 @@
 
 ## Vision
 
-Threadit is a website where anyone can browse and explore content related to their interests. Threadit spans a wide variety of communities including sports, entertainment and politics. 
+Introducing **Threadit**, the newest social media platform designed to share ideas, engage in thoughtful discussions, and connect with others throughout the world. Spanning a wide variety of communities including sports, entertainment, and politics, Threadit is the perfect destination for you to stay connected!
 
 ## Project Summary
 
-As the Threadit implies, users create threads (simple posts) about a particular subject in order to discuss and interact with other interested parties. Users can also subscribe to communities to receive popular threads in their personalized home feed.
+As the name **Threadit** implies, users can post "threads" discussing any subject. Threads are grouped into "spools" that allow users to discover and connect with like-minded individuals on a wide variety of topics. If you come across a thread you like, use the "stitch" system to help others see the content quickly and easily. And when you come across a post that doesn't measure up, the "rip" system allows you to downvote it with ease.
 
 ## Stakeholders
 
@@ -48,14 +48,13 @@ Users should have spools suggested to them based on the spools that they are alr
 
 This application should be able to respond to 1000 requests across 100 users per minute concurrently.
 
-
 ## Technologies
 
-- .NET
-- React
-- Postgres
-- GitHub Actions
-- More?
+- .NET: backend
+- React: frontend
+- Postgres: database
+- GitHub Actions: CI/CD
+- GitHub Projects: project management
 
 ## User Stories
 
