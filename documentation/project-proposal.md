@@ -12,15 +12,24 @@
 
 ## Vision
 
-Introducing **Threadit**, the newest social media platform designed to share ideas, engage in thoughtful discussions, and connect with others throughout the world. Spanning a wide variety of communities including sports, entertainment, and politics, Threadit is the perfect destination for you to stay connected!
+Introducing **Threadit**, the newest social media platform designed to share ideas, engage in thoughtful discussions, and connect with others throughout the world while fostering an environment of mutual understanding and personal growth. Spanning a wide variety of communities including sports, entertainment, and politics, Threadit is the perfect destination for you to stay connected, discover new perspectives and grow as a person.
 
 ## Project Summary
 
-As the name **Threadit** implies, users can post "threads" discussing any subject. Threads are grouped into "spools" that allow users to discover and connect with like-minded individuals on a wide variety of topics. If you come across a thread you like, use the "stitch" system to help others see the content quickly and easily. And when you come across a post that doesn't measure up, the "rip" system allows you to downvote it with ease.
+**Threadit** is a social media platform that aims to revolutionize online communication by creating a community-driven platform for in-depth discussions and meaningful conversations. It is built around organized and specific threads called "spools" where users can discover and connect with like-minded individuals on a wide variety of topics. The platform also features a unique "stitch" system that helps members quickly and easily see the best content and a "rip" system for downvoting posts that do not measure up. The vision of Threadit is to empower individuals to connect, engage and share knowledge in a community-driven platform that fosters mutual understanding and personal growth.
 
 ## Stakeholders
 
-Threadit is the perfect platform for **marketing teams** to create communities surrounding their products in order to generate content to engage customers and increase excitement about their product. Threadit is a great place for **fan bases** to come together and discuss their favourite team, band, or video game. Threadit allows **students** to ask questions about certain subjects and receive answers from experts. Overall Threadit is the place to be for everyone to learn, explore and interact with others.
+Threadit is the perfect platform for marketing teams to create communities surrounding their products in order to generate content to engage customers and increase excitement about their product. Threadit is a great place for fan bases to come together and discuss their favourite team, band, or video game. Threadit allows students to ask questions about certain subjects and receive answers from experts. Overall Threadit is the place to be for everyone to learn, explore and interact with others.
+
+The stakeholders of Threadit would likely include:
+
+- The users or members of the platform, as they are the primary audience and directly benefit from the platform's features and community.
+- The platform's owners or operators, as they have a vested interest in the success and growth of the platform.
+- Advertisers or partners, as they may be interested in reaching Threadit's audience or potentially monetizing the platform in some way.
+- Investors, as they have invested in the platform and have a stake in its success.
+- The community managers, as they may be responsible for moderating the platform and ensuring its content is appropriate.
+- The employees of the company, as they have invested their time and effort to build the platform and are dependent on the platform's success for their own livelihood. 
 
 ## Core Features
 
@@ -50,11 +59,11 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ## Technologies
 
-- .NET: backend
-- React: frontend
-- Postgres: database
+- .NET: Backend REST API
+- React.js: Web Frontend
+- Postgres: Database
 - GitHub Actions: CI/CD
-- GitHub Projects: project management
+- Jira: Project Management
 
 ## User Stories
 
