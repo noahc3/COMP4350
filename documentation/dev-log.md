@@ -13,3 +13,4 @@
 | 01/26/2023 | 2     | Noah    | Migrate epics and tickets from GitHub projects to Jira              |
 | 01/26/2023 | 0.25  | Noah    | Revise proposal and add architecture diagram                        |
 | 01/26/2023 | 0.25  | Cody    | Refine proposal                                                     |
+| 01/26/2023 | 1     | Cody    | Put together slideshow                                              |
