@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ThreaditAPI.Models
+﻿namespace ThreaditAPI.Models
 {
     public class User
     {
@@ -9,5 +7,6 @@ namespace ThreaditAPI.Models
         public string Username { get; set; } = "";
         public string PasswordHash { get; set; } = "";
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public List<Spool> Spools { get; set; } = new List<Spool>();
     }
 }
