@@ -16,3 +16,4 @@
 | 01/26/2023 | 0.25  | Cody    | Refine proposal                                                     |
 | 01/26/2023 | 1     | Cody    | Put together slideshow                                              |
 | 01/31/2023 | 0.5   | Nate    | Cleaned up and added slides to slideshow                            |
+| 02/02/2023 | 3     | Cody    | Worked on Sequence Diagram and ER diagram for schema's              |
