@@ -1,7 +1,6 @@
 ﻿using ThreaditAPI.Constants;
 using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace ThreaditAPI.Database {
     public class PostgresDbContext : DbContext {
@@ -12,6 +11,7 @@ namespace ThreaditAPI.Database {
         public DbSet<Spool> Spools { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<ModeratorProfile> Moderators { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
         public PostgresDbContext() {
 
