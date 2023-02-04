@@ -10,6 +10,7 @@ namespace ThreaditAPI.Models
         public string Title { get; set; } = "";
         public string Content { get; set; } = "";
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        //TODO: look into making this a list of users, not just id's.
         public string Rips { get; set; } = "";
         public string Stitches { get; set; } = "";
         [Required]
