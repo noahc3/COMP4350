@@ -7,7 +7,6 @@ namespace ThreaditAPI.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Topic { get; set; } = "";
-        public string OwnerId { get; set; } = "";
         public string Title { get; set; } = "";
         public string Content { get; set; } = "";
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
@@ -18,6 +17,10 @@ namespace ThreaditAPI.Models
         public List<Comment> Comments { get; set; } = new List<Comment>();
 
 
+        public Thread()
+        {
+
+        }
         public Thread(User owner)
         {
             Owner = owner;

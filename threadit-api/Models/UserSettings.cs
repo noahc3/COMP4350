@@ -7,7 +7,6 @@
         public string ProfilePicture { get; set; } = "";
         public string Interests { get; set; } = "";
         public string Spins { get; set; } = "";
-        public string Spools { get; set; } = "";
-
+        public  List<Spool> SpoolsJoined { get; set; } = new List<Spool>();
     }
 }
