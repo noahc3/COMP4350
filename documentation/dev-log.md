@@ -16,5 +16,6 @@
 | 01/26/2023 | 0.25  | Cody    | Refine proposal                                                     |
 | 01/26/2023 | 1     | Cody    | Put together slideshow                                              |
 | 01/31/2023 | 0.5   | Nate    | Cleaned up and added slides to slideshow                            |
+| 02/01/2023 | 6     | Noah    | Create project boilerplate and basic login API                      |
 | 02/02/2023 | 3     | Cody    | Worked on Sequence Diagram and ER diagram for schema's              |
 | 02/03/2023 | 5     | Cody    | Created models, data services and repositories                      |
