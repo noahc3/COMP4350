@@ -12,7 +12,7 @@ using ThreaditAPI.Database;
 namespace ThreaditAPI.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20230204021806_InitialCreate")]
+    [Migration("20230204025113_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -66,27 +66,6 @@ namespace ThreaditAPI.Migrations
                     b.HasIndex("ThreadId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("ThreaditAPI.Models.ModeratorProfile", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Moderators");
                 });
 
             modelBuilder.Entity("ThreaditAPI.Models.Spool", b =>
@@ -162,7 +141,7 @@ namespace ThreaditAPI.Migrations
                     b.ToTable("Threads");
                 });
 
-            modelBuilder.Entity("ThreaditAPI.Models.User", b =>
+            modelBuilder.Entity("ThreaditAPI.Models.UserProfile", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -170,11 +149,11 @@ namespace ThreaditAPI.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -184,7 +163,11 @@ namespace ThreaditAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("UserProfiles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("UserProfile");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ThreaditAPI.Models.UserSession", b =>
@@ -230,6 +213,24 @@ namespace ThreaditAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("ThreaditAPI.Models.ModeratorProfile", b =>
+                {
+                    b.HasBaseType("ThreaditAPI.Models.UserProfile");
+
+                    b.HasDiscriminator().HasValue("ModeratorProfile");
+                });
+
+            modelBuilder.Entity("ThreaditAPI.Models.User", b =>
+                {
+                    b.HasBaseType("ThreaditAPI.Models.UserProfile");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("ModeratorProfileSpool", b =>
@@ -302,14 +303,14 @@ namespace ThreaditAPI.Migrations
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("ThreaditAPI.Models.User", b =>
-                {
-                    b.Navigation("CreatedSpools");
-                });
-
             modelBuilder.Entity("ThreaditAPI.Models.UserSettings", b =>
                 {
                     b.Navigation("SpoolsJoined");
+                });
+
+            modelBuilder.Entity("ThreaditAPI.Models.User", b =>
+                {
+                    b.Navigation("CreatedSpools");
                 });
 #pragma warning restore 612, 618
         }
