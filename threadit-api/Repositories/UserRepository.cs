@@ -7,12 +7,12 @@ namespace ThreaditAPI.Repositories {
         public UserRepository(PostgresDbContext dbContext) : base(dbContext) {
         }
 
-        public async Task<User?> GetUserAsync(User user) {
+        public async Task<UserDTO?> GetUserAsync(UserDTO user) {
             return await GetUserAsync(user.Id);
         }
 
-        public async Task<User?> GetUserAsync(string userId) {
-            User? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        public async Task<UserDTO?> GetUserAsync(string userId) {
+            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
             return dbUser == default ? null : dbUser;
         }
 

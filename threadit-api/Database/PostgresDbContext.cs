@@ -1,7 +1,6 @@
 ﻿using ThreaditAPI.Constants;
 using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace ThreaditAPI.Database {
     public class PostgresDbContext : DbContext {

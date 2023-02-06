@@ -2,7 +2,7 @@
 
 namespace ThreaditAPI.Extensions {
     public static class HttpContextExtensions {
-        public static void SetUser(this HttpContext context, User user) {
+        public static void SetUser(this HttpContext context, UserDTO user) {
             context.Items["User"] = user;
         }
 

@@ -28,7 +28,7 @@ namespace ThreaditAPI.Services {
             return session;
         }
 
-        public async Task<User?> GetUserFromSession(string sessionId) {
+        public async Task<UserDTO?> GetUserFromSession(string sessionId) {
             UserSession? session = await this.sessionRepository.GetUserSessionAsync(sessionId);
             if (session == null) {
                 return null;
