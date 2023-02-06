@@ -19,3 +19,4 @@
 | 02/01/2023 | 6     | Noah    | Create project boilerplate and basic login API                      |
 | 02/02/2023 | 3     | Cody    | Worked on Sequence Diagram and ER diagram for schema's              |
 | 02/03/2023 | 5     | Cody    | Created models, data services and repositories                      |
+| 02/05/2023 | 2     | Cody    | Model and Services Change/Investigation                             |
