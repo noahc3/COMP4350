@@ -2,12 +2,12 @@
 
 namespace ThreaditAPI.Extensions {
     public static class HttpContextExtensions {
-        public static void SetUserProfile(this HttpContext context, UserProfile profile) {
-            context.Items["UserProfile"] = profile;
+        public static void SetUser(this HttpContext context, User user) {
+            context.Items["User"] = user;
         }
 
-        public static UserProfile? GetUserProfile(this HttpContext context) {
-            return context.Items["UserProfile"] as UserProfile;
+        public static UserDTO? GetUser(this HttpContext context) {
+            return context.Items["User"] as UserDTO;
         }
     }
 }

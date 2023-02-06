@@ -8,16 +8,27 @@ namespace ThreaditAPI.Models
         public string Content { get; set; } = "";
         public bool Edited { get; set; } = false;
         [Required]
-        public User Owner { get; set; }
+        public string OwnerId { get; set; }
+        [Required]
+        public string ThreadId { get; set; }
+        [Required]
+        public string? ParentCommentId { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
 
         public Comment()
         {
 
         }
-        public Comment(User owner)
+        public Comment(string ownerId, string threadId)
         {
-            Owner = owner;
+            this.OwnerId = ownerId;
+            this.ThreadId = threadId;
         }
-
+        public Comment(string ownerId, string threadId, string parentCommentId)
+        {
+            this.OwnerId = ownerId;
+            this.ThreadId = threadId;
+            this.ParentCommentId = parentCommentId;
+        }
     }
 }

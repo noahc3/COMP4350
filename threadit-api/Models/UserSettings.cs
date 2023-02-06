@@ -5,8 +5,10 @@
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public bool DarkMode { get; set; } = true;
         public string ProfilePicture { get; set; } = "";
-        public string Interests { get; set; } = "";
-        public string Spins { get; set; } = "";
-        public  List<Spool> SpoolsJoined { get; set; } = new List<Spool>();
+        public List<string> Interests { get; set; } = new List<string>();
+        //each string is a thread Id
+        public List<string> Spins { get; set; } = new List<string>();
+        //each string is a spool Id
+        public  List<string> SpoolsJoined { get; set; } = new List<string>();
     }
 }

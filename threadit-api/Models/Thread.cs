@@ -10,21 +10,22 @@ namespace ThreaditAPI.Models
         public string Title { get; set; } = "";
         public string Content { get; set; } = "";
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        //TODO: look into making this a list of users, not just id's.
-        public string Rips { get; set; } = "";
-        public string Stitches { get; set; } = "";
+        public List<string> Rips { get; set; } = new List<string>();
+        public List<string> Stitches { get; set; } = new List<string>();
         [Required]
-        public User Owner { get; set; }
-        public List<Comment> Comments { get; set; } = new List<Comment>();
+        public string OwnerId { get; set; }
+        [Required]
+        public string SpoolId { get; set; }
 
 
         public Thread()
         {
 
         }
-        public Thread(User owner)
+        public Thread(string ownerId, string spoolId)
         {
-            Owner = owner;
+            this.OwnerId = ownerId;
+            this.SpoolId = spoolId;
         }
     }
 }

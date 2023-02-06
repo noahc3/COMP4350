@@ -8,17 +8,17 @@ namespace ThreaditAPI.Models
         public string Name { get; set; } = "";
         public string Interests { get; set; } = "";
         [Required]
-        public User Owner { get; set; }
-        public List<ModeratorProfile> Moderators { get; set; } = new List<ModeratorProfile>();
-        public List<Thread> Threads { get; set; } = new List<Thread>();
+        public string OwnerId { get; set; }
+        //each string is a user Id
+        public List<string> Moderators { get; set; } = new List<string>();
 
         public Spool()
         {
 
         }
-        public Spool(User owner)
+        public Spool(string ownerId)
         {
-            Owner = owner;
+            this.OwnerId = ownerId;
         }
     }
 }

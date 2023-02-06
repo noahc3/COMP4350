@@ -1,6 +1,7 @@
 ﻿using ThreaditAPI.Extensions;
 using ThreaditAPI.Middleware;
 using Microsoft.AspNetCore.Mvc;
+using ThreaditAPI.Models;
 
 namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
@@ -9,7 +10,7 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpGet("profile")]
         [AuthenticationRequired]
         public IActionResult GetProfile() {
-            return Ok(Request.HttpContext.GetUserProfile());
+            return Ok(Request.HttpContext.GetUser());
         }
     }
 }
