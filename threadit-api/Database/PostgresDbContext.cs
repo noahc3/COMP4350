@@ -10,8 +10,6 @@ namespace ThreaditAPI.Database {
         public DbSet<Models.Thread> Threads { get; set; }
         public DbSet<Spool> Spools { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<ModeratorProfile> Moderators { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
 
         public PostgresDbContext() {
 

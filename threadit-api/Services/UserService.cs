@@ -9,11 +9,11 @@ namespace ThreaditAPI.Services {
             this.userRepository = new UserRepository(context);
         }
 
-        public async Task<User?> GetUserAsync(string userId) {
+        public async Task<UserDTO?> GetUserAsync(string userId) {
             return await this.userRepository.GetUserAsync(userId);
         }
 
-        public async Task<User?> GetUserAsync(User user) {
+        public async Task<UserDTO?> GetUserAsync(UserDTO user) {
             return await this.userRepository.GetUserAsync(user);
         }
 
@@ -27,7 +27,7 @@ namespace ThreaditAPI.Services {
             return valid ? user : null;
         }
 
-        public async Task<User> CreateUserAsync() {
+        public async Task<UserDTO> CreateUserAsync() {
             User user = new User();
             await this.userRepository.InsertUserAsync(user);
             return user;
@@ -42,7 +42,7 @@ namespace ThreaditAPI.Services {
             string hash = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
             User user = new User() {
-                Username = username,
+                Username = username, 
                 Email = email,
                 PasswordHash = hash
             }; 

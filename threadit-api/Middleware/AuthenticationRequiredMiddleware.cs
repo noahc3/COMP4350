@@ -29,7 +29,7 @@ namespace ThreaditAPI.Middleware
 
                 if (!string.IsNullOrWhiteSpace(sessionToken))
                 {
-                    User? user = await sessionService.GetUserFromSession(sessionToken);
+                    UserDTO? user = await sessionService.GetUserFromSession(sessionToken);
                     if (user != null)
                     {
                         context.SetUser(user);
