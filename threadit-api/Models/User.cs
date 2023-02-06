@@ -1,13 +1,18 @@
-﻿using System;
-
-namespace ThreaditAPI.Models
+﻿namespace ThreaditAPI.Models
 {
-    public class User
+    public class User : UserDTO
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Email { get; set; } = "";
-        public string Username { get; set; } = "";
         public string PasswordHash { get; set; } = "";
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+
+        public User()
+        {
+
+        }
+
+        public User(string email, string username)
+        {
+            this.Email = email;
+            this.Username = username;
+        }
     }
 }

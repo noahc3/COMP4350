@@ -1,0 +1,31 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+
+namespace ThreaditAPI.Models
+{
+    public class Thread
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Topic { get; set; } = "";
+        public string Title { get; set; } = "";
+        public string Content { get; set; } = "";
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public List<string> Rips { get; set; } = new List<string>();
+        public List<string> Stitches { get; set; } = new List<string>();
+        [Required]
+        public string OwnerId { get; set; }
+        [Required]
+        public string SpoolId { get; set; }
+
+
+        public Thread()
+        {
+
+        }
+        public Thread(string ownerId, string spoolId)
+        {
+            this.OwnerId = ownerId;
+            this.SpoolId = spoolId;
+        }
+    }
+}
