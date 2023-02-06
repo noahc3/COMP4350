@@ -1,2 +1,3 @@
 csv/
 **/*.pem
+/.vs/slnx.sqlite
