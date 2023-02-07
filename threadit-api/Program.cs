@@ -35,6 +35,10 @@ namespace ThreaditAPI
             builder.Services.AddDbContext<PostgresDbContext>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<UserSessionService>();
+            builder.Services.AddScoped<ThreadService>();
+            builder.Services.AddScoped<UserSettingsService>();
+            builder.Services.AddScoped<SpoolService>();
+            builder.Services.AddScoped<CommentService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
