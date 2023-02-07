@@ -1,10 +1,5 @@
 csv/
 **/*.pem
-/.vs/slnx.sqlite
-/.vs/COMP4350/v17/.wsuo
-/.vs/COMP4350/FileContentIndex/read.lock
 **/*.vsidx
 **/*.wsuo
-/.vs/COMP4350/v17/.wsuo
-/.vs/slnx.sqlite
 /.vs
