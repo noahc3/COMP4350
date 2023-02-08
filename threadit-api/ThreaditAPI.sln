@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33209.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreaditAPI", "ThreaditAPI.csproj", "{2510226F-5311-4439-BCC0-B84C08994A49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreaditTests", "..\ThreaditTests\ThreaditTests.csproj", "{E5A51071-662E-4719-A78C-6FDEAB3624B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "threadit-tests", "..\ThreaditTests\threadit-tests.csproj", "{E5A51071-662E-4719-A78C-6FDEAB3624B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
