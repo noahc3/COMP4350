@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ThreaditAPI</RootNamespace>
+	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+	<PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

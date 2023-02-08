@@ -4,8 +4,6 @@ C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\ThreaditAPI.dep
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\ThreaditAPI.runtimeconfig.json
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\appsettings.json
-C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\Tests\obj\project.assets.json
-C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\Tests\obj\Tests.csproj.nuget.dgspec.json
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\ThreaditAPI.exe
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\testhost.exe
 C:\Users\codyw\Documents\COMP4350\ThreaditTests\bin\Debug\net7.0\NUnit3.TestAdapter.dll

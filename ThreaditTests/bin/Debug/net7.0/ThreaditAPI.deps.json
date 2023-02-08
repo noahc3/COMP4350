@@ -13,6 +13,7 @@
           "Macross.Json.Extensions": "3.0.0",
           "Microsoft.AspNetCore.OpenApi": "7.0.0",
           "Microsoft.EntityFrameworkCore.Design": "7.0.1",
+          "NUnit3TestAdapter": "4.2.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.1",
           "PemUtils": "3.0.0.82",
           "Swashbuckle.AspNetCore": "6.4.0",
@@ -269,6 +270,7 @@
           }
         }
       },
+      "NUnit3TestAdapter/4.2.1": {},
       "PemUtils/3.0.0.82": {
         "dependencies": {
           "DerConverter": "3.0.0.82"
@@ -596,6 +598,13 @@
       "sha512": "sha512-8txq2CsPWvWO4azZSBmKLKmYsL6dkGrarX2hJZY0Djx6uWZJGH9W0OTE1oHqn+aC5L+xrzyS+TM3kiKw2gdXuA==",
       "path": "npgsql.entityframeworkcore.postgresql/7.0.1",
       "hashPath": "npgsql.entityframeworkcore.postgresql.7.0.1.nupkg.sha512"
+    },
+    "NUnit3TestAdapter/4.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kgH8VKsrcZZgNGQXRpVCrM7TnNz9li3b/snH+YmnXUNqsaWa1Xw9EQWHpbzq4Li2FbTjTE/E5N5HdLNXzZ8BpQ==",
+      "path": "nunit3testadapter/4.2.1",
+      "hashPath": "nunit3testadapter.4.2.1.nupkg.sha512"
     },
     "PemUtils/3.0.0.82": {
       "type": "package",

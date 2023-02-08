@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj": {}
+    "c:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj": {
+    "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj",
+        "projectUniqueName": "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj",
         "projectName": "ThreaditAPI",
-        "projectPath": "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj",
+        "projectPath": "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj",
         "packagesPath": "C:\\Users\\codyw\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\obj\\",
+        "outputPath": "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\codyw\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -106,14 +106,14 @@
         }
       }
     },
-    "C:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj": {
+    "c:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj",
+        "projectUniqueName": "c:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj",
         "projectName": "ThreaditTests",
-        "projectPath": "C:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj",
+        "projectPath": "c:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\ThreaditTests.csproj",
         "packagesPath": "C:\\Users\\codyw\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\obj\\",
+        "outputPath": "c:\\Users\\codyw\\Documents\\COMP4350\\ThreaditTests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\codyw\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -130,8 +130,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj": {
-                "projectPath": "C:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj"
+              "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj": {
+                "projectPath": "c:\\Users\\codyw\\Documents\\COMP4350\\threadit-api\\ThreaditAPI.csproj"
               }
             }
           }
@@ -148,19 +148,21 @@
           "dependencies": {
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[17.3.2, )"
+              "version": "[17.4.1, )"
             },
             "NUnit": {
               "target": "Package",
               "version": "[3.13.3, )"
             },
             "NUnit.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[3.3.0, )"
+              "version": "[3.5.0, )"
             },
             "NUnit3TestAdapter": {
               "target": "Package",
-              "version": "[4.2.1, )"
+              "version": "[4.3.1, )"
             },
             "coverlet.collector": {
               "target": "Package",
