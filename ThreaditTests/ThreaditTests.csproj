@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThreaditAPI.csproj" />
+    <ProjectReference Include="..\threadit-api\ThreaditAPI.csproj" />
   </ItemGroup>
 
 </Project>
