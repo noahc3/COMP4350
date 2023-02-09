@@ -25,7 +25,10 @@ public class Tests
     [Test]
     public async Task UserRepository_RetrieveUser_Exists_ShouldPass()
     {
-        User testUser = new User(email: "testUserEmail@test.com", username: "testUsername");
+        User testUser = new User() {
+            Username = "testUsername",
+            Email = "testUserEmail@test.com"
+        };
 
         await _userRepository.InsertUserAsync(testUser);
 

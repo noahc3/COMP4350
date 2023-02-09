@@ -43,7 +43,6 @@ namespace ThreaditAPI.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ParentCommentId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ThreadId")
@@ -149,8 +148,8 @@ namespace ThreaditAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9bb973d3-290f-46dc-b72c-219403a3985d",
-                            DateCreated = new DateTime(2023, 2, 7, 2, 2, 42, 508, DateTimeKind.Utc).AddTicks(7665),
+                            Id = "00000000-0000-456a-b0f7-7a8c172c23e0",
+                            DateCreated = new DateTime(2023, 2, 9, 17, 53, 19, 761, DateTimeKind.Utc).AddTicks(9114),
                             Email = "test@gmail.com",
                             PasswordHash = "testPassword",
                             Username = "testAccount"

@@ -7,12 +7,9 @@ namespace ThreaditAPI.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Content { get; set; } = "";
         public bool Edited { get; set; } = false;
-        [Required]
-        public string OwnerId { get; set; }
-        [Required]
-        public string ThreadId { get; set; }
-        [Required]
-        public string? ParentCommentId { get; set; }
+        public required string OwnerId { get; set; }
+        public required string ThreadId { get; set; }
+        public required string? ParentCommentId { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         public Comment()

@@ -12,10 +12,8 @@ namespace ThreaditAPI.Models
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public List<string> Rips { get; set; } = new List<string>();
         public List<string> Stitches { get; set; } = new List<string>();
-        [Required]
-        public string OwnerId { get; set; }
-        [Required]
-        public string SpoolId { get; set; }
+        public required string OwnerId { get; set; }
+        public required string SpoolId { get; set; }
 
 
         public Thread()
