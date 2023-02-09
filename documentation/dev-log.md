@@ -20,3 +20,4 @@
 | 02/02/2023 | 3     | Cody    | Worked on Sequence Diagram and ER diagram for schema's              |
 | 02/03/2023 | 5     | Cody    | Created models, data services and repositories                      |
 | 02/05/2023 | 2     | Cody    | Model and Services Change/Investigation                             |
+| 02/09/2023 | 4     | Noah    | Setup CICD                                                          |
