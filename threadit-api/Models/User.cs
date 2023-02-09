@@ -9,10 +9,8 @@
 
         }
 
-        public User(string email, string username)
+        public User(string email, string username) : base(email, username)
         {
-            this.Email = email;
-            this.Username = username;
         }
     }
 }

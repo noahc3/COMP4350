@@ -27,12 +27,6 @@ namespace ThreaditAPI.Services {
             return valid ? user : null;
         }
 
-        public async Task<UserDTO> CreateUserAsync() {
-            User user = new User();
-            await this.userRepository.InsertUserAsync(user);
-            return user;
-        }
-
         public async Task<User> CreateUserAsync(string username, string email, string password) {
             if (await userRepository.GetUserByLoginIdentifierAsync(username) != null || await userRepository.GetUserByLoginIdentifierAsync(email) != null) {
                 throw new Exception("Username or email already exists.");
