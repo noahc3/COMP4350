@@ -145,6 +145,16 @@ namespace ThreaditAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "9bb973d3-290f-46dc-b72c-219403a3985d",
+                            DateCreated = new DateTime(2023, 2, 7, 2, 2, 42, 508, DateTimeKind.Utc).AddTicks(7665),
+                            Email = "test@gmail.com",
+                            PasswordHash = "testPassword",
+                            Username = "testAccount"
+                        });
                 });
 
             modelBuilder.Entity("ThreaditAPI.Models.UserSession", b =>

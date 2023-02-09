@@ -25,5 +25,11 @@ namespace ThreaditAPI.Database {
 
             options.UseNpgsql($"Host={host};Username={user};Password={password};Database={db}");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            #region UserSeed
+            modelBuilder.Entity<User>().HasData(new User { Id = "00000000-0000-456a-b0f7-7a8c172c23e0", Email = "test@gmail.com", Username = "testAccount", PasswordHash = "testPassword"});
+            #endregion
+        }
     }
 }
