@@ -24,7 +24,7 @@ jobs:
       - name: Test
         env:
           dbUser: ${{ secrets.THREADIT_DB_CI_USER }}
-          dbPass: ${{ secrets.THREADIT_DB_CI_PASS }}
+          dbPassword: ${{ secrets.THREADIT_DB_CI_PASS }}
           dbHost: ${{ secrets.THREADIT_DB_CI_HOST }}
           dbName: ${{ secrets.THREADIT_DB_CI_NAME }}
         run: dotnet test --no-restore --verbosity normal
