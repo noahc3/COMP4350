@@ -5,8 +5,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  ci:
+    name: 'threadit-api: continuous integration (pull requests)'
     runs-on: ubuntu-latest
     defaults:
       run:
