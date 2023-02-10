@@ -109,9 +109,14 @@ namespace ThreaditAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Spools",
+                columns: new[] { "Id", "Interests", "Moderators", "Name", "OwnerId" },
+                values: new object[] { "7f527ccf-a2bc-4adb-a7da-970be1175525", "Hockey", new List<string>(), "First Spool Ever!!!", "00000000-0000-456a-b0f7-7a8c172c23e0" });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DateCreated", "Email", "PasswordHash", "Username" },
-                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 10, 1, 27, 4, 692, DateTimeKind.Utc).AddTicks(5502), "test@gmail.com", "testPassword", "testAccount" });
+                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 10, 16, 13, 58, 162, DateTimeKind.Utc).AddTicks(9209), "test@gmail.com", "testPassword", "testAccount" });
         }
 
         /// <inheritdoc />
