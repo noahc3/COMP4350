@@ -33,9 +33,9 @@ public class ThreadRepositoryTests
         ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            Topic = "Spool Topic",
-            Title = "Spool Title",
-            Content = "Spool Content",
+            Topic = "Thread Topic",
+            Title = "Thread Title",
+            Content = "Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
             SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
         };
@@ -53,15 +53,15 @@ public class ThreadRepositoryTests
     }
 
     [Test]
-    public async Task RetrieveSpool_Exists_ShouldPass()
+    public async Task RetrieveThread_Exists_ShouldPass()
     {
         // Create Thread
         ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            Topic = "Spool Topic",
-            Title = "Spool Title",
-            Content = "Spool Content",
+            Topic = "Thread Topic",
+            Title = "Thread Title",
+            Content = "Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
             SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
         };
@@ -91,9 +91,9 @@ public class ThreadRepositoryTests
         ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            Topic = "Spool Topic",
-            Title = "Spool Title",
-            Content = "Spool Content",
+            Topic = "Thread Topic",
+            Title = "Thread Title",
+            Content = "Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
             SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
         };
