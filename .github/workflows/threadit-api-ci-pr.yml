@@ -21,16 +21,6 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore -warnaserror
-      - name: Update Database
-        env:
-          dbUser: ${{ secrets.THREADIT_DB_CI_USER }}
-          dbPassword: ${{ secrets.THREADIT_DB_CI_PASS }}
-          dbHost: ${{ secrets.THREADIT_DB_CI_HOST }}
-          dbName: ${{ secrets.THREADIT_DB_CI_NAME }}
-        run: |
-          dotnet tool install --global dotnet-ef
-          dotnet tool restore
-          dotnet ef database update
       - name: Test
         env:
           dbUser: ${{ secrets.THREADIT_DB_CI_USER }}
