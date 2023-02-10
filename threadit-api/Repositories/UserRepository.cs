@@ -16,8 +16,8 @@ namespace ThreaditAPI.Repositories {
             return dbUser == default ? null : dbUser;
         }
 
-        public async Task<User?> GetUserByLoginIdentifierAsync(string username) {
-            User? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username || u.Email == username);
+        public async Task<User?> GetUserByLoginIdentifierAsync(string loginIdentifier) {
+            User? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == loginIdentifier || u.Email == loginIdentifier);
             return dbUser == default ? null : dbUser;
         }
 
