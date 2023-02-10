@@ -8,19 +8,18 @@ using ThreaditAPI.Services;
 
 namespace ThreaditTests.Repositories;
 
-//ALL TESTS THAT NEED TO ADD A USER SHOULD USE THE UserId "bdf89c51-9031-4e9b-b712-6df32cd75641" OR "372a4322-21cd-46f7-9ce9-253d6ff62e13"
-
-public class ServiceTests
+public class UserServiceTests
 {
     private UserService _userService;
-    private PostgresDbContext _dbContext = new PostgresDbContext();
+    private PostgresDbContext _dbContext;
 
     [SetUp]
     public void Setup()
     {
-        _userService = new UserService(_dbContext);
+        _dbContext = new PostgresDbContext();
         _dbContext.Database.EnsureDeleted();
         _dbContext.Database.Migrate();
+        _userService = new UserService(_dbContext);
     }
 
     [TearDown]
@@ -60,8 +59,5 @@ public class ServiceTests
         Assert.IsTrue(returnedUser.Email.Equals(createdUser.Email));
         Assert.IsTrue(returnedUser.Username.Equals(createdUser.Username));
         Assert.IsTrue(returnedUser.DateCreated.ToString().Equals(createdUser.DateCreated.ToString()));
-
-        //cleanup
-        //await _userService.DeleteUserAsync(createdUser.Id.ToString());
     }
 }
