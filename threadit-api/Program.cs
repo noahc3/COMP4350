@@ -8,6 +8,7 @@ using ThreaditAPI.Middleware;
 using ThreaditAPI.Constants;
 using ThreaditAPI.Database;
 using ThreaditAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ThreaditAPI
 {
@@ -64,6 +65,7 @@ namespace ThreaditAPI
 
                 var context = services.GetRequiredService<PostgresDbContext>();
                 context.Database.EnsureCreated();
+                context.Database.Migrate();
             }
 
             app.UseMiddleware<AuthenticationRequiredMiddleware>();

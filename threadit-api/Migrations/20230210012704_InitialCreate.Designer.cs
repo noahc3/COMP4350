@@ -13,7 +13,7 @@ using ThreaditAPI.Database;
 namespace ThreaditAPI.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20230209175319_InitialCreate")]
+    [Migration("20230210012704_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -152,7 +152,7 @@ namespace ThreaditAPI.Migrations
                         new
                         {
                             Id = "00000000-0000-456a-b0f7-7a8c172c23e0",
-                            DateCreated = new DateTime(2023, 2, 9, 17, 53, 19, 761, DateTimeKind.Utc).AddTicks(9114),
+                            DateCreated = new DateTime(2023, 2, 10, 1, 27, 4, 692, DateTimeKind.Utc).AddTicks(5502),
                             Email = "test@gmail.com",
                             PasswordHash = "testPassword",
                             Username = "testAccount"

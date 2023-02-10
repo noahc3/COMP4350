@@ -25,5 +25,16 @@ namespace ThreaditAPI.Repositories {
             await db.Users.AddAsync(user);
             await db.SaveChangesAsync();
         }
+
+        public async Task<UserDTO?> DeleteUserAsync(string userId)
+        {
+            UserDTO? returnUser = await GetUserAsync(userId);
+
+            if(returnUser == null) return null;
+
+            string sqlQuery = "DELETE FROM \"Users\" WHERE \"Id\"='" + userId + "';";
+            db.Database.ExecuteSqlRaw(sqlQuery);
+            return returnUser;
+        }
     }
 }

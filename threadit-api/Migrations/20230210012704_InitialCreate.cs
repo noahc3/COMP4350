@@ -111,7 +111,7 @@ namespace ThreaditAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DateCreated", "Email", "PasswordHash", "Username" },
-                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 9, 17, 53, 19, 761, DateTimeKind.Utc).AddTicks(9114), "test@gmail.com", "testPassword", "testAccount" });
+                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 10, 1, 27, 4, 692, DateTimeKind.Utc).AddTicks(5502), "test@gmail.com", "testPassword", "testAccount" });
         }
 
         /// <inheritdoc />
