@@ -9,6 +9,7 @@
 4. Open command prompt or terminal in `devtools/postgres-docker` folder.
 5. Run the command 'docker-compose up -d`.
     - PostgresDB docker container will install and start automatically from now on. You can view it's status in Docker Desktop. 
+6. To view latest changes to the database tables and content, open command prompt or terminal in 'threadit-api' folder and run 'dotnet ef database update'.
 
 ### threadit-api
 

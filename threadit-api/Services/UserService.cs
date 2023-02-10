@@ -45,5 +45,10 @@ namespace ThreaditAPI.Services {
             return user;
         }
 
+        public async Task<UserDTO?> DeleteUserAsync(string username)
+        {
+            UserDTO? user = await this.userRepository.DeleteUserAsync(username);
+            return user;
+        }
     }
 }

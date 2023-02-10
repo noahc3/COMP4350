@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
@@ -8,18 +9,16 @@ using ThreaditAPI.Services;
 namespace ThreaditTests.Repositories;
 
 //ALL TESTS THAT NEED TO ADD A USER SHOULD USE THE UserId "bdf89c51-9031-4e9b-b712-6df32cd75641" OR "372a4322-21cd-46f7-9ce9-253d6ff62e13"
-//AS WELL AS "doesNotExistUser@test.com" OR "doesNotExistUser@test.net"
-//AND "doesNotExistUser" OR "fakeUser"
 
-public class RepositoryTests
+public class ServiceTests
 {
-    private UserRepository _userRepository;
+    private UserService _userService;
     private PostgresDbContext _dbContext = new PostgresDbContext();
 
     [SetUp]
     public void Setup()
     {
-        _userRepository = new UserRepository(_dbContext);
+        _userService = new UserService(_dbContext);
     }
 
     [TearDown]
@@ -49,35 +48,37 @@ public class RepositoryTests
     }
 
     [Test]
-    public async Task UserRepository_RetrieveUser_NotExists_ShouldFail()
+    public async Task UserService_RetrieveUser_NotExists_ShouldFail()
     {
-        UserDTO? returnedUser = await _userRepository.GetUserAsync("00000000-0000-0000-0000-000000000000");
-
+        //check with giving it a string for the ID
+        UserDTO? returnedUser = await _userService.GetUserAsync("00000000-0000-0000-0000-000000000000");
         Assert.That(returnedUser, Is.Null);
 
         //also check with giving it a user entity which has not been added
-        UserDTO initialUser = new User()
-        {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+        UserDTO initialUser = new User() {
             Username = "doesNotExistUser",
             Email = "doesNotExistUser@test.com"
         };
-        returnedUser = await _userRepository.GetUserAsync(initialUser);
+        returnedUser = await _userService.GetUserAsync(initialUser);
         Assert.That(returnedUser, Is.Null);
     }
 
     [Test]
-    public async Task UserRepository_RetrieveUser_Exists_ShouldPass()
+    public async Task UserService_RetrieveUser_Exists_ShouldPass()
     {
         User testUser = new User() {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Username = "doesNotExistUser",
             Email = "doesNotExistUser@test.com"
         };
+        //make sure the user was not already in the database
+        UserDTO? returnedUser = await _userService.GetUserAsync(testUser);
+        Assert.That(returnedUser, Is.Null);
 
-        await _userRepository.InsertUserAsync(testUser);
+        //now add to the database
+        await _userService.CreateUserAsync(testUser.Username, testUser.Email, "fakePassword");
 
-        UserDTO? returnedUser = await _userRepository.GetUserAsync(testUser.Id.ToString());
+        returnedUser = await _userService.GetUserAsync(testUser.Id.ToString());
 
         Assert.That(returnedUser, Is.Not.Null);
         Assert.IsTrue(returnedUser.Id.Equals(testUser.Id));

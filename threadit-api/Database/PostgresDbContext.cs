@@ -3,7 +3,8 @@ using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ThreaditAPI.Database {
-    public class PostgresDbContext : DbContext {
+    public class PostgresDbContext : DbContext
+    {
         public DbSet<User> Users { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<UserSettings> UserSettings { get; set; }
