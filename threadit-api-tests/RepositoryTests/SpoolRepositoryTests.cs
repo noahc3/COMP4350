@@ -61,15 +61,15 @@ public class SpoolRepositoryTests
             Interests = new List<string>(){"Interest1", "Interest2"}
         };
 
-        // Ensure User is not in database
+        // Ensure Spool is not in database
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
         Assert.That(returnedSpool, Is.Null);
 
-        // Add User to database
+        // Add Spool to database
         await _spoolRepository.InsertSpoolAsync(testSpool);
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
 
-        // Ensure User is added correctly
+        // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
         Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
@@ -89,15 +89,15 @@ public class SpoolRepositoryTests
             Interests = new List<string>(){"Interest1", "Interest2"}
         };
 
-        // Ensure User is not in database
+        // Ensure Spool is not in database
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
         Assert.That(returnedSpool, Is.Null);
 
-        // Add User to database
+        // Add Spool to database
         await _spoolRepository.InsertSpoolAsync(testSpool);
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
 
-        // Ensure User is added correctly
+        // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
         Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
