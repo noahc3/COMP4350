@@ -20,38 +20,20 @@ public class RepositoryTests
     public void Setup()
     {
         _userRepository = new UserRepository(_dbContext);
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Database.Migrate();
     }
 
     [TearDown]
     public void Cleanup()
     {
-        try
-        {
-            string sqlQuery = "DELETE FROM Users WHERE Id='bdf89c51-9031-4e9b-b712-6df32cd75641';";
-            _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-
-            sqlQuery = "DELETE FROM Users WHERE Id='372a4322-21cd-46f7-9ce9-253d6ff62e13';";
-            _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-        }
-        catch (Exception e)
-        {
-            //its fine, the previous test probably failed before adding the user to the database.
-            try
-            {
-                string sqlQuery = "DELETE FROM Users WHERE Id='372a4322-21cd-46f7-9ce9-253d6ff62e13';";
-                _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-            }
-            catch (Exception ex)
-            {
-                //still fine.
-            }
-        }
+        _dbContext.Database.EnsureDeleted();
     }
 
     [Test]
     public async Task UserRepository_RetrieveUser_NotExists_ShouldFail()
     {
-        UserDTO? returnedUser = await _userRepository.GetUserAsync("00000000-0000-0000-0000-000000000000");
+        UserDTO? returnedUser = await _userRepository.GetUserAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
 
         Assert.That(returnedUser, Is.Null);
 
@@ -69,16 +51,25 @@ public class RepositoryTests
     [Test]
     public async Task UserRepository_RetrieveUser_Exists_ShouldPass()
     {
-        User testUser = new User() {
+        //create user
+        User testUser = new User()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Username = "doesNotExistUser",
             Email = "doesNotExistUser@test.com"
         };
 
+        //make sure the user was not already in the database
+        UserDTO? returnedUser = await _userRepository.GetUserAsync(testUser);
+        Assert.That(returnedUser, Is.Null);
+
+        //now add to the database
         await _userRepository.InsertUserAsync(testUser);
 
-        UserDTO? returnedUser = await _userRepository.GetUserAsync(testUser.Id.ToString());
+        //now get the user from the database
+        returnedUser = await _userRepository.GetUserAsync(testUser.Id.ToString());
 
+        //checkit
         Assert.That(returnedUser, Is.Not.Null);
         Assert.IsTrue(returnedUser.Id.Equals(testUser.Id));
         Assert.IsTrue(returnedUser.Email.Equals(testUser.Email));
@@ -86,7 +77,6 @@ public class RepositoryTests
         Assert.IsTrue(returnedUser.DateCreated.ToString().Equals(testUser.DateCreated.ToString()));
 
         //cleanup
-        string sqlQuery = "DELETE FROM Users WHERE Id='bdf89c51-9031-4e9b-b712-6df32cd75641';";
-        _dbContext.Database.ExecuteSqlRaw(sqlQuery);
+        //await _userRepository.DeleteUserAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
     }
 }

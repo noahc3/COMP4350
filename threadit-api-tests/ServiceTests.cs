@@ -19,32 +19,14 @@ public class ServiceTests
     public void Setup()
     {
         _userService = new UserService(_dbContext);
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Database.Migrate();
     }
 
     [TearDown]
     public void Cleanup()
     {
-        try
-        {
-            string sqlQuery = "DELETE FROM Users WHERE Id='bdf89c51-9031-4e9b-b712-6df32cd75641';";
-            _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-
-            sqlQuery = "DELETE FROM Users WHERE Id='372a4322-21cd-46f7-9ce9-253d6ff62e13';";
-            _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-        }
-        catch (Exception e)
-        {
-            //its fine, the previous test probably failed before adding the user to the database.
-            try
-            {
-                string sqlQuery = "DELETE FROM Users WHERE Id='372a4322-21cd-46f7-9ce9-253d6ff62e13';";
-                _dbContext.Database.ExecuteSqlRaw(sqlQuery);
-            }
-            catch (Exception ex)
-            {
-                //still fine.
-            }
-        }
+        _dbContext.Database.EnsureDeleted();
     }
 
     [Test]
@@ -66,28 +48,20 @@ public class ServiceTests
     [Test]
     public async Task UserService_RetrieveUser_Exists_ShouldPass()
     {
-        User testUser = new User() {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            Username = "doesNotExistUser",
-            Email = "doesNotExistUser@test.com"
-        };
-        //make sure the user was not already in the database
-        UserDTO? returnedUser = await _userService.GetUserAsync(testUser);
-        Assert.That(returnedUser, Is.Null);
+        //add to the database
+        User createdUser = await _userService.CreateUserAsync("doesNotExistUser", "doesNotExistUser@test.com", "fakePassword");
 
-        //now add to the database
-        await _userService.CreateUserAsync(testUser.Username, testUser.Email, "fakePassword");
+        //now get the user from the database
+        UserDTO? returnedUser = await _userService.GetUserAsync(createdUser.Id.ToString());
 
-        returnedUser = await _userService.GetUserAsync(testUser.Id.ToString());
-
+        //check it
         Assert.That(returnedUser, Is.Not.Null);
-        Assert.IsTrue(returnedUser.Id.Equals(testUser.Id));
-        Assert.IsTrue(returnedUser.Email.Equals(testUser.Email));
-        Assert.IsTrue(returnedUser.Username.Equals(testUser.Username));
-        Assert.IsTrue(returnedUser.DateCreated.ToString().Equals(testUser.DateCreated.ToString()));
+        Assert.IsTrue(returnedUser.Id.Equals(createdUser.Id));
+        Assert.IsTrue(returnedUser.Email.Equals(createdUser.Email));
+        Assert.IsTrue(returnedUser.Username.Equals(createdUser.Username));
+        Assert.IsTrue(returnedUser.DateCreated.ToString().Equals(createdUser.DateCreated.ToString()));
 
         //cleanup
-        string sqlQuery = "DELETE FROM Users WHERE Id='bdf89c51-9031-4e9b-b712-6df32cd75641';";
-        _dbContext.Database.ExecuteSqlRaw(sqlQuery);
+        //await _userService.DeleteUserAsync(createdUser.Id.ToString());
     }
 }

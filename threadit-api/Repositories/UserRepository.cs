@@ -32,7 +32,7 @@ namespace ThreaditAPI.Repositories {
 
             if(returnUser == null) return null;
 
-            string sqlQuery = "DELETE FROM Users WHERE Id='" + userId + "';";
+            string sqlQuery = "DELETE FROM \"Users\" WHERE \"Id\"='" + userId + "';";
             db.Database.ExecuteSqlRaw(sqlQuery);
             return returnUser;
         }
