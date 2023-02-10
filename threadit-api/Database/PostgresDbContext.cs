@@ -33,7 +33,7 @@ namespace ThreaditAPI.Database {
             #endregion
 
             #region SpoolSeed
-            modelBuilder.Entity<Spool>().HasData(new Spool { Id = "7f527ccf-a2bc-4adb-a7da-970be1175525", Name = "First Spool Ever!!!", Interests = "Hockey", OwnerId = "00000000-0000-456a-b0f7-7a8c172c23e0" });
+            modelBuilder.Entity<Spool>().HasData(new Spool { Id = "7f527ccf-a2bc-4adb-a7da-970be1175525", Name = "First Spool Ever!!!", Interests = new List<string> { "Hockey" }, OwnerId = "00000000-0000-456a-b0f7-7a8c172c23e0" });
             #endregion
         }
     }

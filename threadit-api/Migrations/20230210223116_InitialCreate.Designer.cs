@@ -13,7 +13,7 @@ using ThreaditAPI.Database;
 namespace ThreaditAPI.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20230210161358_InitialCreate")]
+    [Migration("20230210223116_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,9 +62,9 @@ namespace ThreaditAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Interests")
+                    b.Property<List<string>>("Interests")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text[]");
 
                     b.Property<List<string>>("Moderators")
                         .IsRequired()
@@ -86,7 +86,7 @@ namespace ThreaditAPI.Migrations
                         new
                         {
                             Id = "7f527ccf-a2bc-4adb-a7da-970be1175525",
-                            Interests = "Hockey",
+                            Interests = new List<string> { "Hockey" },
                             Moderators = new List<string>(),
                             Name = "First Spool Ever!!!",
                             OwnerId = "00000000-0000-456a-b0f7-7a8c172c23e0"
@@ -162,7 +162,7 @@ namespace ThreaditAPI.Migrations
                         new
                         {
                             Id = "00000000-0000-456a-b0f7-7a8c172c23e0",
-                            DateCreated = new DateTime(2023, 2, 10, 16, 13, 58, 162, DateTimeKind.Utc).AddTicks(9209),
+                            DateCreated = new DateTime(2023, 2, 10, 22, 31, 16, 689, DateTimeKind.Utc).AddTicks(563),
                             Email = "test@gmail.com",
                             PasswordHash = "testPassword",
                             Username = "testAccount"

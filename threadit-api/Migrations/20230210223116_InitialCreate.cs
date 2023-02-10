@@ -35,8 +35,8 @@ namespace ThreaditAPI.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Interests = table.Column<string>(type: "text", nullable: false),
                     OwnerId = table.Column<string>(type: "text", nullable: false),
+                    Interests = table.Column<List<string>>(type: "text[]", nullable: false),
                     Moderators = table.Column<List<string>>(type: "text[]", nullable: false)
                 },
                 constraints: table =>
@@ -111,12 +111,12 @@ namespace ThreaditAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Spools",
                 columns: new[] { "Id", "Interests", "Moderators", "Name", "OwnerId" },
-                values: new object[] { "7f527ccf-a2bc-4adb-a7da-970be1175525", "Hockey", new List<string>(), "First Spool Ever!!!", "00000000-0000-456a-b0f7-7a8c172c23e0" });
+                values: new object[] { "7f527ccf-a2bc-4adb-a7da-970be1175525", new List<string> { "Hockey" }, new List<string>(), "First Spool Ever!!!", "00000000-0000-456a-b0f7-7a8c172c23e0" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DateCreated", "Email", "PasswordHash", "Username" },
-                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 10, 16, 13, 58, 162, DateTimeKind.Utc).AddTicks(9209), "test@gmail.com", "testPassword", "testAccount" });
+                values: new object[] { "00000000-0000-456a-b0f7-7a8c172c23e0", new DateTime(2023, 2, 10, 22, 31, 16, 689, DateTimeKind.Utc).AddTicks(563), "test@gmail.com", "testPassword", "testAccount" });
         }
 
         /// <inheritdoc />
