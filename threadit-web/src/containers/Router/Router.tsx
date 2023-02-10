@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import UserSettings from "../../pages/UserSettings/UserSettings";
 import Home from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
-import Thread from "../../pages/Thread/Thread";
+import Thread from "../../pages/CreateThread/CreateThread";
 
 
 interface AuthenticatedRoute {
