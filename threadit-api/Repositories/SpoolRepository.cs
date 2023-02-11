@@ -29,9 +29,7 @@ namespace ThreaditAPI.Repositories
 
         public async Task<List<string>> GetModeratorsAsync(string spoolId)
         {
-            //List<string> returnList = new List<string>();
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
-            //return dbSpool.Moderators;
             if (dbSpool != null)
             {
                 return dbSpool.Moderators.First().Split(',').ToList();
