@@ -28,5 +28,10 @@ namespace ThreaditAPI.Services
             return comment;
         }
 
+        public async Task<Comment> UpdateCommentAsync(Comment comment)
+        {
+            await this.commentRepository.UpdateCommentAsync(comment);
+            return comment;
+        }
     }
 }

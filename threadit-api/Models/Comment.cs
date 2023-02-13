@@ -10,7 +10,7 @@ namespace ThreaditAPI.Models
         public required string OwnerId { get; set; }
         public required string ThreadId { get; set; }
         public required string? ParentCommentId { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         public Comment()
         {

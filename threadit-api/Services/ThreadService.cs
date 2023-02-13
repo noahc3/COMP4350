@@ -27,5 +27,10 @@ namespace ThreaditAPI.Services
             return thread;
         }
 
+        public async Task<Models.Thread> UpdateThreadAsync(Models.Thread thread)
+        {
+            await this.threadRepository.UpdateThreadAsync(thread);
+            return thread;
+        }
     }
 }
