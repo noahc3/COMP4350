@@ -10,10 +10,10 @@ export default function PostThread() {
 
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
-    const [topic, setTopic] = React.useState('topic-placeholder');
-    const [spoolId, setSpoolId] = React.useState('spoolid-placeholder');
+    // const [topic, setTopic] = React.useState('topic-placeholder');
+    // const [spoolId, setSpoolId] = React.useState('spoolid-placeholder');
 
-    const [threadError, setThreadError] = React.useState('');
+    // const [threadError, setThreadError] = React.useState('');
 
     const options = [
         { value: 'spool1', label: 'spool1' },
@@ -24,9 +24,9 @@ export default function PostThread() {
     const postThread = async () => {
         setLockInputs(true);
         try {
-            const success = await threadStore.postThread(title, content, topic, spoolId);
+            const success = await threadStore.postThread(title, content, "topic-placeholder", "spoolid_placeholder");
             if (!success) {
-                setThreadError('Invalid thread parameters.');
+                // setThreadError('Invalid thread parameters.');
             } else {
                 navStore.navigateTo("/");
             }
