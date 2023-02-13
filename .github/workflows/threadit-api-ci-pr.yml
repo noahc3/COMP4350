@@ -1,0 +1,30 @@
+name: 'threadit-api: continuous integration (pull requests)'
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    name: 'threadit-api: continuous integration (pull requests)'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./threadit-api
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore -warnaserror
+      - name: Test
+        env:
+          dbUser: ${{ secrets.THREADIT_DB_CI_USER }}
+          dbPassword: ${{ secrets.THREADIT_DB_CI_PASS }}
+          dbHost: ${{ secrets.THREADIT_DB_CI_HOST }}
+          dbName: ${{ secrets.THREADIT_DB_CI_NAME }}
+        run: dotnet test --no-restore --verbosity normal

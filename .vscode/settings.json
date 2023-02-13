@@ -1,0 +1,5 @@
+{
+    "dotnet-test-explorer.testProjectPath": "**/*threadit-api-tests.csproj",
+    "dotnet-test-explorer.autoExpandTree": true,
+    "dotnet-test-explorer.testArguments": ""
+}

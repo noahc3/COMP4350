@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33209.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreaditAPI", "ThreaditAPI.csproj", "{2510226F-5311-4439-BCC0-B84C08994A49}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "threadit-api-tests", "..\threadit-api-tests\threadit-api-tests.csproj", "{7132A08E-0539-43DE-9642-7D62256AB9B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2510226F-5311-4439-BCC0-B84C08994A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2510226F-5311-4439-BCC0-B84C08994A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2510226F-5311-4439-BCC0-B84C08994A49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7132A08E-0539-43DE-9642-7D62256AB9B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7132A08E-0539-43DE-9642-7D62256AB9B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7132A08E-0539-43DE-9642-7D62256AB9B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7132A08E-0539-43DE-9642-7D62256AB9B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

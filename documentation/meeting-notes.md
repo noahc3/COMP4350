@@ -56,3 +56,24 @@
 - Cody: meet with TA
 - Nathan: finalize project proposal
 - Noah: update user stories (issues) on GitHub
+
+## Meeting 4
+
+| Date| Time | Length
+| --- | --- | --- |
+| 6 Feb, 2023 | 5:00-6:00pm | 1 hour |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Familiarize everyone with base project 
+- Assign sprint 2 tasks
+
+**Notes:**
+- Noah demoed the base project
+
+**Assigned Tasks:**
+- Anthony: fix login UI/UX
+- Cody: set up testing
+- Nathan: write some unit tests
+- Noah: set up CI/CD

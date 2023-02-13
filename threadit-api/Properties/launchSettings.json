@@ -7,9 +7,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "dbUser": "threadit",
-        "dbPassword": "xRx3zzr549BF2#7j",
+        "dbPassword": "1234",
         "dbName": "threadit",
-        "dbHost": "4350db.noahc3.cc:5999"
+        "dbHost": "localhost:5999"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5116"

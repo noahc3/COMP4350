@@ -25,5 +25,17 @@ namespace ThreaditAPI.Repositories
             await db.Threads.AddAsync(thread);
             await db.SaveChangesAsync();
         }
+
+        public async Task UpdateThreadAsync(Models.Thread thread)
+        {
+            Models.Thread? originalThread = await GetThreadAsync(thread.Id);
+            if (originalThread != null)
+            {
+                originalThread.Content = thread.Content;
+                originalThread.Topic = thread.Topic;
+                originalThread.Title = thread.Title;
+                await db.SaveChangesAsync();
+            }
+        }
     }
 }
