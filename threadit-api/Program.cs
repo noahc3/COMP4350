@@ -64,7 +64,6 @@ namespace ThreaditAPI
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<PostgresDbContext>();
-                context.Database.EnsureCreated();
                 context.Database.Migrate();
             }
 
