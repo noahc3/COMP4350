@@ -1,5 +1,4 @@
 import React from "react";
-import Select from 'react-select'
 import { Button, Card, CardBody, Flex, Input, Stack, Textarea} from "@chakra-ui/react";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
@@ -14,12 +13,6 @@ export default function PostThread() {
     // const [spoolId, setSpoolId] = React.useState('spoolid-placeholder');
 
     // const [threadError, setThreadError] = React.useState('');
-
-    const options = [
-        { value: 'spool1', label: 'spool1' },
-        { value: 'spool2', label: 'spool2' },
-        { value: 'spool3', label: 'spool3' }
-      ]
 
     const postThread = async () => {
         setLockInputs(true);
@@ -39,7 +32,6 @@ export default function PostThread() {
         <PageLayout title="Post a thread">
         <Flex direction={"column"} className="thread" margin="20px">
             <Stack spacing='3'>
-                <Select options={options} placeholder='Select a spool...'/>
                 <Card>
                     <CardBody>
                         <Stack spacing='3'>

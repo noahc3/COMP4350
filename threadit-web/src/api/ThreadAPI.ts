@@ -2,11 +2,11 @@ import { ApiEndpoint } from "../constants/ApiConstants";
 import { IThread } from "../models/Thread";
 import { postWithAuth } from "./Request";
 
-const threadEndpoint = ApiEndpoint('/v1/thread');
+const postThreadEndpoint = ApiEndpoint('/v1/thread/create');
 
 export default class UserAPI {
     static async postThread(title: string, content: string, topic: string, spoolId: string): Promise<IThread> {
-        const response = await postWithAuth(threadEndpoint, {
+        const response = await postWithAuth(postThreadEndpoint, {
             title,
             content,
             topic,

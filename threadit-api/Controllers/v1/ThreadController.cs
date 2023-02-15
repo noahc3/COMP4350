@@ -11,6 +11,7 @@ namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
     [Route("v1/thread")]
     public class ThreadController : ControllerBase {
+        [HttpPost("create")]
         [AuthenticationRequired]
         public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService) {            
             UserDTO? userDTO = Request.HttpContext.GetUser();

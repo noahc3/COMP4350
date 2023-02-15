@@ -3,13 +3,6 @@ import { IThread } from '../models/Thread';
 import ThreadAPI from "../api/ThreadAPI";
 
 export class ThreadStore {
-    @observable
-    _thread?: IThread = undefined;
-
-    constructor() {
-        makeObservable(this);
-    }
-
     @action
     async postThread(title: string, content: string, topic: string, spoolId: string): Promise<IThread> {
         const thread = await ThreadAPI.postThread(title, content, topic, spoolId);
