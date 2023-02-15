@@ -1,4 +1,4 @@
-import { makeObservable, action, observable } from "mobx";
+import { action } from "mobx";
 import { IThread } from '../models/Thread';
 import ThreadAPI from "../api/ThreadAPI";
 
