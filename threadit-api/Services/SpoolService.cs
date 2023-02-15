@@ -14,12 +14,28 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> GetSpoolAsync(string spoolId)
         {
-            return await this.spoolRepository.GetSpoolAsync(spoolId);
+            Spool? returnedSpool = await this.spoolRepository.GetSpoolAsync(spoolId);
+            if (returnedSpool != null)
+            {
+                return returnedSpool;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
         }
 
         public async Task<Spool?> GetSpoolAsync(Spool spool)
         {
-            return await this.spoolRepository.GetSpoolAsync(spool);
+            Spool? returnedSpool = await this.spoolRepository.GetSpoolAsync(spool);
+            if (returnedSpool != null)
+            {
+                return returnedSpool;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
         }
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
@@ -30,8 +46,15 @@ namespace ThreaditAPI.Services
 
         public async Task<List<string>> GetModeratorsAsync(string spoolId)
         {
-            List<string> moderators = await this.spoolRepository.GetModeratorsAsync(spoolId);
-            return moderators;
+            List<string>? moderators = await this.spoolRepository.GetModeratorsAsync(spoolId);
+            if (moderators != null)
+            {
+                return moderators;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
         }
 
         public async Task AddModeratorAsync(string spoolId, string userId)
@@ -41,7 +64,15 @@ namespace ThreaditAPI.Services
 
         public async Task RemoveModeratorAsync(string spoolId, string userId)
         {
-            await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
+            string? removedUser = await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
+            if(removedUser != null)
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
         }
     }
 }

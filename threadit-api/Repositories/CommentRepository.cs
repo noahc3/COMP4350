@@ -27,13 +27,18 @@ namespace ThreaditAPI.Repositories
             await db.SaveChangesAsync();
         }
 
-        public async Task UpdateCommentAsync(Comment comment)
+        public async Task<Comment?> UpdateCommentAsync(Comment comment)
         {
             Comment? originalComment = await GetCommentAsync(comment.Id);
             if (originalComment != null)
             {
                 originalComment.Content = comment.Content;
                 await db.SaveChangesAsync();
+                return comment;
+            }
+            else
+            {
+                return null;
             }
         }
     }

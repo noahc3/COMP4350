@@ -31,17 +31,31 @@ public class UserServiceTests
     [Test]
     public async Task UserService_RetrieveUser_NotExists_ShouldFail()
     {
-        //check with giving it a string for the ID
-        UserDTO? returnedUser = await _userService.GetUserAsync("00000000-0000-0000-0000-000000000000");
-        Assert.That(returnedUser, Is.Null);
-
-        //also check with giving it a user entity which has not been added
-        UserDTO initialUser = new User() {
-            Username = "doesNotExistUser",
-            Email = "doesNotExistUser@test.com"
-        };
-        returnedUser = await _userService.GetUserAsync(initialUser);
-        Assert.That(returnedUser, Is.Null);
+        try
+        {
+            //check with giving it a string for the ID
+            UserDTO? returnedUser = await _userService.GetUserAsync("00000000-0000-0000-0000-000000000000");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+            Assert.Pass();
+            //also check with giving it a user entity which has not been added
+            try
+            {
+                UserDTO initialUser = new User()
+                {
+                    Username = "doesNotExistUser",
+                    Email = "doesNotExistUser@test.com"
+                };
+                UserDTO? returnedUser2 = await _userService.GetUserAsync(initialUser);
+                Assert.Fail();
+            }
+            catch(Exception)
+            {
+                Assert.Fail();
+            }
+        }
     }
 
     [Test]

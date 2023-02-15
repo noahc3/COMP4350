@@ -149,7 +149,7 @@ public class CommentRepositoryTests
         };
 
         //update comment in the database
-        await _commentRepository.UpdateCommentAsync(updatedTestComment);
+        Comment? updateReturnedComment = await _commentRepository.UpdateCommentAsync(updatedTestComment);
 
         //get the comment again
         returnedComment = await _commentRepository.GetCommentAsync(updatedTestComment.Id);
@@ -180,7 +180,7 @@ public class CommentRepositoryTests
         Assert.That(returnedThread, Is.Null);
 
         //update comment
-        await _commentRepository.UpdateCommentAsync(testComment);
+        Comment? updateReturnedComment = await _commentRepository.UpdateCommentAsync(testComment);
 
         //get the comment again
         returnedThread = await _commentRepository.GetCommentAsync(testComment.Id);

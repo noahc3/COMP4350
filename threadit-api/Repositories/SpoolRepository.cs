@@ -27,14 +27,14 @@ namespace ThreaditAPI.Repositories
             await db.SaveChangesAsync();
         }
 
-        public async Task<List<string>> GetModeratorsAsync(string spoolId)
+        public async Task<List<string>?> GetModeratorsAsync(string spoolId)
         {
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
             if (dbSpool != null)
             {
                 return dbSpool.Moderators.First().Split(',').ToList();
             }
-            return new List<string> { };
+            return null;
         }
 
         public async Task AddModeratorAsync(string spoolId, string userId)
@@ -46,13 +46,16 @@ namespace ThreaditAPI.Repositories
             await db.SaveChangesAsync();
         }
 
-        public async Task RemoveModeratorAsync(string spoolId, string userId)
+        public async Task<string?> RemoveModeratorAsync(string spoolId, string userId)
         {
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
             if (dbSpool == null)
-                return;
+            {
+                return null;
+            }
             dbSpool.Moderators.Remove(userId);
             await db.SaveChangesAsync();
+            return userId;
         }
     }
 }

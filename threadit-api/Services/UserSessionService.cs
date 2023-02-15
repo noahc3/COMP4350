@@ -12,11 +12,27 @@ namespace ThreaditAPI.Services {
         }
 
         public async Task<UserSession?> GetUserSessionAsync(string sessionId) {
-            return await this.sessionRepository.GetUserSessionAsync(sessionId);
+            UserSession? userSess = await this.sessionRepository.GetUserSessionAsync(sessionId);
+            if (userSess != null)
+            {
+                return userSess;
+            }
+            else
+            {
+                throw new Exception("UserSession does not exist.");
+            }
         }
 
         public async Task<UserSession?> GetUserSessionAsync(UserSession session) {
-            return await this.sessionRepository.GetUserSessionAsync(session);
+            UserSession? userSess = await this.sessionRepository.GetUserSessionAsync(session);
+            if (userSess != null)
+            {
+                return userSess;
+            }
+            else
+            {
+                throw new Exception("UserSession does not exist.");
+            }
         }
 
         public async Task<UserSession> CreateUserSessionAsync(User user) {
