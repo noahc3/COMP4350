@@ -178,7 +178,7 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
 
         //remove moderator
-        await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "923f3675-90e5-458f-a997-73f263d01f95");
+        string? removedUserId = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "923f3675-90e5-458f-a997-73f263d01f95");
 
         //get the Spool again
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
@@ -235,7 +235,7 @@ public class SpoolRepositoryTests
         Assert.That(returnedSpool, Is.Null);
 
         //add moderator
-        await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "923f3675-90e5-458f-a997-73f263d01f95");
+        string? removedUserId = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "923f3675-90e5-458f-a997-73f263d01f95");
 
         //get the Spool again
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
@@ -271,7 +271,7 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
 
         //retrieve moderators
-        List<string> mods = await _spoolRepository.GetModeratorsAsync(testSpool.Id);
+        List<string>? mods = await _spoolRepository.GetModeratorsAsync(testSpool.Id);
 
         //make sure the list is the same
         Assert.False(mods.IsNullOrEmpty());
@@ -297,7 +297,7 @@ public class SpoolRepositoryTests
         Assert.That(returnedSpool, Is.Null);
 
         //retrieve moderators
-        List<string> mods = await _spoolRepository.GetModeratorsAsync(testSpool.Id);
+        List<string>? mods = await _spoolRepository.GetModeratorsAsync(testSpool.Id);
 
         //checks
         Assert.True(mods.IsNullOrEmpty());

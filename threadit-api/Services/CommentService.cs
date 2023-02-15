@@ -14,12 +14,28 @@ namespace ThreaditAPI.Services
 
         public async Task<Comment?> GetCommentAsync(string commentId)
         {
-            return await this.commentRepository.GetCommentAsync(commentId);
+            Comment? returnedComment = await this.commentRepository.GetCommentAsync(commentId);
+            if (returnedComment != null)
+            {
+                return returnedComment;
+            }
+            else
+            {
+                throw new Exception("Comment does not exist.");
+            }
         }
 
         public async Task<Comment?> GetCommentAsync(Comment comment)
         {
-            return await this.commentRepository.GetCommentAsync(comment);
+            Comment? returnedComment = await this.commentRepository.GetCommentAsync(comment);
+            if (returnedComment != null)
+            {
+                return returnedComment;
+            }
+            else
+            {
+                throw new Exception("Comment does not exist.");
+            }
         }
 
         public async Task<Comment> InsertCommentAsync(Comment comment)
@@ -30,8 +46,15 @@ namespace ThreaditAPI.Services
 
         public async Task<Comment> UpdateCommentAsync(Comment comment)
         {
-            await this.commentRepository.UpdateCommentAsync(comment);
-            return comment;
+            Comment? returnedComment = await this.commentRepository.UpdateCommentAsync(comment);
+            if (returnedComment != null)
+            {
+                return comment;
+            }
+            else
+            {
+                throw new Exception("Comment does not exist.");
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ThreaditAPI.Services {
         }
 
         public async Task<UserDTO?> GetUserAsync(string userId) {
-            UserDTO returnedUser = await this.userRepository.GetUserAsync(userId);
+            UserDTO? returnedUser = await this.userRepository.GetUserAsync(userId);
             if(returnedUser != null)
             {
                 return returnedUser;
@@ -22,7 +22,7 @@ namespace ThreaditAPI.Services {
         }
 
         public async Task<UserDTO?> GetUserAsync(UserDTO user) {
-            UserDTO returnedUser = await this.userRepository.GetUserAsync(user);
+            UserDTO? returnedUser = await this.userRepository.GetUserAsync(user);
             if (returnedUser != null)
             {
                 return returnedUser;
