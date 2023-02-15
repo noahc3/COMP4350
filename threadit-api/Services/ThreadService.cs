@@ -13,12 +13,28 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread?> GetThreadAsync(string threadId)
         {
-            return await this.threadRepository.GetThreadAsync(threadId);
+            Models.Thread? returnedThread = await this.threadRepository.GetThreadAsync(threadId);
+            if (returnedThread != null)
+            {
+                return returnedThread;
+            }
+            else
+            {
+                throw new Exception("Thread does not exist.");
+            }
         }
 
         public async Task<Models.Thread?> GetThreadAsync(Models.Thread thread)
         {
-            return await this.threadRepository.GetThreadAsync(thread);
+            Models.Thread? returnedThread = await this.threadRepository.GetThreadAsync(thread);
+            if (returnedThread != null)
+            {
+                return returnedThread;
+            }
+            else
+            {
+                throw new Exception("Thread does not exist.");
+            }
         }
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
