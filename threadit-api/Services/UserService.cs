@@ -10,17 +10,33 @@ namespace ThreaditAPI.Services {
         }
 
         public async Task<UserDTO?> GetUserAsync(string userId) {
-            return await this.userRepository.GetUserAsync(userId);
+            UserDTO returnedUser = await this.userRepository.GetUserAsync(userId);
+            if(returnedUser != null)
+            {
+                return returnedUser;
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
+            }
         }
 
         public async Task<UserDTO?> GetUserAsync(UserDTO user) {
-            return await this.userRepository.GetUserAsync(user);
+            UserDTO returnedUser = await this.userRepository.GetUserAsync(user);
+            if (returnedUser != null)
+            {
+                return returnedUser;
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
+            }
         }
 
         public async Task<User?> GetUserAsync(string username, string password) {
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null) {
-                return null;
+                throw new Exception("User does not exist.");
             }
 
             bool valid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
@@ -48,7 +64,14 @@ namespace ThreaditAPI.Services {
         public async Task<UserDTO?> DeleteUserAsync(string userId)
         {
             UserDTO? user = await this.userRepository.DeleteUserAsync(userId);
-            return user;
+            if (user == null)
+            {
+                throw new Exception("User does not exist.");
+            }
+            else
+            {
+                return user;
+            }
         }
     }
 }
