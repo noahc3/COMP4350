@@ -37,7 +37,7 @@ public class UserServiceTests
             UserDTO? returnedUser = await _userService.GetUserAsync("00000000-0000-0000-0000-000000000000");
             Assert.Fail();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             Assert.Pass();
             //also check with giving it a user entity which has not been added
@@ -51,7 +51,7 @@ public class UserServiceTests
                 UserDTO? returnedUser2 = await _userService.GetUserAsync(initialUser);
                 Assert.Fail();
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Assert.Fail();
             }
