@@ -6,6 +6,8 @@ import { observer } from "mobx-react";
 import UserSettings from "../../pages/UserSettings/UserSettings";
 import Home from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
+import Thread from "../../pages/PostThread/PostThread";
+
 
 interface AuthenticatedRoute {
     path: string;
@@ -32,6 +34,7 @@ export const Router: React.FC = observer(() => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/thread" element={<Thread />} />
                 {authenticatedRouteComponents}
             </Routes>
         </HistoryRouter>
