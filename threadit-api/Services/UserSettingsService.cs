@@ -14,12 +14,25 @@ namespace ThreaditAPI.Services
 
         public async Task<UserSettings?> GetUserSettingsAsync(string userSettingsId)
         {
-            return await this.userSettingsRepository.GetUserSettingsAsync(userSettingsId);
+            UserSettings? userSettings = await this.userSettingsRepository.GetUserSettingsAsync(userSettingsId);
+            if (userSettings != null)
+            {
+                return userSettings;
+            }
+            else
+            {
+                throw new Exception("UserSettings does not exist.");
+            }
         }
 
         public async Task<UserSettings?> GetUserSettingsAsync(UserSettings userSettings)
         {
-            return await this.userSettingsRepository.GetUserSettingsAsync(userSettings);
+            UserSettings? userSett = await this.userSettingsRepository.GetUserSettingsAsync(userSettings);
+            if (userSett == null)
+            {
+                throw new Exception("UserSettings does not exist.");
+            }
+            return userSett;
         }
 
         public async Task<UserSettings> InsertUserSettingsAsync(UserSettings userSettings)
