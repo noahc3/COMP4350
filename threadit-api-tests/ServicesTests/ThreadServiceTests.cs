@@ -33,7 +33,7 @@ public class ThreadServiceTests
     }
 
     [Test]
-    public async Task RetrieveThreadsBySpool_NoneExists_ShouldFail()
+    public void RetrieveThreadsBySpool_NoneExists_ShouldFail()
     {
         Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadsBySpoolAsync("qr5t9c51-9031-4e9b-b712-6df32cd75641"));
     }

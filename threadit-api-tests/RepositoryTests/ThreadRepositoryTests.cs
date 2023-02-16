@@ -73,7 +73,7 @@ public class ThreadRepositoryTests
 
         // Ensure Thread is added correctly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.That(returnedThread.Id, Is.EqualTo(testThread.Id));
+        Assert.That(returnedThread!.Id, Is.EqualTo(testThread.Id));
         Assert.That(returnedThread.Topic, Is.EqualTo(testThread.Topic));
         Assert.That(returnedThread.Title, Is.EqualTo(testThread.Title));
         Assert.That(returnedThread.Content, Is.EqualTo(testThread.Content));
@@ -105,7 +105,7 @@ public class ThreadRepositoryTests
 
         // Ensure Thread is added correctly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.That(returnedThread.Id, Is.EqualTo(testThread.Id));
+        Assert.That(returnedThread!.Id, Is.EqualTo(testThread.Id));
         Assert.That(returnedThread.Topic, Is.EqualTo(testThread.Topic));
         Assert.That(returnedThread.Title, Is.EqualTo(testThread.Title));
         Assert.That(returnedThread.Content, Is.EqualTo(testThread.Content));
@@ -295,7 +295,7 @@ public class ThreadRepositoryTests
 
         // Ensure Thread is added correctly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.IsTrue(returnedThread.Id.Equals(testThread.Id));
+        Assert.IsTrue(returnedThread!.Id.Equals(testThread.Id));
         Assert.IsTrue(returnedThread.Topic.Equals(testThread.Topic));
         Assert.IsTrue(returnedThread.Title.Equals(testThread.Title));
         Assert.IsTrue(returnedThread.Content.Equals(testThread.Content));
@@ -321,7 +321,7 @@ public class ThreadRepositoryTests
 
         //make sure thread has been updated properly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.IsTrue(returnedThread.Id.Equals(updatedTestThread.Id));
+        Assert.IsTrue(returnedThread!.Id.Equals(updatedTestThread.Id));
         Assert.IsTrue(returnedThread.Topic.Equals(updatedTestThread.Topic));
         Assert.IsTrue(returnedThread.Title.Equals(updatedTestThread.Title));
         Assert.IsTrue(returnedThread.Content.Equals(updatedTestThread.Content));

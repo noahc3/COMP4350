@@ -80,7 +80,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -108,7 +108,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -136,7 +136,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -165,7 +165,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -178,7 +178,7 @@ public class SpoolRepositoryTests
 
         //make sure thread has been updated properly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -208,7 +208,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -221,7 +221,7 @@ public class SpoolRepositoryTests
 
         //make sure thread has been updated properly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
@@ -301,7 +301,7 @@ public class SpoolRepositoryTests
 
         // Ensure Spool is added correctly
         Assert.That(returnedSpool, Is.Not.Null);
-        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));

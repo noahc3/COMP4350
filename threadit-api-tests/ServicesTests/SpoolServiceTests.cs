@@ -29,7 +29,7 @@ public class SpoolServiceTests
     }
 
     [Test]
-    public async Task RetrieveSpoolByName_NotExists_ShouldFail()
+    public void RetrieveSpoolByName_NotExists_ShouldFail()
     {
         Assert.ThrowsAsync<Exception>(async () => await _spoolService.GetSpoolByNameAsync("doesNotExistSpool"));
     }
@@ -54,7 +54,7 @@ public class SpoolServiceTests
         var retrievedSpool = await _spoolService.GetSpoolByNameAsync(spool.Name);
 
         Assert.NotNull(retrievedSpool);
-        Assert.That(retrievedSpool.Id, Is.EqualTo(spool.Id));
+        Assert.That(retrievedSpool!.Id, Is.EqualTo(spool.Id));
         Assert.That(retrievedSpool.Name, Is.EqualTo(spool.Name));
         Assert.That(retrievedSpool.OwnerId, Is.EqualTo(spool.OwnerId));
     }
