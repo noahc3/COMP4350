@@ -1,4 +1,5 @@
 ﻿using ThreaditAPI.Database;
+using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
 namespace ThreaditAPI.Services
@@ -49,6 +50,13 @@ namespace ThreaditAPI.Services
             List<Models.ThreadFull> fullThreads = new List<Models.ThreadFull>();
             for (int i = 0; i < threads.Length; i++)
             {
+                UserDTO? user = await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId);
+
+                if (user == null)
+                {
+                    throw new Exception($"User {threads[i].OwnerId} does not exist.");
+                }
+
                 Models.ThreadFull fullThread = new Models.ThreadFull() {
                     Id = threads[i].Id,
                     Content = threads[i].Content,
@@ -57,8 +65,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
-                    AuthorName = (await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId)).Username,
-                    SpoolName = (await new SpoolService(new PostgresDbContext()).GetSpoolAsync(threads[i].SpoolId)).Name
+                    AuthorName = user.Username,
+                    SpoolName = spool.Name
                 };
                 fullThreads.Add(fullThread);
             }
@@ -72,6 +80,19 @@ namespace ThreaditAPI.Services
             Models.ThreadFull[] fullThreads = new Models.ThreadFull[threads.Length];
             for (int i = 0; i < threads.Length; i++)
             {
+                UserDTO? user = await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId);
+                Spool? spool = await new SpoolService(new PostgresDbContext()).GetSpoolAsync(threads[i].SpoolId);
+
+                if (user == null)
+                {
+                    throw new Exception($"User {threads[i].OwnerId} does not exist.");
+                }
+
+                if (spool == null)
+                {
+                    throw new Exception($"Spool {threads[i].SpoolId} does not exist.");
+                }
+
                 Models.ThreadFull fullThread = new Models.ThreadFull() {
                     Id = threads[i].Id,
                     Content = threads[i].Content,
@@ -80,8 +101,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
-                    AuthorName = (await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId)).Username,
-                    SpoolName = (await new SpoolService(new PostgresDbContext()).GetSpoolAsync(threads[i].SpoolId)).Name
+                    AuthorName = user.Username,
+                    SpoolName = spool.Name
                 };
                 fullThreads[i] = fullThread;
             }
