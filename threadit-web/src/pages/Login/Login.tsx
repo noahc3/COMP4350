@@ -16,6 +16,7 @@ export default function Login() {
 
     const [loginError, setLoginError] = React.useState('');
     const [registerError, setRegisterError] = React.useState('');
+    const [registerSuccess, setRegisterSuccess] = React.useState('');
 
     const login = async () => {
         setLockInputs(true);
@@ -32,11 +33,16 @@ export default function Login() {
     }
 
     const register = async () => {
+        setRegisterError('');
+        setRegisterSuccess('');
         setLockInputs(true);
         try {
             const result = await authStore.register(registerEmail, registerUsername, registerPassword);
             if (result !== true && typeof result === 'string') {
                 setRegisterError(result);
+            }
+            else{
+                setRegisterSuccess("Successfully registered!");
             }
         } finally {
             setLockInputs(false);
@@ -44,7 +50,7 @@ export default function Login() {
     }
 
     return (
-        <Box className="loginPanel" p={10} border="1px solid black" w='xl' h='xl'>
+        <Box className="loginPanel" boxShadow='2xl' p={10} rounded='lg' border="1px solid black" w='xl' h='xl'>
             <Heading as="h1">threadit</Heading>
             <br></br>
             <Tabs>
@@ -79,6 +85,12 @@ export default function Login() {
                                 <Alert status='error'>
                                     <AlertIcon />
                                     {registerError}
+                                </Alert>
+                            )}
+                            {registerSuccess.length > 0 && (
+                                    <Alert status='success'>
+                                    <AlertIcon />
+                                    {registerSuccess}
                                 </Alert>
                             )}
                             <FormControl isRequired>
