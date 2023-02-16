@@ -38,7 +38,7 @@ public class SpoolRepositoryTests
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(spool);
-        
+
         Assert.That(returnedSpool, Is.Null);
     }
 
@@ -46,6 +46,14 @@ public class SpoolRepositoryTests
     public async Task RetrieveSpoolById_NotExists_ShouldFail()
     {
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
+
+        Assert.That(returnedSpool, Is.Null);
+    }
+
+    [Test]
+    public async Task RetrieveSpoolByName_NotExists_ShouldFail()
+    {
+        Spool? returnedSpool = await _spoolRepository.GetSpoolByNameAsync("Spool");
 
         Assert.That(returnedSpool, Is.Null);
     }
@@ -59,7 +67,7 @@ public class SpoolRepositoryTests
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            Interests = new List<string>(){"Interest1", "Interest2"}
+            Interests = new List<string>() { "Interest1", "Interest2" }
         };
 
         // Ensure Spool is not in database
@@ -87,7 +95,7 @@ public class SpoolRepositoryTests
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            Interests = new List<string>(){"Interest1", "Interest2"}
+            Interests = new List<string>() { "Interest1", "Interest2" }
         };
 
         // Ensure Spool is not in database
@@ -107,6 +115,34 @@ public class SpoolRepositoryTests
     }
 
     [Test]
+    public async Task RetrieveSpoolByName_Exists_ShouldPass()
+    {
+        // Create Spool
+        Spool testSpool = new Spool()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool",
+            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Interests = new List<string>() { "Interest1", "Interest2" }
+        };
+
+        // Ensure Spool is not in database
+        Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
+        Assert.That(returnedSpool, Is.Null);
+
+        // Add Spool to database
+        await _spoolRepository.InsertSpoolAsync(testSpool);
+        returnedSpool = await _spoolRepository.GetSpoolByNameAsync(testSpool.Name);
+
+        // Ensure Spool is added correctly
+        Assert.That(returnedSpool, Is.Not.Null);
+        Assert.IsTrue(returnedSpool.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
+        Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
+        Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
+    }
+
+    [Test]
     public async Task AddModerator_SpoolExists_ShouldPass()
     {
         // Create Spool
@@ -116,7 +152,7 @@ public class SpoolRepositoryTests
             Name = "Spool",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
             Interests = new List<string>() { "Interest1", "Interest2" },
-            Moderators= new List<string>() { "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd", "923f3675-90e5-458f-a997-73f263d01f95" }
+            Moderators = new List<string>() { "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd", "923f3675-90e5-458f-a997-73f263d01f95" }
         };
 
         // Ensure Spool is not in database

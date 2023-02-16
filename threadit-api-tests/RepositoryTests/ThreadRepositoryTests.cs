@@ -114,6 +114,164 @@ public class ThreadRepositoryTests
     }
 
     [Test]
+    public async Task RetrieveThreadsBySpool_NoneExists_ShouldFail()
+    {
+        var threads = await _threadRepository.GetThreadsBySpoolAsync("qr5t9c51-9031-4e9b-b712-6df32cd75641");
+
+        Assert.That(threads, Is.Empty);
+    }
+
+    [Test]
+    public async Task RetrieveThreadsBySpool_Exists_ShouldPass()
+    {
+        // Create Threads
+        var threads = new List<ThreaditAPI.Models.Thread>() {
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "643634634-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 1",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "12321314-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 2",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "adadada-9031-4e9b-b712-6df32cd75641"
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "2563636-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 3",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "14141441-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 4",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "67676-9031-4e9b-b712-6df32cd75641"
+            }
+        };
+
+        // Ensure Thread is not in database
+        foreach(var thread in threads)
+        {
+            ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(thread);
+            Assert.That(returnedThread, Is.Null);
+        }
+
+        // Ensure query by spool returns no items
+        var returnedThreads = await _threadRepository.GetThreadsBySpoolAsync("qr5t9c51-9031-4e9b-b712-6df32cd75641");
+        Assert.That(returnedThreads, Is.Empty);
+
+        // Add Thread to database
+        foreach(var thread in threads)
+        {
+            await _threadRepository.InsertThreadAsync(thread);
+        }
+
+        // Ensure Thread is added correctly
+        returnedThreads = await _threadRepository.GetThreadsBySpoolAsync("qr5t9c51-9031-4e9b-b712-6df32cd75641");
+        Assert.That(returnedThreads, Is.Not.Null);
+        Assert.That(returnedThreads.Count, Is.EqualTo(2));
+        Assert.AreEqual("Thread Title 3", returnedThreads[0].Title);
+        Assert.AreEqual("Thread Title 1", returnedThreads[1].Title);
+    }
+
+    [Test]
+    public async Task RetrieveAllThreads_NoneExists_ShouldFail()
+    {
+        var threads = await _threadRepository.GetAllThreadsAsync();
+
+        Assert.That(threads, Is.Empty);
+    }
+
+    [Test]
+    public async Task RetrieveAllThreads_Exists_ShouldPass()
+    {
+        // Create Threads
+        var threads = new List<ThreaditAPI.Models.Thread>() {
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "643634634-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 1",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+                DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime()
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "12321314-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 2",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "adadada-9031-4e9b-b712-6df32cd75641",
+                DateCreated = DateTime.Parse("2021-01-01 01:00:00").ToUniversalTime()
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "2563636-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 3",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+                DateCreated = DateTime.Parse("2021-01-01 02:00:00").ToUniversalTime()
+            },
+            new ThreaditAPI.Models.Thread()
+            {
+                Id = "14141441-9031-4e9b-b712-6df32cd75641",
+                Topic = "Thread Topic",
+                Title = "Thread Title 4",
+                Content = "Thread Content",
+                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                SpoolId = "67676-9031-4e9b-b712-6df32cd75641",
+                DateCreated = DateTime.Parse("2021-01-01 03:00:00").ToUniversalTime()
+            }
+        };
+
+        // Ensure Thread is not in database
+        foreach(var thread in threads)
+        {
+            ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(thread);
+            Assert.That(returnedThread, Is.Null);
+        }
+
+        // Ensure query all returns no items
+        var returnedThreads = await _threadRepository.GetAllThreadsAsync();
+        Assert.That(returnedThreads, Is.Empty);
+
+        // Add Thread to database
+        foreach(var thread in threads)
+        {
+            await _threadRepository.InsertThreadAsync(thread);
+        }
+
+        // Ensure Thread is added correctly
+        returnedThreads = await _threadRepository.GetAllThreadsAsync();
+        Assert.That(returnedThreads, Is.Not.Null);
+        Assert.That(returnedThreads.Count, Is.EqualTo(4));
+        Assert.AreEqual("Thread Title 4", returnedThreads[0].Title);
+        Assert.AreEqual("Thread Title 3", returnedThreads[1].Title);
+        Assert.AreEqual("Thread Title 2", returnedThreads[2].Title);
+        Assert.AreEqual("Thread Title 1", returnedThreads[3].Title);
+    }
+
+    [Test]
     public async Task UpdateThread_Exists_ShouldPass()
     {
         // Create Thread
