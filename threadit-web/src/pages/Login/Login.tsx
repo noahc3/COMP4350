@@ -33,6 +33,8 @@ export default function Login() {
     }
 
     const register = async () => {
+        setRegisterError('');
+        setRegisterSuccess('');
         setLockInputs(true);
         try {
             const result = await authStore.register(registerEmail, registerUsername, registerPassword);
@@ -48,7 +50,7 @@ export default function Login() {
     }
 
     return (
-        <Box className="loginPanel" p={10} border="1px solid black" w='xl' h='xl'>
+        <Box className="loginPanel" boxShadow='2xl' p={10} rounded='lg' border="1px solid black" w='xl' h='xl'>
             <Heading as="h1">threadit</Heading>
             <br></br>
             <Tabs>
