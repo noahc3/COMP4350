@@ -128,13 +128,13 @@ public class ThreadServiceTests
         // Ensure Thread is added correctly
         returnedThreads = await _threadService.GetThreadsBySpoolAsync("Spool1");
         Assert.That(returnedThreads, Is.Not.Null);
-        Assert.AreEqual(2, returnedThreads.Count);
-        Assert.AreEqual("Thread Title 3", returnedThreads[0].Title);
-        Assert.AreEqual("Spool1", returnedThreads[0].SpoolName);
-        Assert.AreEqual("TestUser", returnedThreads[0].AuthorName);
-        Assert.AreEqual("Thread Title 1", returnedThreads[1].Title);
-        Assert.AreEqual("Spool1", returnedThreads[1].SpoolName);
-        Assert.AreEqual("TestUser", returnedThreads[1].AuthorName);
+        Assert.That(returnedThreads.Count, Is.EqualTo(2));
+        Assert.That(returnedThreads[0].Title, Is.EqualTo("Thread Title 3"));
+        Assert.That(returnedThreads[0].SpoolName, Is.EqualTo("Spool1"));
+        Assert.That(returnedThreads[0].AuthorName, Is.EqualTo("TestUser"));
+        Assert.That(returnedThreads[1].Title, Is.EqualTo("Thread Title 1"));
+        Assert.That(returnedThreads[1].SpoolName, Is.EqualTo("Spool1"));
+        Assert.That(returnedThreads[1].AuthorName, Is.EqualTo("TestUser"));
     }
 
     [Test]
@@ -236,14 +236,14 @@ public class ThreadServiceTests
         returnedThreads = await _threadService.GetAllThreadsAsync();
         Assert.That(returnedThreads, Is.Not.Null);
         Assert.That(returnedThreads.Count, Is.EqualTo(3));
-        Assert.AreEqual("Thread Title 3", returnedThreads[0].Title);
-        Assert.AreEqual("Spool1", returnedThreads[0].SpoolName);
-        Assert.AreEqual("TestUser", returnedThreads[0].AuthorName);
-        Assert.AreEqual("Thread Title 2", returnedThreads[1].Title);
-        Assert.AreEqual("Spool2", returnedThreads[1].SpoolName);
-        Assert.AreEqual("TestUser", returnedThreads[1].AuthorName);
-        Assert.AreEqual("Thread Title 1", returnedThreads[2].Title);
-        Assert.AreEqual("Spool1", returnedThreads[2].SpoolName);
-        Assert.AreEqual("TestUser", returnedThreads[2].AuthorName);
+        Assert.That(returnedThreads[0].Title, Is.EqualTo("Thread Title 3"));
+        Assert.That(returnedThreads[0].SpoolName, Is.EqualTo("Spool1"));
+        Assert.That(returnedThreads[0].AuthorName, Is.EqualTo("TestUser"));
+        Assert.That(returnedThreads[1].Title, Is.EqualTo("Thread Title 2"));
+        Assert.That(returnedThreads[1].SpoolName, Is.EqualTo("Spool2"));
+        Assert.That(returnedThreads[1].AuthorName, Is.EqualTo("TestUser"));
+        Assert.That(returnedThreads[2].Title, Is.EqualTo("Thread Title 1"));
+        Assert.That(returnedThreads[2].SpoolName, Is.EqualTo("Spool1"));
+        Assert.That(returnedThreads[2].AuthorName, Is.EqualTo("TestUser"));
     }
 }

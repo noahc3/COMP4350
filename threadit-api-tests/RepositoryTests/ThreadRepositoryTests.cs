@@ -73,12 +73,12 @@ public class ThreadRepositoryTests
 
         // Ensure Thread is added correctly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.IsTrue(returnedThread.Id.Equals(testThread.Id));
-        Assert.IsTrue(returnedThread.Topic.Equals(testThread.Topic));
-        Assert.IsTrue(returnedThread.Title.Equals(testThread.Title));
-        Assert.IsTrue(returnedThread.Content.Equals(testThread.Content));
-        Assert.IsTrue(returnedThread.OwnerId.Equals(testThread.OwnerId));
-        Assert.IsTrue(returnedThread.SpoolId.Equals(testThread.SpoolId));
+        Assert.That(returnedThread.Id, Is.EqualTo(testThread.Id));
+        Assert.That(returnedThread.Topic, Is.EqualTo(testThread.Topic));
+        Assert.That(returnedThread.Title, Is.EqualTo(testThread.Title));
+        Assert.That(returnedThread.Content, Is.EqualTo(testThread.Content));
+        Assert.That(returnedThread.OwnerId, Is.EqualTo(testThread.OwnerId));
+        Assert.That(returnedThread.SpoolId, Is.EqualTo(testThread.SpoolId));
     }
 
     [Test]
@@ -105,12 +105,12 @@ public class ThreadRepositoryTests
 
         // Ensure Thread is added correctly
         Assert.That(returnedThread, Is.Not.Null);
-        Assert.IsTrue(returnedThread.Id.Equals(testThread.Id));
-        Assert.IsTrue(returnedThread.Topic.Equals(testThread.Topic));
-        Assert.IsTrue(returnedThread.Title.Equals(testThread.Title));
-        Assert.IsTrue(returnedThread.Content.Equals(testThread.Content));
-        Assert.IsTrue(returnedThread.OwnerId.Equals(testThread.OwnerId));
-        Assert.IsTrue(returnedThread.SpoolId.Equals(testThread.SpoolId));
+        Assert.That(returnedThread.Id, Is.EqualTo(testThread.Id));
+        Assert.That(returnedThread.Topic, Is.EqualTo(testThread.Topic));
+        Assert.That(returnedThread.Title, Is.EqualTo(testThread.Title));
+        Assert.That(returnedThread.Content, Is.EqualTo(testThread.Content));
+        Assert.That(returnedThread.OwnerId, Is.EqualTo(testThread.OwnerId));
+        Assert.That(returnedThread.SpoolId, Is.EqualTo(testThread.SpoolId));
     }
 
     [Test]
@@ -185,8 +185,8 @@ public class ThreadRepositoryTests
         returnedThreads = await _threadRepository.GetThreadsBySpoolAsync("qr5t9c51-9031-4e9b-b712-6df32cd75641");
         Assert.That(returnedThreads, Is.Not.Null);
         Assert.That(returnedThreads.Count, Is.EqualTo(2));
-        Assert.AreEqual("Thread Title 3", returnedThreads[0].Title);
-        Assert.AreEqual("Thread Title 1", returnedThreads[1].Title);
+        Assert.That(returnedThreads[0].Title, Is.EqualTo("Thread Title 3"));
+        Assert.That(returnedThreads[1].Title, Is.EqualTo("Thread Title 1"));
     }
 
     [Test]
@@ -265,10 +265,10 @@ public class ThreadRepositoryTests
         returnedThreads = await _threadRepository.GetAllThreadsAsync();
         Assert.That(returnedThreads, Is.Not.Null);
         Assert.That(returnedThreads.Count, Is.EqualTo(4));
-        Assert.AreEqual("Thread Title 4", returnedThreads[0].Title);
-        Assert.AreEqual("Thread Title 3", returnedThreads[1].Title);
-        Assert.AreEqual("Thread Title 2", returnedThreads[2].Title);
-        Assert.AreEqual("Thread Title 1", returnedThreads[3].Title);
+        Assert.That(returnedThreads[0].Title, Is.EqualTo("Thread Title 4"));
+        Assert.That(returnedThreads[1].Title, Is.EqualTo("Thread Title 3"));
+        Assert.That(returnedThreads[2].Title, Is.EqualTo("Thread Title 2"));
+        Assert.That(returnedThreads[3].Title, Is.EqualTo("Thread Title 1"));
     }
 
     [Test]

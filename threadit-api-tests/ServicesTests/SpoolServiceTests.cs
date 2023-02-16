@@ -54,8 +54,8 @@ public class SpoolServiceTests
         var retrievedSpool = await _spoolService.GetSpoolByNameAsync(spool.Name);
 
         Assert.NotNull(retrievedSpool);
-        Assert.AreEqual(spool.Id, retrievedSpool.Id);
-        Assert.AreEqual(spool.Name, retrievedSpool.Name);
-        Assert.AreEqual(spool.OwnerId, retrievedSpool.OwnerId);
+        Assert.That(retrievedSpool.Id, Is.EqualTo(spool.Id));
+        Assert.That(retrievedSpool.Name, Is.EqualTo(spool.Name));
+        Assert.That(retrievedSpool.OwnerId, Is.EqualTo(spool.OwnerId));
     }
 }
