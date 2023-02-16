@@ -16,6 +16,7 @@ export default function Login() {
 
     const [loginError, setLoginError] = React.useState('');
     const [registerError, setRegisterError] = React.useState('');
+    const [registerSuccess, setRegisterSuccess] = React.useState('');
 
     const login = async () => {
         setLockInputs(true);
@@ -37,6 +38,9 @@ export default function Login() {
             const result = await authStore.register(registerEmail, registerUsername, registerPassword);
             if (result !== true && typeof result === 'string') {
                 setRegisterError(result);
+            }
+            else{
+                setRegisterSuccess("Successfully registered!");
             }
         } finally {
             setLockInputs(false);
@@ -79,6 +83,12 @@ export default function Login() {
                                 <Alert status='error'>
                                     <AlertIcon />
                                     {registerError}
+                                </Alert>
+                            )}
+                            {registerSuccess.length > 0 && (
+                                    <Alert status='success'>
+                                    <AlertIcon />
+                                    {registerSuccess}
                                 </Alert>
                             )}
                             <FormControl isRequired>
