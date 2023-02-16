@@ -26,15 +26,5 @@ namespace ThreaditAPI.Database {
 
             options.UseNpgsql($"Host={host};Username={user};Password={password};Database={db}");
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            #region UserSeed
-            modelBuilder.Entity<User>().HasData(new User { Id = "00000000-0000-456a-b0f7-7a8c172c23e0", Email = "test@gmail.com", Username = "testAccount", PasswordHash = "testPassword"});
-            #endregion
-
-            #region SpoolSeed
-            modelBuilder.Entity<Spool>().HasData(new Spool { Id = "7f527ccf-a2bc-4adb-a7da-970be1175525", Name = "First Spool Ever!!!", Interests = new List<string> { "Hockey" }, OwnerId = "00000000-0000-456a-b0f7-7a8c172c23e0" });
-            #endregion
-        }
     }
 }

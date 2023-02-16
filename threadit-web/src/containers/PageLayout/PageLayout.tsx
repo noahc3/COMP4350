@@ -9,7 +9,7 @@ interface IPageLayout {
 
 export const PageLayout = observer(({title, children}: IPageLayout) => {
     return (
-        <Box className="pagelayout">
+        <Box className="pagelayout" backgroundColor={"gray.100"} h="100%" overflowY="scroll" scrollBehavior={"smooth"}>
             <Heading>{title}</Heading>
             <Divider/>
             {children}

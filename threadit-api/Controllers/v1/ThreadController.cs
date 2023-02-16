@@ -30,10 +30,16 @@ namespace ThreaditAPI.Controllers.v1 {
 
             try {
                 thread = await threadService.InsertThreadAsync(thread);
-                return Ok();
+                return Ok(thread);
             } catch (Exception e) {
                 return BadRequest(e.Message);
             }   
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllThreads([FromServices] ThreadService threadService) {
+            Models.ThreadFull[] threads = await threadService.GetAllThreadsAsync();
+            return Ok(threads);
         }
     }
 }
