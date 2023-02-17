@@ -18,11 +18,13 @@ export default function PostThread() {
 
 
     const postSpool = async () => {
-        setLockInputs(true);
-        try {
-            await SpoolAPI.PostSpool(title, user?.id, ["hockey, sports"],[]);
-        } finally {
-            setLockInputs(false);
+        if (user) {
+            setLockInputs(true);
+            try {
+                await SpoolAPI.PostSpool(title, user.id, ["hockey, sports"], []);
+            } finally {
+                setLockInputs(false);
+            }
         }
     }
 
