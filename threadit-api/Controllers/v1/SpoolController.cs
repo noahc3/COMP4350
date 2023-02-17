@@ -18,9 +18,41 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("{spoolId}")]
-        public async Task<IActionResult> GetSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService) {            
+        public async Task<IActionResult> GetSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
             Models.Spool? spool = await spoolService.GetSpoolByNameAsync(spoolId);
             return Ok(spool);
+        }
+
+        [HttpPost("create")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> PostSpool([FromBody] PostSpoolRequest request, [FromServices] SpoolService spoolService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+
+            Models.Spool spool = new Models.Spool
+            {
+                Id = request.Id,
+                Name = request.Name,
+                OwnerId = userDTO.Id,
+                Interests = request.Interests,
+                Moderators = request.Moderators
+            };
+
+            try
+            {
+                spool = await spoolService.InsertSpoolAsync(spool);
+                return Ok(spool);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

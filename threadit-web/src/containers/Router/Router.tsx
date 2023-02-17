@@ -8,6 +8,7 @@ import Login from "../../pages/Login/Login";
 import PostThread from "../../pages/PostThread/PostThread";
 import { Thread } from "../../pages/Thread/Thread";
 import { Spool } from "../../pages/Spool/Spool";
+import PostSpool from "../../pages/PostSpool/PostSpool"; "
 
 export const Router: React.FC = observer(() => {
     const history = navStore.history;
@@ -18,6 +19,7 @@ export const Router: React.FC = observer(() => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/s/:spoolName/createthread" element={<PostThread />} />
+                <Route path="/s/:createspool" element={<PostSpool />} />
                 <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
                 <Route path="/settings" element={<UserSettings/>} />
