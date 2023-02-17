@@ -18,7 +18,7 @@ Users should be able to create and subscribe to spools so that they can see rela
 
 Users should be able to see a personalized feed containing threads from spools that they are subscribed to. Users should be able to sort their feed to maximize their browsing experience.
 
-**Spool Suggestions**
+**Spool Suggestions (optional)**
 
 Users should have spools suggested to them based on the spools that they are already subscribed to. When a user first creates an account they should receive spool suggestions based on their interests.
 
