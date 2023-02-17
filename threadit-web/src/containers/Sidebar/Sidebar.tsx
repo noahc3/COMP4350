@@ -2,7 +2,6 @@ import { observer } from "mobx-react"
 import { Avatar, Box, Button, Divider, Flex, HStack, Icon, Image, Spacer, Text } from "@chakra-ui/react";
 import "./Sidebar.scss";
 import { IoStatsChart } from "react-icons/io5";
-import { FaWrench } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { MdOutlineExitToApp } from "react-icons/md";
 import { NavLink } from "../Router/NavLink";
