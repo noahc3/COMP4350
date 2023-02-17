@@ -11,7 +11,7 @@ export default class SpoolAPI {
         const response = await get(spoolThreadsEndpoint + spoolId);
     
         if (!response.ok) {
-            throw new Error(`Failed to post thread: ${await response.text()}`);
+            throw new Error(`Failed to get all spool threads: ${await response.text()}`);
         }
 
         return await response.json();
@@ -21,7 +21,7 @@ export default class SpoolAPI {
         const response = await get(spoolEndpoint + spoolId);
     
         if (!response.ok) {
-            throw new Error(`Failed to post thread: ${await response.text()}`);
+            throw new Error(`Failed to get spool: ${await response.text()}`);
         }
 
         return await response.json();

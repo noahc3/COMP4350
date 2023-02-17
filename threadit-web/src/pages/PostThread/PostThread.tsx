@@ -13,10 +13,6 @@ export default function PostThread() {
     const [lockInputs, setLockInputs] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
-    // const [topic, setTopic] = React.useState('topic-placeholder');
-    // const [spoolId, setSpoolId] = React.useState('spoolid-placeholder');
-
-    // const [threadError, setThreadError] = React.useState('');
 
     React.useEffect(() => {
         if (spoolName) {

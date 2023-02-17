@@ -11,6 +11,13 @@ namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
     [Route("v1/thread")]
     public class ThreadController : ControllerBase {
+        
+        [HttpGet("{threadId}")]
+        public async Task<IActionResult> GetThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {            
+            Models.ThreadFull? threadFull = await threadService.GetThreadFullAsync(threadId);
+            return Ok(threadFull);
+        }
+
         [HttpPost("create")]
         [AuthenticationRequired]
         public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService) {            

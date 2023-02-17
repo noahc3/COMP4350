@@ -5,7 +5,8 @@ import { observer } from "mobx-react";
 import UserSettings from "../../pages/UserSettings/UserSettings";
 import { Home } from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
-import Thread from "../../pages/PostThread/PostThread";
+import PostThread from "../../pages/PostThread/PostThread";
+import { Thread } from "../../pages/Thread/Thread";
 import { Spool } from "../../pages/Spool/Spool";
 
 export const Router: React.FC = observer(() => {
@@ -16,7 +17,8 @@ export const Router: React.FC = observer(() => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/s/:spoolName/createthread" element={<Thread />} />
+                <Route path="/s/:spoolName/createthread" element={<PostThread />} />
+                <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
                 <Route path="/settings" element={<UserSettings/>} />
             </Routes>
