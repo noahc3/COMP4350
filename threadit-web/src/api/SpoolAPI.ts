@@ -1,7 +1,7 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { ISpool } from "../models/Spool";
 import { IThreadFull } from "../models/ThreadFull";
-import { get } from "./Request";
+import { get, postWithAuth } from "./Request";
 
 const spoolEndpoint = ApiEndpoint("/v1/spool/");
 const spoolThreadsEndpoint = ApiEndpoint('/v1/spool/threads/');
@@ -28,7 +28,7 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async post(name: string, ownerId: string, interests: string[], moderators: string[]): Promise<ISpool> {
+    static async PostSpool(name: string, ownerId: string, interests: string[], moderators: string[]): Promise<ISpool> {
         const response = await postWithAuth(postSpoolEndpoint, {
             name,
             ownerId,

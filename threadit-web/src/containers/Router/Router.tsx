@@ -6,9 +6,9 @@ import UserSettings from "../../pages/UserSettings/UserSettings";
 import { Home } from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
 import PostThread from "../../pages/PostThread/PostThread";
+import PostSpool from "../../pages/PostSpool/PostSpool";
 import { Thread } from "../../pages/Thread/Thread";
 import { Spool } from "../../pages/Spool/Spool";
-import PostSpool from "../../pages/PostSpool/PostSpool"; "
 
 export const Router: React.FC = observer(() => {
     const history = navStore.history;
