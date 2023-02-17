@@ -7,9 +7,11 @@ namespace ThreaditAPI.Services
     public class SpoolService
     {
         private readonly SpoolRepository spoolRepository;
+        private readonly UserRepository userRepository;
         public SpoolService(PostgresDbContext context)
         {
             this.spoolRepository = new SpoolRepository(context);
+            this.userRepository = new UserRepository(context);
         }
 
         public async Task<Spool?> GetSpoolAsync(string spoolId)
@@ -53,8 +55,16 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
-            await this.spoolRepository.InsertSpoolAsync(spool);
-            return spool;
+            Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
+            if (returnedSpool != null)
+            {
+                await this.spoolRepository.InsertSpoolAsync(spool);
+                return returnedSpool;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
         }
 
         public async Task<List<string>> GetModeratorsAsync(string spoolId)
