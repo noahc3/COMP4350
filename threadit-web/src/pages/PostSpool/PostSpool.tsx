@@ -13,7 +13,7 @@ export default function PostThread() {
     const [spool, setSpool] = React.useState<ISpool>();
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
-    const [id] = useParams();
+    const [interests, setInterests] = React.useState('');
 
 
 
@@ -40,7 +40,7 @@ export default function PostThread() {
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel>Interests</FormLabel>
-                                    <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
+                                    <Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setTitle(e.target.value)} />
                                 </FormControl>
                                 <Button colorScheme={"purple"} width='120px' onClick={() => { postSpool() }}>
                                     Create
