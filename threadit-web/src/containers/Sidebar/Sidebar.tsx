@@ -1,5 +1,5 @@
 import { observer } from "mobx-react"
-import { Box, Button, Divider, Flex, Icon, Image, Spacer } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Icon, Image, Spacer, Text } from "@chakra-ui/react";
 import "./Sidebar.scss";
 import { IoStatsChart } from "react-icons/io5";
 import { FaWrench } from "react-icons/fa";
@@ -17,7 +17,10 @@ export const Sidebar = observer(() => {
             <Image src="/logo.png" alt="Threadit" className="logo" />
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
-            <NavLink to={"/thread"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Post Thread</Button></NavLink>
+            <Divider />
+            <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
+            <NavLink to={"/s/AskThreadit"}><Button colorScheme={"purple"}>AskThreadit</Button></NavLink>
+            <NavLink to={"/s/hockey"}><Button colorScheme={"purple"}>hockey</Button></NavLink>
             <Spacer />
             {profile && <>
                 <Divider />

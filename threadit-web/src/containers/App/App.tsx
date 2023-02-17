@@ -13,7 +13,7 @@ const App = observer(() => {
                     <Box flexBasis={"content"}>
                         <Sidebar />
                     </Box>
-                    <Box flexGrow={1}>
+                    <Box flexGrow={1} maxH="100vh" scrollBehavior={"smooth"}>
                         <Router />
                     </Box>
                 </Flex>

@@ -38,6 +38,19 @@ namespace ThreaditAPI.Services
             }
         }
 
+        public async Task<Spool?> GetSpoolByNameAsync(string spoolName)
+        {
+            Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spoolName);
+            if (returnedSpool != null)
+            {
+                return returnedSpool;
+            }
+            else
+            {
+                throw new Exception("Spool does not exist.");
+            }
+        }
+
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
             await this.spoolRepository.InsertSpoolAsync(spool);

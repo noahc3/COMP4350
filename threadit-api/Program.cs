@@ -65,6 +65,7 @@ namespace ThreaditAPI
 
                 var context = services.GetRequiredService<PostgresDbContext>();
                 context.Database.Migrate();
+                DbInitializer.Initialize(context);
             }
 
             app.UseMiddleware<AuthenticationRequiredMiddleware>();

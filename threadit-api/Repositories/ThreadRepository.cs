@@ -20,6 +20,18 @@ namespace ThreaditAPI.Repositories
             return dbThread == default ? null : dbThread;
         }
 
+        public async Task<Models.Thread[]> GetThreadsBySpoolAsync(string spoolId)
+        {
+            Models.Thread[] dbThreads = await db.Threads.Where(u => u.SpoolId == spoolId).OrderByDescending(u => u.DateCreated).ToArrayAsync();
+            return dbThreads;
+        }
+
+        public async Task<Models.Thread[]> GetAllThreadsAsync()
+        {
+            Models.Thread[] dbThreads = await db.Threads.OrderByDescending(u => u.DateCreated).ToArrayAsync();
+            return dbThreads;
+        }
+
         public async Task InsertThreadAsync(Models.Thread thread)
         {
             await db.Threads.AddAsync(thread);

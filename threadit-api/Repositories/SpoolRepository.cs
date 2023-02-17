@@ -21,6 +21,12 @@ namespace ThreaditAPI.Repositories
             return dbSpool == default ? null : dbSpool;
         }
 
+        public async Task<Spool?> GetSpoolByNameAsync(string spoolName)
+        {
+            Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Name == spoolName);
+            return dbSpool == default ? null : dbSpool;
+        }
+
         public async Task InsertSpoolAsync(Spool spool)
         {
             await db.Spools.AddAsync(spool);

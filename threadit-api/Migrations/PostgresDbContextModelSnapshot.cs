@@ -78,16 +78,6 @@ namespace ThreaditAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Spools");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "7f527ccf-a2bc-4adb-a7da-970be1175525",
-                            Interests = new List<string> { "Hockey" },
-                            Moderators = new List<string>(),
-                            Name = "First Spool Ever!!!",
-                            OwnerId = "00000000-0000-456a-b0f7-7a8c172c23e0"
-                        });
                 });
 
             modelBuilder.Entity("ThreaditAPI.Models.Thread", b =>
@@ -154,16 +144,6 @@ namespace ThreaditAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "00000000-0000-456a-b0f7-7a8c172c23e0",
-                            DateCreated = new DateTime(2023, 2, 10, 22, 31, 16, 689, DateTimeKind.Utc).AddTicks(563),
-                            Email = "test@gmail.com",
-                            PasswordHash = "testPassword",
-                            Username = "testAccount"
-                        });
                 });
 
             modelBuilder.Entity("ThreaditAPI.Models.UserSession", b =>
