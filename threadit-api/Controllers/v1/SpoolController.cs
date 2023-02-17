@@ -37,7 +37,6 @@ namespace ThreaditAPI.Controllers.v1 {
 
             Models.Spool spool = new Models.Spool
             {
-                Id = request.Id,
                 Name = request.Name,
                 OwnerId = userDTO.Id,
                 Interests = request.Interests,
