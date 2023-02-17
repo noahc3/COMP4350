@@ -3,7 +3,6 @@ import { Alert, AlertIcon, Box, Button, FormControl, FormLabel, Heading, Input, 
 import React from "react";
 import { authStore } from "../../stores/AuthStore";
 import { navStore } from "../../stores/NavStore";
-import { userStore } from "../../stores/UserStore";
 import './Login.css'
 
 export default function Login() {

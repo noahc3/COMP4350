@@ -1,5 +1,4 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
-import { navStore } from "../stores/NavStore";
 import { getWithAuth, post } from "./Request";
 
 const loginEndpoint = ApiEndpoint('/v1/auth/login');

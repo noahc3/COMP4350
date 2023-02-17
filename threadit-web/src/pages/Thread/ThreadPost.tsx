@@ -1,9 +1,7 @@
-import { Box, Button, ButtonGroup, Container, Heading, HStack, Spacer, Spinner, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { useParams } from "react-router";
 import ThreadAPI from "../../api/ThreadAPI";
-import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { IThreadFull } from "../../models/ThreadFull";
 import Moment from 'react-moment';
 import { authStore } from "../../stores/AuthStore";
@@ -13,6 +11,7 @@ import { MdOutlineCancel, MdOutlineDelete } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
 import { navStore } from "../../stores/NavStore";
 import { Link } from "react-router-dom";
+import "./ThreadPost.scss";
 
 export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
     const [thread, setThread] = useState<IThreadFull>();
@@ -70,7 +69,7 @@ export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
     }
 
     return (
-        <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%">
+        <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%" className="threadPost">
             {thread ? (
                 <VStack alignItems="start">
                     <HStack>
