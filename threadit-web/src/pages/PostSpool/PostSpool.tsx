@@ -21,7 +21,7 @@ export default function PostThread() {
         if (user) {
             setLockInputs(true);
             try {
-                await SpoolAPI.PostSpool(title, user.id, ["hockey, sports"], []);
+                await SpoolAPI.PostSpool(title, user.id, ["hockey, sports", "other stuff"], []);
             } finally {
                 setLockInputs(false);
             }
