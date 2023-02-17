@@ -1,5 +1,7 @@
 import { makeObservable, action, observable } from "mobx";
 import AuthAPI from "../api/AuthAPI";
+import { navStore } from "./NavStore";
+import { userStore } from "./UserStore";
 
 export class AuthStore {
     @observable
@@ -22,6 +24,7 @@ export class AuthStore {
             this.sessionToken = localStorage.getItem("session-token");
             this.isAuthenticated = true;
             this.userNeedsAuthentication = false;
+            await userStore.refreshUserProfile();
         }
         return success;
     }
@@ -54,6 +57,20 @@ export class AuthStore {
 
         this.isAuthenticated = true;
         this.userNeedsAuthentication = false;
+    }
+
+    @action
+    async logout(): Promise<void> {
+        try {
+            await AuthAPI.logout();
+        } finally {
+            this.sessionToken = null;
+            this.isAuthenticated = false;
+            this.userNeedsAuthentication = true;
+            userStore.clearUserProfile();
+            localStorage.removeItem("session-token");
+            navStore.navigateTo("/");
+        }
     }
 
 }

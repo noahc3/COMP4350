@@ -3,4 +3,5 @@ export interface IThread {
     title: string
     content: string
     spoolId: string
+    ownerId: string
 }

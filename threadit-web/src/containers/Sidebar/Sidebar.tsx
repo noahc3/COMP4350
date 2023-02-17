@@ -12,6 +12,11 @@ import { authStore } from "../../stores/AuthStore";
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
+
+    const logout = async () => {
+        authStore.logout();
+    }
+
     return (
         <Flex direction={"column"} className="sidebar">
             <Image src="/logo.png" alt="Threadit" className="logo" />
@@ -32,7 +37,7 @@ export const Sidebar = observer(() => {
             {isAuthenticated && (
                 <>
                     <NavLink to={"/settings"}><Button leftIcon={<Icon as={FaWrench} />} colorScheme={"purple"}>Settings</Button></NavLink>
-                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} colorScheme={"purple"}>Logout</Button>
+                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} colorScheme={"purple"} onClick={() => { logout() }}>Logout</Button>
                 </>
             )}
 

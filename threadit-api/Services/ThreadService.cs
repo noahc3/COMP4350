@@ -156,5 +156,10 @@ namespace ThreaditAPI.Services
             await this.threadRepository.UpdateThreadAsync(thread);
             return thread;
         }
+
+        public async Task DeleteThreadAsync(string threadId)
+        {
+            await this.threadRepository.DeleteThreadAsync(threadId);
+        }
     }
 }

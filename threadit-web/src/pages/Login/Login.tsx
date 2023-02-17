@@ -3,6 +3,7 @@ import { Alert, AlertIcon, Box, Button, FormControl, FormLabel, Heading, Input, 
 import React from "react";
 import { authStore } from "../../stores/AuthStore";
 import { navStore } from "../../stores/NavStore";
+import { userStore } from "../../stores/UserStore";
 import './Login.css'
 
 export default function Login() {
@@ -74,7 +75,7 @@ export default function Login() {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Password</FormLabel>
-                                <Input disabled={lockInputs} type='password' value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                                <Input onKeyDown={(e) => { if (e.key === 'Enter') login()}} disabled={lockInputs} type='password' value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
                             </FormControl>
                             <Button width={'100%'} colorScheme="purple" leftIcon={<LockIcon />} onClick={() => { login() }}>Login</Button>
                         </VStack>
@@ -103,7 +104,7 @@ export default function Login() {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Password</FormLabel>
-                                <Input disabled={lockInputs} type='password' value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
+                                <Input onKeyDown={(e) => { if (e.key === 'Enter') register()}} disabled={lockInputs} type='password' value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
                             </FormControl>
                             <Button w='100%' colorScheme="purple" leftIcon={<LockIcon />} onClick={() => { register() }}>Register</Button>
                         </VStack>

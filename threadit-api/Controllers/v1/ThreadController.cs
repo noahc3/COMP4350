@@ -48,5 +48,63 @@ namespace ThreaditAPI.Controllers.v1 {
             Models.ThreadFull[] threads = await threadService.GetAllThreadsAsync();
             return Ok(threads);
         }
+
+        [HttpPost("edit")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> EditThread([FromServices] ThreadService threadService, [FromBody] Models.Thread thread) {
+            if (thread == null || String.IsNullOrWhiteSpace(thread.Id)) {
+                return BadRequest("Thread data is invalid.");
+            }
+
+            UserDTO? profile = Request.HttpContext.GetUser();
+            if (profile == null) {
+                return Unauthorized();
+            }
+
+            Models.Thread? threadFromDb = await threadService.GetThreadAsync(thread.Id);
+            if (threadFromDb == null) {
+                return BadRequest("Thread does not exist.");
+            }
+
+            if (threadFromDb.OwnerId != profile.Id) {
+                return Unauthorized();
+            }
+
+            try {
+                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(thread);
+                return Ok(updatedThread);
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{threadId}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> DeleteThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {
+            if (String.IsNullOrWhiteSpace(threadId)) {
+                return BadRequest("Thread ID is invalid.");
+            }
+
+            UserDTO? profile = Request.HttpContext.GetUser();
+            if (profile == null) {
+                return Unauthorized();
+            }
+
+            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
+            if (threadFromDb == null) {
+                return BadRequest("Thread does not exist.");
+            }
+
+            if (threadFromDb.OwnerId != profile.Id) {
+                return Unauthorized();
+            }
+
+            try {
+                await threadService.DeleteThreadAsync(threadId);
+                return Ok();
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

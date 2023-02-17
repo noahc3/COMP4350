@@ -13,26 +13,12 @@ namespace ThreaditAPI.Services {
 
         public async Task<UserSession?> GetUserSessionAsync(string sessionId) {
             UserSession? userSess = await this.sessionRepository.GetUserSessionAsync(sessionId);
-            if (userSess != null)
-            {
-                return userSess;
-            }
-            else
-            {
-                throw new Exception("UserSession does not exist.");
-            }
+            return userSess;
         }
 
         public async Task<UserSession?> GetUserSessionAsync(UserSession session) {
             UserSession? userSess = await this.sessionRepository.GetUserSessionAsync(session);
-            if (userSess != null)
-            {
-                return userSess;
-            }
-            else
-            {
-                throw new Exception("UserSession does not exist.");
-            }
+            return userSess;
         }
 
         public async Task<UserSession> CreateUserSessionAsync(User user) {
@@ -49,12 +35,15 @@ namespace ThreaditAPI.Services {
             if (session == null) {
                 return null;
             } else if (session.DateExpires < DateTime.Now) {
-                await this.sessionRepository.DeleteUserSessionAsync(session);
+                await this.sessionRepository.DeleteUserSessionAsync(sessionId);
                 return null;
             }
 
             return await this.userRepository.GetUserAsync(session.UserId);
         }
 
+        public async Task DeleteUserSessionAsync(string sessionId) {
+            await this.sessionRepository.DeleteUserSessionAsync(sessionId);
+        }
     }
 }

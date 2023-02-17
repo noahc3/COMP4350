@@ -1,9 +1,11 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
-import { post } from "./Request";
+import { navStore } from "../stores/NavStore";
+import { getWithAuth, post } from "./Request";
 
 const loginEndpoint = ApiEndpoint('/v1/auth/login');
 const registerEndpoint = ApiEndpoint('/v1/auth/register');
 const checkSessionEndpoint = ApiEndpoint('/v1/auth/checksession');
+const logoutEndpoint = ApiEndpoint('/v1/auth/logout');
 
 export default class AuthAPI {
     static async login(username: string, password: string): Promise<boolean> {
@@ -41,5 +43,12 @@ export default class AuthAPI {
         });
 
         return response.ok;
+    }
+
+    static async logout(): Promise<void> {
+        const response = await getWithAuth(logoutEndpoint);
+        if (!response.ok) {
+            throw new Error(`Failed to logout: ${await response.text()}`);
+        }
     }
 }

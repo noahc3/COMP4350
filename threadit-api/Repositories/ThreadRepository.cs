@@ -49,5 +49,14 @@ namespace ThreaditAPI.Repositories
                 await db.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteThreadAsync(string threadId) {
+            Models.Thread? originalThread = await GetThreadAsync(threadId);
+            if (originalThread != null)
+            {
+                db.Threads.Remove(originalThread);
+                await db.SaveChangesAsync();
+            }
+        }
     }
 }
