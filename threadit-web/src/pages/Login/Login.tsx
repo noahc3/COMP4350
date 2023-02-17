@@ -74,7 +74,7 @@ export default function Login() {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Password</FormLabel>
-                                <Input disabled={lockInputs} type='password' value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                                <Input onKeyDown={(e) => { if (e.key === 'Enter') login()}} disabled={lockInputs} type='password' value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
                             </FormControl>
                             <Button width={'100%'} colorScheme="purple" leftIcon={<LockIcon />} onClick={() => { login() }}>Login</Button>
                         </VStack>
@@ -103,7 +103,7 @@ export default function Login() {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Password</FormLabel>
-                                <Input disabled={lockInputs} type='password' value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
+                                <Input onKeyDown={(e) => { if (e.key === 'Enter') register()}} disabled={lockInputs} type='password' value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
                             </FormControl>
                             <Button w='100%' colorScheme="purple" leftIcon={<LockIcon />} onClick={() => { register() }}>Register</Button>
                         </VStack>

@@ -356,4 +356,45 @@ public class ThreadRepositoryTests
         //make sure it was not in the database
         Assert.That(returnedThread, Is.Null);
     }
+
+    [Test]
+    public async Task DeleteThread_Exists_ShouldPass() 
+    {
+        // Create Thread
+        ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "7b55bc38-c3d7-41d2-8f19-c6e6e9bcd50d",
+            Topic = "Test Thread Topic",
+            Title = "Test Thread Title",
+            Content = "Test Thread Content",
+            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+        };
+
+        // Ensure Thread is not in database
+        ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
+        Assert.That(returnedThread, Is.Null);
+
+        // Add Thread to database
+        await _threadRepository.InsertThreadAsync(testThread);
+        returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
+
+        // Ensure Thread is added correctly
+        Assert.That(returnedThread, Is.Not.Null);
+        Assert.IsTrue(returnedThread!.Id.Equals(testThread.Id));
+        Assert.IsTrue(returnedThread.Topic.Equals(testThread.Topic));
+        Assert.IsTrue(returnedThread.Title.Equals(testThread.Title));
+        Assert.IsTrue(returnedThread.Content.Equals(testThread.Content));
+        Assert.IsTrue(returnedThread.OwnerId.Equals(testThread.OwnerId));
+        Assert.IsTrue(returnedThread.SpoolId.Equals(testThread.SpoolId));
+
+        //delete thread
+        await _threadRepository.DeleteThreadAsync(testThread.Id);
+
+        //get the thread again
+        returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
+
+        //make sure thread has been deleted
+        Assert.That(returnedThread, Is.Null);
+    }
 }

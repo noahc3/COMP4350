@@ -4,6 +4,7 @@ export interface IThreadFull {
     title: string
     content: string
     spoolId: string
+    ownerId: string
     authorName: string
     spoolName: string
     dateCreated: string

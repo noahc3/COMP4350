@@ -17,6 +17,11 @@ export class UserStore {
         return this._userProfile
     }
 
+    @action
+    async clearUserProfile() {
+        this._userProfile = undefined;
+    }
+
     @computed
     get userProfile() {
         if (this._userProfile === undefined) this.refreshUserProfile();

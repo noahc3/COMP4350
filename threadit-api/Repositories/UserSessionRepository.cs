@@ -21,9 +21,12 @@ namespace ThreaditAPI.Repositories {
             await db.SaveChangesAsync();
         }
 
-        public async Task DeleteUserSessionAsync(UserSession session) {
-            db.UserSessions.Remove(session);
-            await db.SaveChangesAsync();
+        public async Task DeleteUserSessionAsync(string sessionId) {
+            UserSession? session = await GetUserSessionAsync(sessionId);
+            if (session != null) {
+                db.UserSessions.Remove(session);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 import { observer } from "mobx-react"
-import { Box, Button, Divider, Flex, Icon, Image, Spacer, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Divider, Flex, HStack, Icon, Image, Spacer, Text } from "@chakra-ui/react";
 import "./Sidebar.scss";
 import { IoStatsChart } from "react-icons/io5";
-import { FaWrench } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { MdOutlineExitToApp } from "react-icons/md";
 import { NavLink } from "../Router/NavLink";
@@ -12,6 +11,11 @@ import { authStore } from "../../stores/AuthStore";
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
+
+    const logout = async () => {
+        authStore.logout();
+    }
+
     return (
         <Flex direction={"column"} className="sidebar">
             <Image src="/logo.png" alt="Threadit" className="logo" />
@@ -24,15 +28,17 @@ export const Sidebar = observer(() => {
             <Spacer />
             {profile && <>
                 <Divider />
-                <Box paddingInlineStart={4} paddingInlineEnd={4} textColor={'gray.300'} fontSize={'xs'}>
-                    {profile.email}<br />{profile.id}
+                <Box >
+                    <HStack marginInlineStart={2}>
+                        <Avatar size={'sm'} name='Dan Abrahmov' src='/img/avatar_placeholder.png' />
+                        <Text>{profile.username}</Text>
+                    </HStack>
                 </Box>
             </>}
             <Divider />
             {isAuthenticated && (
                 <>
-                    <NavLink to={"/settings"}><Button leftIcon={<Icon as={FaWrench} />} colorScheme={"purple"}>Settings</Button></NavLink>
-                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} colorScheme={"purple"}>Logout</Button>
+                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} colorScheme={"purple"} onClick={() => { logout() }}>Logout</Button>
                 </>
             )}
 
