@@ -7,10 +7,10 @@ import { useParams } from "react-router";
 import SpoolAPI from "../../api/SpoolAPI";
 import { ISpool } from "../../models/Spool";
 import ThreadAPI from "../../api/ThreadAPI";
+import { IUserProfile } from "../../models/UserProfile";
 
 export default function PostThread() {
-    const { spoolName } = useParams();
-    const [spool, setSpool] = React.useState<ISpool>();
+    const [user, getUser] = React.useState<IUserProfile>();
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
     const [interests, setInterests] = React.useState('');
@@ -20,8 +20,7 @@ export default function PostThread() {
     const postSpool = async () => {
         setLockInputs(true);
         try {
-            await SpoolAPI.PostSpool(title, id,,);
-            navStore.navigateTo("/s/" + spool.name + "/");
+            await SpoolAPI.PostSpool(title, user?.id, ["hockey, sports"],[]);
         } finally {
             setLockInputs(false);
         }
