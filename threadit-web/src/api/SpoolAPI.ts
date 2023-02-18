@@ -44,7 +44,7 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async getAllThreads(): Promise<ISpool[]> {
+    static async GetAllThreads(): Promise<ISpool[]> {
         const response = await get(allSpoolsEndpoint);
 
         if (!response.ok) {
