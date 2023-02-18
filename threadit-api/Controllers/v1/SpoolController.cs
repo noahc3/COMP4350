@@ -53,5 +53,12 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllSpools([FromServices] SpoolService spoolService)
+        {
+            List<Spool>? spools = await spoolService.GetAllSpoolsAsync();
+            return Ok(spools);
+        }
     }
 }

@@ -19,7 +19,7 @@ export const Router: React.FC = observer(() => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/s/:spoolName/createthread" element={<PostThread />} />
-                <Route path="/s/:createspool" element={<PostSpool />} />
+                <Route path="/:createspool" element={<PostSpool />} />
                 <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
                 <Route path="/settings" element={<UserSettings/>} />
