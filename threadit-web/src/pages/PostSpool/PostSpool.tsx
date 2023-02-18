@@ -44,13 +44,8 @@ export default function PostSpool() {
                                     <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
                                 </FormControl>
                                 <FormControl>
-                                    {/*<FormLabel>Interests</FormLabel>*/}
-                                    {/*<Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setInterests(e.target.value)} />*/}
-
-                                            <FormLabel>Interests (Press enter after each interest)</FormLabel>
-                                        <ChakraTagInput tags={tags} onTagsChange={handleTagsChange} />
-
-
+                                    <FormLabel>Interests (Press enter after each interest)</FormLabel>
+                                    <ChakraTagInput tags={tags} onTagsChange={handleTagsChange} />
                                 </FormControl>
                                 <Button colorScheme={"purple"} width='120px' onClick={() => { postSpool() }}>
                                     Create
