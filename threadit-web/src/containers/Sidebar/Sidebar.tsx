@@ -15,7 +15,7 @@ export const Sidebar = observer(() => {
     const spools = spoolStore.spools;
     const buttons = spools?.map(function (spool) {
         return (
-            <NavLink to={"/s/" + spool.name}>
+            <NavLink to={"/s/" + spool.name} key={spool.id}>
                 <Button colorScheme={"purple"}>{spool.name}</Button>
             </NavLink>
         );
@@ -31,9 +31,9 @@ export const Sidebar = observer(() => {
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
             <Divider />
-            <NavLink to={"/spool"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+            <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
-            return <>{buttons}</>
+            <>{buttons}</>
             <Spacer />
             {profile && <>
                 <Divider />

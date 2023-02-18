@@ -61,7 +61,7 @@ namespace ThreaditAPI.Services
             else
             {
                 await this.spoolRepository.InsertSpoolAsync(spool);
-                return returnedSpool!;
+                return spool!;
             }
         }
 
@@ -96,9 +96,9 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<List<Spool>> GetAllSpoolsAsync()
+        public async Task<Spool[]> GetAllSpoolsAsync()
         {
-            List<Spool> spools = await this.spoolRepository.GetAllSpools();
+            Spool[] spools = await this.spoolRepository.GetAllSpoolsAsync();
             return spools;
         } 
     }

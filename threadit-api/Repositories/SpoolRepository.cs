@@ -64,10 +64,10 @@ namespace ThreaditAPI.Repositories
             return userId;
         }
 
-        public Task<List<Spool>> GetAllSpools()
+        public async Task<Spool[]> GetAllSpoolsAsync()
         {
-            List<Spool> spools = this.db.Spools.ToList();
-            return Task.FromResult(spools);
+            Spool[] spools = await db.Spools.OrderByDescending(u => u.Id).ToArrayAsync();
+            return spools;
         }
     }
 }

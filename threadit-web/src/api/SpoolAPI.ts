@@ -2,6 +2,7 @@ import { ApiEndpoint } from "../constants/ApiConstants";
 import { ISpool } from "../models/Spool";
 import { IThreadFull } from "../models/ThreadFull";
 import { get, postWithAuth } from "./Request";
+import { spoolStore } from "../stores/SpoolStore";
 
 const spoolEndpoint = ApiEndpoint("/v1/spool/");
 const spoolThreadsEndpoint = ApiEndpoint('/v1/spool/threads/');
@@ -11,7 +12,7 @@ const allSpoolsEndpoint = ApiEndpoint('/v1/spool/all');
 export default class SpoolAPI {
     static async getSpoolThreads(spoolId: string): Promise<IThreadFull[]> {
         const response = await get(spoolThreadsEndpoint + spoolId);
-    
+
         if (!response.ok) {
             throw new Error(`Failed to get all spool threads: ${await response.text()}`);
         }
@@ -21,7 +22,7 @@ export default class SpoolAPI {
 
     static async getSpoolById(spoolId: string): Promise<ISpool> {
         const response = await get(spoolEndpoint + spoolId);
-    
+
         if (!response.ok) {
             throw new Error(`Failed to get spool: ${await response.text()}`);
         }
@@ -41,14 +42,16 @@ export default class SpoolAPI {
             throw new Error(`Failed to post spool: ${await response.text()}`);
         }
 
+        spoolStore.refreshSpools();
+
         return await response.json();
     }
 
-    static async GetAllThreads(): Promise<ISpool[]> {
+    static async GetAllSpools(): Promise<ISpool[]> {
         const response = await get(allSpoolsEndpoint);
 
         if (!response.ok) {
-            throw new Error(`Failed to get all spool threads: ${await response.text()}`);
+            throw new Error(`Failed to get all spools: ${await response.text()}`);
         }
 
         return await response.json();
