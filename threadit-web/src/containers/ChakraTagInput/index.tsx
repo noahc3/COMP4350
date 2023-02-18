@@ -103,9 +103,7 @@ export default forwardRef(function ChakraTagInput({
           </ChakraTagInputTag>
         </WrapItem>
       ))}
-      <WrapItem flexGrow={1} {...maybeCall(wrapItemProps, true, tags.length)}>
         <Input {...props} onKeyDown={handleKeyDown} ref={ref}/>
-      </WrapItem>
     </Wrap>
   )
 })
