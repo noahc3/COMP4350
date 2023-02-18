@@ -53,8 +53,16 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
-            await this.spoolRepository.InsertSpoolAsync(spool);
-            return spool;
+            Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
+            if (returnedSpool != null)
+            {
+                throw new Exception("Spool already exists.");
+            }
+            else
+            {
+                await this.spoolRepository.InsertSpoolAsync(spool);
+                return spool!;
+            }
         }
 
         public async Task<List<string>> GetModeratorsAsync(string spoolId)
@@ -87,5 +95,11 @@ namespace ThreaditAPI.Services
                 throw new Exception("Spool does not exist.");
             }
         }
+
+        public async Task<Spool[]> GetAllSpoolsAsync()
+        {
+            Spool[] spools = await this.spoolRepository.GetAllSpoolsAsync();
+            return spools;
+        } 
     }
 }

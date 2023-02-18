@@ -7,10 +7,20 @@ import { MdOutlineExitToApp } from "react-icons/md";
 import { NavLink } from "../Router/NavLink";
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
+import { spoolStore } from "../../stores/SpoolStore";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
+    const spools = spoolStore.spools;
+    const buttons = spools?.map(function (spool) {
+        return (
+            <NavLink to={"/s/" + spool.name} key={spool.id}>
+                <Button colorScheme={"purple"}>{spool.name}</Button>
+            </NavLink>
+        );
+    });
 
     const logout = async () => {
         authStore.logout();
@@ -21,10 +31,12 @@ export const Sidebar = observer(() => {
             <Image src="/logo.png" alt="Threadit" className="logo" />
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
+            {profile && <>
+                <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+            </>}
             <Divider />
             <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
-            <NavLink to={"/s/AskThreadit"}><Button colorScheme={"purple"}>AskThreadit</Button></NavLink>
-            <NavLink to={"/s/hockey"}><Button colorScheme={"purple"}>hockey</Button></NavLink>
+            <>{buttons}</>
             <Spacer />
             {profile && <>
                 <Divider />

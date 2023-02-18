@@ -28,7 +28,6 @@ export class UserStore {
 
         return this._userProfile;
     }
-
 }
 
 export const userStore = new UserStore();
