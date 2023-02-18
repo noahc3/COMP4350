@@ -8,6 +8,8 @@ import { NavLink } from "../Router/NavLink";
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
 import { spoolStore } from "../../stores/SpoolStore";
+import { ADD } from "mobx/dist/internal";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
@@ -31,7 +33,7 @@ export const Sidebar = observer(() => {
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
             <Divider />
-            <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+            <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
             <>{buttons}</>
             <Spacer />
