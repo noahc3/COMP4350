@@ -16,8 +16,7 @@ export default function PostSpool() {
         if (profile) {
             setLockInputs(true);
             try {
-                const interests = tags.join(",");
-                await SpoolAPI.createSpool(title, profile.id, interests.split(","), []);
+                await SpoolAPI.createSpool(title, profile.id, tags, []);
                 navStore.navigateTo("/s/" + title + "/");
             } finally {
                 setLockInputs(false);
