@@ -22,7 +22,7 @@ export const Sidebar = observer(() => {
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
             <Divider />
-            <NavLink to={"/spool"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+            <NavLink to={"/spool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
             <NavLink to={"/s/AskThreadit"}><Button colorScheme={"purple"}>AskThreadit</Button></NavLink>
             <NavLink to={"/s/hockey"}><Button colorScheme={"purple"}>hockey</Button></NavLink>
