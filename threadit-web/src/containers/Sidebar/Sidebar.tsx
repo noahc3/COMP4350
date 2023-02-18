@@ -8,7 +8,6 @@ import { NavLink } from "../Router/NavLink";
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
 import { spoolStore } from "../../stores/SpoolStore";
-import { ADD } from "mobx/dist/internal";
 import { AddIcon } from "@chakra-ui/icons";
 
 export const Sidebar = observer(() => {
