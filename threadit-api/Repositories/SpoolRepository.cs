@@ -63,5 +63,11 @@ namespace ThreaditAPI.Repositories
             await db.SaveChangesAsync();
             return userId;
         }
+
+        public async Task<Spool[]> GetAllSpoolsAsync()
+        {
+            Spool[] spools = await db.Spools.OrderByDescending(u => u.Id).ToArrayAsync();
+            return spools;
+        }
     }
 }

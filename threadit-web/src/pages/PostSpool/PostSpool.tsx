@@ -1,16 +1,12 @@
 import React from "react";
-import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack, Textarea } from "@chakra-ui/react";
+import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
 import { userStore } from "../../stores/UserStore";
-import { useParams } from "react-router";
 import SpoolAPI from "../../api/SpoolAPI";
-import { ISpool } from "../../models/Spool";
-import ThreadAPI from "../../api/ThreadAPI";
-import { IUserProfile } from "../../models/UserProfile";
 
-export default function PostThread() {
-    const [user, getUser] = React.useState<IUserProfile>();
+export default function PostSpool() {
+    const profile = userStore.userProfile;
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
     const [interests, setInterests] = React.useState('');
@@ -18,11 +14,17 @@ export default function PostThread() {
 
 
     const postSpool = async () => {
-        setLockInputs(true);
-        try {
-            await SpoolAPI.PostSpool(title, user?.id, ["hockey, sports"],[]);
-        } finally {
-            setLockInputs(false);
+        if (profile) {
+            setLockInputs(true);
+            try {
+                await SpoolAPI.PostSpool(title, profile.id, interests.split(","), []);
+                navStore.navigateTo("/s/" + title + "/");
+            } finally {
+                setLockInputs(false);
+            }
+        }
+        else {
+            console.log("No user set.");
         }
     }
 
@@ -39,7 +41,7 @@ export default function PostThread() {
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel>Interests</FormLabel>
-                                    <Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setTitle(e.target.value)} />
+                                    <Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setInterests(e.target.value)} />
                                 </FormControl>
                                 <Button colorScheme={"purple"} width='120px' onClick={() => { postSpool() }}>
                                     Create
