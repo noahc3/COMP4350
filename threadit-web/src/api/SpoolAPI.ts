@@ -30,7 +30,7 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async PostSpool(name: string, ownerId: string, interests: string[], moderators: string[]): Promise<ISpool> {
+    static async createSpool(name: string, ownerId: string, interests: string[], moderators: string[]): Promise<ISpool> {
         const response = await postWithAuth(postSpoolEndpoint, {
             name,
             ownerId,
@@ -47,7 +47,7 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async GetAllSpools(): Promise<ISpool[]> {
+    static async getAllSpools(): Promise<ISpool[]> {
         const response = await get(allSpoolsEndpoint);
 
         if (!response.ok) {

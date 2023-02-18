@@ -1,5 +1,6 @@
-import React from "react";
-import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
+import React, { SyntheticEvent, useCallback } from "react";
+import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack, Container, ChakraProvider, Heading } from "@chakra-ui/react";
+import ChakraTagInput from "../../containers/ChakraTagInput";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
 import { userStore } from "../../stores/UserStore";
@@ -9,15 +10,14 @@ export default function PostSpool() {
     const profile = userStore.userProfile;
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
-    const [interests, setInterests] = React.useState('');
-
-
+    const [tags, setTags] = React.useState(["General"]);
 
     const postSpool = async () => {
         if (profile) {
             setLockInputs(true);
             try {
-                await SpoolAPI.PostSpool(title, profile.id, interests.split(","), []);
+                const interests = tags.join(",");
+                await SpoolAPI.createSpool(title, profile.id, interests.split(","), []);
                 navStore.navigateTo("/s/" + title + "/");
             } finally {
                 setLockInputs(false);
@@ -27,6 +27,10 @@ export default function PostSpool() {
             console.log("No user set.");
         }
     }
+
+    const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
+        setTags(tags)
+    }, [])
 
     return (
         <PageLayout title="Post a Spool">
@@ -40,8 +44,13 @@ export default function PostSpool() {
                                     <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
                                 </FormControl>
                                 <FormControl>
-                                    <FormLabel>Interests</FormLabel>
-                                    <Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setInterests(e.target.value)} />
+                                    {/*<FormLabel>Interests</FormLabel>*/}
+                                    {/*<Input disabled={lockInputs} size='md' value={interests} onChange={(e) => setInterests(e.target.value)} />*/}
+
+                                            <FormLabel>Interests (Press enter after each interest)</FormLabel>
+                                        <ChakraTagInput tags={tags} onTagsChange={handleTagsChange} />
+
+
                                 </FormControl>
                                 <Button colorScheme={"purple"} width='120px' onClick={() => { postSpool() }}>
                                     Create

@@ -32,8 +32,10 @@ export const Sidebar = observer(() => {
             <Image src="/logo.png" alt="Threadit" className="logo" />
             <Divider />
             <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
+            {profile && <>
+                <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+            </>}
             <Divider />
-            <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
             <>{buttons}</>
             <Spacer />

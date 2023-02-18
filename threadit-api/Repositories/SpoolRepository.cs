@@ -66,7 +66,7 @@ namespace ThreaditAPI.Repositories
 
         public async Task<Spool[]> GetAllSpoolsAsync()
         {
-            Spool[] spools = await db.Spools.OrderByDescending(u => u.Id).ToArrayAsync();
+            Spool[] spools = await db.Spools.OrderBy(u => u.Name).ToArrayAsync();
             return spools;
         }
     }

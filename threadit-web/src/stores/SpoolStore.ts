@@ -13,7 +13,7 @@ export class SpoolStore {
 
     @action
     async refreshSpools() {
-        this._spools = await SpoolAPI.GetAllSpools();
+        this._spools = await SpoolAPI.getAllSpools();
         return this._spools
     }
 
