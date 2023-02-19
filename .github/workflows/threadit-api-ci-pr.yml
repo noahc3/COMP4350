@@ -8,6 +8,18 @@ jobs:
   ci:
     name: 'threadit-api: continuous integration (pull requests)'
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: threadit
+          POSTGRES_PASSWORD: threadit
+          POSTGRES_DB: threadit
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: ./threadit-api
@@ -23,8 +35,8 @@ jobs:
         run: dotnet build --configuration Release --no-restore -warnaserror
       - name: Test
         env:
-          dbUser: ${{ secrets.THREADIT_DB_CI_USER }}
-          dbPassword: ${{ secrets.THREADIT_DB_CI_PASS }}
-          dbHost: ${{ secrets.THREADIT_DB_CI_HOST }}
-          dbName: ${{ secrets.THREADIT_DB_CI_NAME }}
+          dbUser: threadit
+          dbPassword: threadit
+          dbHost: postgres:5432
+          dbName: threadit
         run: dotnet test --no-restore --verbosity normal
