@@ -20,12 +20,6 @@ public class SpoolRepositoryTests
         _spoolRepository = new SpoolRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveSpool_NotExists_ShouldFail()
     {

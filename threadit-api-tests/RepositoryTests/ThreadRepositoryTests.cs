@@ -16,12 +16,6 @@ public class ThreadRepositoryTests
         _threadRepository = new ThreadRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveThread_NotExists_ShouldFail()
     {

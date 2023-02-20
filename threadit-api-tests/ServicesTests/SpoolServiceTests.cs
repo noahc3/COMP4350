@@ -21,12 +21,6 @@ public class SpoolServiceTests
         _spoolService = new SpoolService(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public void RetrieveSpoolByName_NotExists_ShouldFail()
     {

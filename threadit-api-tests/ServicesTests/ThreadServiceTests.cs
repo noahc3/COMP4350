@@ -24,12 +24,6 @@ public class ThreadServiceTests
         _userRepository = new UserRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public void RetrieveThreadsBySpool_NoneExists_ShouldFail()
     {

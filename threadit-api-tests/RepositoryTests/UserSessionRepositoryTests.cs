@@ -19,12 +19,6 @@ public class UserSessionRepositoryTests
         _userSessionRepository = new UserSessionRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveUserSession_NotExists_ShouldFail()
     {

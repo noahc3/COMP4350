@@ -19,12 +19,6 @@ public class UserRepositoryTests
         _userRepository = new UserRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveUser_NotExists_ShouldFail()
     {

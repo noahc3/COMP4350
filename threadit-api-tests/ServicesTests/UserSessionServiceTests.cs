@@ -20,12 +20,6 @@ public class UserSessionServiceTests
         _userSessionService = new UserSessionService(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveUserSession_NotExists_ShouldFail() {
         UserSession testUserSession = new UserSession() {

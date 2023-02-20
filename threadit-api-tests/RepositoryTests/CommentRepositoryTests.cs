@@ -17,12 +17,6 @@ public class CommentRepositoryTests
         _commentRepository = new CommentRepository(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task RetrieveComment_NotExists_ShouldFail()
     {

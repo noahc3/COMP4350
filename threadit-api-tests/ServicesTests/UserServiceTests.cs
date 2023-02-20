@@ -20,12 +20,6 @@ public class UserServiceTests
         _userService = new UserService(_dbContext);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        CommonUtils.Rollback(_dbContext);
-    }
-
     [Test]
     public async Task UserService_RetrieveUser_NotExists_ShouldFail()
     {
