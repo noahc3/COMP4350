@@ -16,16 +16,14 @@ public class UserSessionServiceTests
     [SetUp]
     public void Setup()
     {
-        _dbContext = new PostgresDbContext();
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Database.Migrate();
+        _dbContext = CommonUtils.GetDbContext();
         _userSessionService = new UserSessionService(_dbContext);
     }
 
     [TearDown]
     public void Cleanup()
     {
-        _dbContext.Database.EnsureDeleted();
+        CommonUtils.Rollback(_dbContext);
     }
 
     [Test]

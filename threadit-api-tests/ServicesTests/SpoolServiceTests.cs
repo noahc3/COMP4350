@@ -17,16 +17,14 @@ public class SpoolServiceTests
     [SetUp]
     public void Setup()
     {
-        _dbContext = new PostgresDbContext();
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Database.Migrate();
+        _dbContext = CommonUtils.GetDbContext();
         _spoolService = new SpoolService(_dbContext);
     }
 
     [TearDown]
     public void Cleanup()
     {
-        _dbContext.Database.EnsureDeleted();
+        CommonUtils.Rollback(_dbContext);
     }
 
     [Test]
