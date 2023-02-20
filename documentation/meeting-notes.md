@@ -77,3 +77,20 @@
 - Cody: set up testing
 - Nathan: write some unit tests
 - Noah: set up CI/CD
+
+## Meeting 5
+
+| Date| Time | Length
+| --- | --- | --- |
+| 20 Feb, 2023 | 10:00-10:30pm | 0.5 hours |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Assign sprint 3 tasks
+
+**Assigned Tasks:**
+- Anthony: implement suggestions, quiz and user profile
+- Cody: create front end test suite and implement joining spools
+- Nathan: implement stitch/rip system and filtering feeds
+- Noah: implement comments and subscribing to threads
