@@ -13,16 +13,8 @@ public class CommentRepositoryTests
     [SetUp]
     public void Setup()
     {
-        _dbContext = new PostgresDbContext();
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Database.Migrate();
+        _dbContext = CommonUtils.GetDbContext();
         _commentRepository = new CommentRepository(_dbContext);
-    }
-
-    [TearDown]
-    public void Cleanup()
-    {
-        _dbContext.Database.EnsureDeleted();
     }
 
     [Test]

@@ -18,18 +18,10 @@ public class ThreadServiceTests
     [SetUp]
     public void Setup()
     {
-        _dbContext = new PostgresDbContext();
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Database.Migrate();
+        _dbContext = CommonUtils.GetDbContext();
         _threadService = new ThreadService(_dbContext);
         _spoolRepository = new SpoolRepository(_dbContext);
         _userRepository = new UserRepository(_dbContext);
-    }
-
-    [TearDown]
-    public void Cleanup()
-    {
-        _dbContext.Database.EnsureDeleted();
     }
 
     [Test]
