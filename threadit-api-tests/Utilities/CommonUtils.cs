@@ -8,4 +8,10 @@ public class CommonUtils {
         context.Database.EnsureCreated();
         return context;
     }
+
+    [OneTimeTearDown]
+    public void TearDown() {
+        var context = new PostgresDbContext();
+        context.Database.EnsureDeleted();
+    }
 }
