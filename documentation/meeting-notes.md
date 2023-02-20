@@ -82,7 +82,7 @@
 
 | Date| Time | Length
 | --- | --- | --- |
-| 20 Feb, 2023 | 10:00-10:30pm | 0.5 hours |
+| 20 Feb, 2023 | 10:00-11:00pm | 1 hour |
 
 **Attendance:** Anthony, Cody, Nathan, Noah
 
