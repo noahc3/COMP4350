@@ -52,10 +52,27 @@ namespace ThreaditAPI.Controllers.v1 {
             }
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllSpools([FromServices] SpoolService spoolService)
+        //can try the commented out one and remove userId from this route
+        [HttpGet("all/{userId}")]
+        public async Task<IActionResult> GetAllSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
-            Spool[] spools = await spoolService.GetAllSpoolsAsync();
+            if (userId == null)
+            {
+                Spool[] spools = await spoolService.GetAllSpoolsAsync();
+                return Ok(spools);
+            }
+            else
+            {
+                Spool[] spools = await spoolService.GetJoinedSpoolsAsync(userId);
+                return Ok(spools);
+            }
+        }
+
+        //different endpoint for commented out attempt in API
+        [HttpGet("joined/{userId}")]
+        public async Task<IActionResult> JoinedSpoolsEndpoint([FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            Spool[] spools = await spoolService.GetJoinedSpoolsAsync(userId);
             return Ok(spools);
         }
     }

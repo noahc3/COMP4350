@@ -13,14 +13,22 @@ import { AddIcon } from "@chakra-ui/icons";
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
-    const spools = spoolStore.spools;
-    const buttons = spools?.map(function (spool) {
+    const allSpools = spoolStore.allSpools;
+    const joinedSpools = spoolStore.joinedSpools;
+    const allButtons = allSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
                 <Button colorScheme={"purple"}>{spool.name}</Button>
             </NavLink>
         );
     });
+    //const joinedButtons = joinedSpools?.map(function (spool) {
+    //    return (
+    //        <NavLink to={"/s/" + spool.name} key={spool.id}>
+    //            <Button colorScheme={"purple"}>{spool.name}</Button>
+    //        </NavLink>
+    //    );
+    //});
 
     const logout = async () => {
         authStore.logout();
@@ -35,8 +43,13 @@ export const Sidebar = observer(() => {
                 <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             </>}
             <Divider />
-            <Text mb={"0.5rem"} fontWeight={"bold"}>Spools</Text>
-            <>{buttons}</>
+            <Text mb={"0.5rem"} fontWeight={"bold"}>All Spools</Text>
+            <>{allButtons}</>
+            {/*{profile && <>*/}
+            {/*    <Spacer />*/}
+            {/*    <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>*/}
+            {/*    <>{joinedButtons}</>*/}
+            {/*</>}*/}
             <Spacer />
             {profile && <>
                 <Divider />

@@ -5,28 +5,47 @@ import SpoolAPI from '../api/SpoolAPI';
 export class SpoolStore {
 
     @observable
-    _spools?: ISpool[] = undefined;
+    _allSpools?: ISpool[] = undefined;
+    _joinedSpools?: ISpool[] = undefined;
 
     constructor() {
         makeObservable(this);
     }
 
     @action
-    async refreshSpools() {
-        this._spools = await SpoolAPI.getAllSpools();
-        return this._spools
+    async refreshAllSpools() {
+        this._allSpools = await SpoolAPI.getAllSpools();
+        return this._allSpools
     }
 
     @action
-    async clearSpools() {
-        this._spools = undefined;
+    async refreshJoinedSpools() {
+        this._joinedSpools = await SpoolAPI.getJoinedSpools();
+        return this._joinedSpools
+    }
+
+    @action
+    async clearAllSpools() {
+        this._allSpools = undefined;
+    }
+
+    @action
+    async clearJoinedSpools() {
+        this._joinedSpools = undefined;
     }
 
     @computed
-    get spools() {
-        if (this._spools === undefined) this.refreshSpools();
+    get allSpools() {
+        if (this._allSpools === undefined) this.refreshAllSpools();
 
-        return this._spools;
+        return this._allSpools;
+    }
+
+    @computed
+    get joinedSpools() {
+        if (this._joinedSpools === undefined) this.refreshJoinedSpools();
+
+        return this._joinedSpools;
     }
 }
 
