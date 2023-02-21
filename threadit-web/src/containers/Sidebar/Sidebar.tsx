@@ -9,6 +9,7 @@ import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
 import { spoolStore } from "../../stores/SpoolStore";
 import { AddIcon } from "@chakra-ui/icons";
+import React from "react";
 
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
@@ -22,6 +23,7 @@ export const Sidebar = observer(() => {
             </NavLink>
         );
     });
+
     const joinedButtons = joinedSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
@@ -29,6 +31,10 @@ export const Sidebar = observer(() => {
             </NavLink>
         );
     });
+
+    React.useEffect(() => { 
+        spoolStore.refreshJoinedSpools();
+    }, [profile, isAuthenticated])
 
     const logout = async () => {
         authStore.logout();

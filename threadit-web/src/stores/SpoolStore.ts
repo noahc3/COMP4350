@@ -1,11 +1,14 @@
-import { makeObservable, action, observable, computed } from "mobx";
+import { makeObservable, action, observable, computed, runInAction } from "mobx";
 import { ISpool } from '../models/Spool';
 import SpoolAPI from '../api/SpoolAPI';
+import { authStore } from "./AuthStore";
 
 export class SpoolStore {
 
     @observable
     _allSpools?: ISpool[] = undefined;
+
+    @observable
     _joinedSpools?: ISpool[] = undefined;
 
     constructor() {
@@ -14,13 +17,25 @@ export class SpoolStore {
 
     @action
     async refreshAllSpools() {
-        this._allSpools = await SpoolAPI.getAllSpools();
+        const spools = await SpoolAPI.getAllSpools();
+        runInAction(() => {
+            this._allSpools = spools;
+        })
         return this._allSpools
     }
 
     @action
     async refreshJoinedSpools() {
-        this._joinedSpools = await SpoolAPI.getJoinedSpools();
+        if (authStore.isAuthenticated) {
+            const spools = await SpoolAPI.getJoinedSpools();
+            runInAction(() => {
+                this._joinedSpools = spools;
+            })
+        } else {
+            runInAction(() => {
+                this._joinedSpools = [];
+            })
+        }
         return this._joinedSpools
     }
 
@@ -43,8 +58,6 @@ export class SpoolStore {
 
     @computed
     get joinedSpools() {
-        if (this._joinedSpools === undefined) this.refreshJoinedSpools();
-
         return this._joinedSpools;
     }
 }
