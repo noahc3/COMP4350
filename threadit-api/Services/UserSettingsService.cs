@@ -41,5 +41,15 @@ namespace ThreaditAPI.Services
             return userSettings;
         }
 
+        public async Task<UserSettings> RemoveUserSettingsAsync(string userId, string spoolId)
+        {
+            UserSettings? resultSettings = await this.userSettingsRepository.RemoveUserSettingsAsync(userId, spoolId);
+            return resultSettings;
+        }
+
+        public async Task<bool> CheckSpoolUserAsync(string userId, string spoolName)
+        {
+            return await this.userSettingsRepository.CheckSpoolUserAsync(userId, spoolName);
+        }
     }
 }
