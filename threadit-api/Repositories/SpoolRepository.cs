@@ -29,7 +29,18 @@ namespace ThreaditAPI.Repositories
 
         public async Task InsertSpoolAsync(Spool spool)
         {
+            //add spool to spools table
             await db.Spools.AddAsync(spool);
+
+            //add spool to users joined list
+            UserSettings? setting = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == spool.OwnerId);
+
+            if(setting == null)
+            {
+                throw new Exception("User Does not have settings.");
+            }
+            setting.SpoolsJoined.Add(spool.Id);
+
             await db.SaveChangesAsync();
         }
 
