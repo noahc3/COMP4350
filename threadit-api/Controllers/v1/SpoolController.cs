@@ -58,5 +58,12 @@ namespace ThreaditAPI.Controllers.v1 {
             Spool[] spools = await spoolService.GetAllSpoolsAsync();
             return Ok(spools);
         }
+
+        [HttpGet("joined/{userId}")]
+        public async Task<IActionResult> JoinedSpoolsEndpoint([FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            List<Spool> spools = await spoolService.GetJoinedSpoolsAsync(userId);
+            return Ok(spools);
+        }
     }
 }

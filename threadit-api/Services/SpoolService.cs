@@ -100,6 +100,12 @@ namespace ThreaditAPI.Services
         {
             Spool[] spools = await this.spoolRepository.GetAllSpoolsAsync();
             return spools;
-        } 
+        }
+
+        public async Task<List<Spool>> GetJoinedSpoolsAsync(string userId)
+        {
+            List<Spool> spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
+            return spools;
+        }
     }
 }

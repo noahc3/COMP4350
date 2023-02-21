@@ -22,7 +22,12 @@ namespace ThreaditAPI.Repositories {
         }
 
         public async Task InsertUserAsync(User user) {
+            UserSettings userSettings = new UserSettings
+            {
+                Id = user.Id
+            };
             await db.Users.AddAsync(user);
+            await db.UserSettings.AddAsync(userSettings);
             await db.SaveChangesAsync();
         }
 

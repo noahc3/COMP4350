@@ -1,4 +1,4 @@
-import { makeObservable, action, observable, computed } from "mobx";
+import { makeObservable, action, observable, computed, runInAction } from "mobx";
 import { IUserProfile } from '../models/UserProfile';
 import UserAPI from '../api/UserAPI';
 
@@ -13,19 +13,23 @@ export class UserStore {
 
     @action
     async refreshUserProfile() {
-        this._userProfile = await UserAPI.getUserProfile();
+        const profile = await UserAPI.getUserProfile();
+        runInAction(() => {
+            this._userProfile = profile;
+        })
         return this._userProfile
     }
 
     @action
     async clearUserProfile() {
-        this._userProfile = undefined;
+        runInAction(() => {
+            this._userProfile = undefined;
+        })
     }
 
     @computed
     get userProfile() {
         if (this._userProfile === undefined) this.refreshUserProfile();
-
         return this._userProfile;
     }
 }

@@ -11,6 +11,7 @@ namespace ThreaditTests.Repositories;
 public class SpoolRepositoryTests
 {
     private SpoolRepository _spoolRepository;
+    private UserRepository _userRepository;
     private PostgresDbContext _dbContext;
 
     [SetUp]
@@ -18,6 +19,7 @@ public class SpoolRepositoryTests
     {
         _dbContext = CommonUtils.GetDbContext();
         _spoolRepository = new SpoolRepository(_dbContext);
+        _userRepository = new UserRepository(_dbContext);
     }
 
     [Test]
@@ -53,12 +55,26 @@ public class SpoolRepositoryTests
     [Test]
     public async Task RetrieveSpool_Exists_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" }
         };
 
@@ -81,12 +97,26 @@ public class SpoolRepositoryTests
     [Test]
     public async Task RetrieveSpoolById_Exists_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" }
         };
 
@@ -109,12 +139,26 @@ public class SpoolRepositoryTests
     [Test]
     public async Task RetrieveSpoolByName_Exists_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" }
         };
 
@@ -137,12 +181,56 @@ public class SpoolRepositoryTests
     [Test]
     public async Task AddModerator_SpoolExists_ShouldPass()
     {
+        // Create Users for owner, and moderators
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        //mod1
+        User mod1 = new User()
+        {
+            Id = "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd",
+            Username = "mod1",
+            Email = "testUser1@test.com"
+        };
+        //mod2
+        User mod2 = new User()
+        {
+            Id = "923f3675-90e5-458f-a997-73f263d01f95",
+            Username = "mod2",
+            Email = "testUser2@test.com"
+        };
+
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
+        // Ensure User is not in database
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod1.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(mod1);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod1.Username);
+
+        // Ensure User is not in database
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod2.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(mod2);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod2.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" },
             Moderators = new List<string>() { "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd", "923f3675-90e5-458f-a997-73f263d01f95" }
         };
@@ -180,12 +268,26 @@ public class SpoolRepositoryTests
     [Test]
     public async Task RemoveModerator_SpoolExists_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" },
             Moderators = new List<string>() { "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd", "923f3675-90e5-458f-a997-73f263d01f95" }
         };
@@ -273,12 +375,26 @@ public class SpoolRepositoryTests
     [Test]
     public async Task GetModerators_SpoolExists_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" },
             Moderators = new List<string>() { "16f0fdb8-8af3-4f9c-b19a-b4a4277692bd", "923f3675-90e5-458f-a997-73f263d01f95" }
         };

@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
@@ -13,12 +10,14 @@ public class SpoolServiceTests
 {
     private SpoolService _spoolService;
     private PostgresDbContext _dbContext;
+    private UserRepository _userRepository;
 
     [SetUp]
     public void Setup()
     {
         _dbContext = CommonUtils.GetDbContext();
         _spoolService = new SpoolService(_dbContext);
+        _userRepository = new UserRepository(_dbContext);
     }
 
     [Test]
@@ -28,13 +27,28 @@ public class SpoolServiceTests
     }
 
     [Test]
-    public async Task RetrieveSpoolByName_Exists_ShouldPass() {
+    public async Task RetrieveSpoolByName_Exists_ShouldPass()
+    {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spool
         var spool = new Spool()
         {
             Id = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
             Name = "Spool1",
-            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            OwnerId = testUser.Id,
         };
 
         // Ensure spool is not in database
@@ -55,12 +69,26 @@ public class SpoolServiceTests
     [Test]
     public async Task RetrieveAllSpools_ShouldPass()
     {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
         // Create Spools
         var spools = new List<Spool>() {
             new Spool() {
                 Id = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
                 Name = "Spool1",
-                OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+                OwnerId = testUser.Id,
                 Interests = new List<string>() { "Interest1", "Interest2" },
                 Moderators = new List<string>() { "d94ddc51-9031-4e9b-b712-6df32cd75641" }
             },

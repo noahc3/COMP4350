@@ -1,32 +1,64 @@
-import { makeObservable, action, observable, computed } from "mobx";
+import { makeObservable, action, observable, computed, runInAction } from "mobx";
 import { ISpool } from '../models/Spool';
 import SpoolAPI from '../api/SpoolAPI';
+import { authStore } from "./AuthStore";
 
 export class SpoolStore {
 
     @observable
-    _spools?: ISpool[] = undefined;
+    _allSpools?: ISpool[] = undefined;
+
+    @observable
+    _joinedSpools?: ISpool[] = undefined;
 
     constructor() {
         makeObservable(this);
     }
 
     @action
-    async refreshSpools() {
-        this._spools = await SpoolAPI.getAllSpools();
-        return this._spools
+    async refreshAllSpools() {
+        const spools = await SpoolAPI.getAllSpools();
+        runInAction(() => {
+            this._allSpools = spools;
+        })
+        return this._allSpools
     }
 
     @action
-    async clearSpools() {
-        this._spools = undefined;
+    async refreshJoinedSpools() {
+        if (authStore.isAuthenticated) {
+            const spools = await SpoolAPI.getJoinedSpools();
+            runInAction(() => {
+                this._joinedSpools = spools;
+            })
+        } else {
+            runInAction(() => {
+                this._joinedSpools = [];
+            })
+        }
+        return this._joinedSpools
+    }
+
+    @action
+    async clearAllSpools() {
+        this._allSpools = undefined;
+    }
+
+    @action
+    async clearJoinedSpools() {
+        this._joinedSpools = undefined;
     }
 
     @computed
-    get spools() {
-        if (this._spools === undefined) this.refreshSpools();
+    get allSpools() {
+        if (this._allSpools === undefined) this.refreshAllSpools();
 
-        return this._spools;
+        return this._allSpools;
+    }
+
+    @computed
+    get joinedSpools() {
+        return this._joinedSpools;
     }
 }
 

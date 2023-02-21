@@ -25,8 +25,6 @@ namespace ThreaditAPI.Middleware
             {
                 var sessionToken = context.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
-                Console.WriteLine(sessionToken);
-
                 if (!string.IsNullOrWhiteSpace(sessionToken))
                 {
                     UserDTO? user = await sessionService.GetUserFromSession(sessionToken);
