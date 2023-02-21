@@ -9,7 +9,7 @@ const spoolEndpoint = ApiEndpoint("/v1/spool/");
 const spoolThreadsEndpoint = ApiEndpoint('/v1/spool/threads/');
 const postSpoolEndpoint = ApiEndpoint('/v1/spool/create');
 const allSpoolsEndpoint = ApiEndpoint('/v1/spool/all');
-const joinedSpoolsEndpoint = ApiEndpoint('/v1/spool/joined');
+const joinedSpoolsEndpoint = ApiEndpoint('/v1/spool/joined/');
 
 export default class SpoolAPI {
     static async getSpoolThreads(spoolId: string): Promise<IThreadFull[]> {
@@ -61,17 +61,6 @@ export default class SpoolAPI {
     }
 
     static async getJoinedSpools(): Promise<ISpool[]> {
-        //one attempt
-        //const userProfile = await UserAPI.getUserProfile();
-        //const response = await get(joinedSpoolsEndpoint + userProfile.id);
-
-        //if (!response.ok) {
-        //    throw new Error(`Failed to get joined spools: ${await response.text()}`);
-        //}
-
-        //return await response.json();
-
-        //and another
         const userProfile = await UserAPI.getUserProfile();
         const response = await get(joinedSpoolsEndpoint + userProfile.id);
 

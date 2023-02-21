@@ -70,12 +70,12 @@ namespace ThreaditAPI.Repositories
             return spools;
         }
 
-        public async Task<Spool[]> GetJoinedSpoolsAsync(string userId)
+        public async Task<List<Spool>> GetJoinedSpoolsAsync(string userId)
         {
             UserSettings? setting = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == userId);
             List<string>? spoolIds = setting?.SpoolsJoined;
 
-            Spool[] spools = Array.Empty<Spool>();
+            List<Spool> spools = new List<Spool>();
             if (spoolIds != null)
             {
                 foreach (var id in spoolIds)
@@ -83,11 +83,10 @@ namespace ThreaditAPI.Repositories
                     Spool? dbSpool = await GetSpoolAsync(id);
                     if (dbSpool != null)
                     {
-                        spools?.Append(dbSpool);
+                        spools.Add(dbSpool);
                     }
                 }
             }
-            Console.WriteLine(spools);
             return spools;
         }
     }

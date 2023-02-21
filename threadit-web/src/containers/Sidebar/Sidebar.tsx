@@ -22,13 +22,13 @@ export const Sidebar = observer(() => {
             </NavLink>
         );
     });
-    //const joinedButtons = joinedSpools?.map(function (spool) {
-    //    return (
-    //        <NavLink to={"/s/" + spool.name} key={spool.id}>
-    //            <Button colorScheme={"purple"}>{spool.name}</Button>
-    //        </NavLink>
-    //    );
-    //});
+    const joinedButtons = joinedSpools?.map(function (spool) {
+        return (
+            <NavLink to={"/s/" + spool.name} key={spool.id}>
+                <Button colorScheme={"purple"}>{spool.name}</Button>
+            </NavLink>
+        );
+    });
 
     const logout = async () => {
         authStore.logout();
@@ -45,11 +45,11 @@ export const Sidebar = observer(() => {
             <Divider />
             <Text mb={"0.5rem"} fontWeight={"bold"}>All Spools</Text>
             <>{allButtons}</>
-            {/*{profile && <>*/}
-            {/*    <Spacer />*/}
-            {/*    <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>*/}
-            {/*    <>{joinedButtons}</>*/}
-            {/*</>}*/}
+            {profile && <>
+                <Spacer />
+                <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>
+                <>{joinedButtons}</>
+            </>}
             <Spacer />
             {profile && <>
                 <Divider />

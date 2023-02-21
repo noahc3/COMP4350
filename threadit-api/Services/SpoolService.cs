@@ -14,7 +14,6 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> GetSpoolAsync(string spoolId)
         {
-            Console.WriteLine("in id");
             Spool? returnedSpool = await this.spoolRepository.GetSpoolAsync(spoolId);
             if (returnedSpool != null)
             {
@@ -28,7 +27,6 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> GetSpoolAsync(Spool spool)
         {
-            Console.WriteLine("in object");
             Spool? returnedSpool = await this.spoolRepository.GetSpoolAsync(spool);
             if (returnedSpool != null)
             {
@@ -42,7 +40,6 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> GetSpoolByNameAsync(string spoolName)
         {
-            Console.WriteLine("in name");
             Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spoolName);
             if (returnedSpool != null)
             {
@@ -105,9 +102,9 @@ namespace ThreaditAPI.Services
             return spools;
         }
 
-        public async Task<Spool[]> GetJoinedSpoolsAsync(string userId)
+        public async Task<List<Spool>> GetJoinedSpoolsAsync(string userId)
         {
-            Spool[] spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
+            List<Spool> spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
             return spools;
         }
     }
