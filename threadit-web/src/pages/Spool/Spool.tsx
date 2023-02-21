@@ -38,7 +38,7 @@ export const Spool = observer(() => {
                 });
             }
         }
-    }, [id]);
+    }, [id, profile, spool]);
 
     const removeSpool = () => {
         UserSettingsAPI.removeSpoolUser(profile!.id, id!);
