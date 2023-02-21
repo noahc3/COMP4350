@@ -41,7 +41,7 @@ export const Spool = observer(() => {
     }, [id]);
 
     const removeSpool = () => {
-        UserSettingsAPI.removeSpoolUser(profile!.id, spool!.id);
+        UserSettingsAPI.removeSpoolUser(profile!.id, id!);
     }
 
     return (
@@ -60,7 +60,7 @@ export const Spool = observer(() => {
                                     {/* TODO: up to here*/}
                                     {spool.ownerId !== profile?.id && belongs &&<>
                                             <Spacer />
-                                            <NavLink to={""}><Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>Leave Spool</Button></NavLink>
+                                            <NavLink to={"/"}><Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>Leave Spool</Button></NavLink>
                                     </>}
                                 </HStack>
                                 </Box>

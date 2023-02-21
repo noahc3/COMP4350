@@ -8,8 +8,8 @@ const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 
 export default class UserSettingsAPI {
 
-    static async removeSpoolUser(userId: string, spoolId: string): Promise<IUserSettings[]> {
-        const response = await get(removeSpoolForUserEndpoint + userId + "/" + spoolId);
+    static async removeSpoolUser(userId: string, spoolName: string): Promise<IUserSettings[]> {
+        const response = await get(removeSpoolForUserEndpoint + userId + "/" + spoolName);
 
         if (!response.ok) {
             throw new Error(`Failed to remove the user from the spool: ${await response.text()}`);

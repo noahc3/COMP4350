@@ -8,10 +8,10 @@ namespace ThreaditAPI.Controllers.v1
     [Route("v1/userSettings")]
     public class UserSettingsController : ControllerBase
     {
-        [HttpGet("remove/{userId}/{spoolId}")]
-        public async Task<IActionResult> RemoveSpoolUser([FromRoute] string userId, [FromRoute] string spoolId, [FromServices] UserSettingsService userSettingsService)
+        [HttpGet("remove/{userId}/{spoolName}")]
+        public async Task<IActionResult> RemoveSpoolUser([FromRoute] string userId, [FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
         {
-            UserSettings userSettings = await userSettingsService.RemoveUserSettingsAsync(userId, spoolId);
+            UserSettings userSettings = await userSettingsService.RemoveUserSettingsAsync(userId, spoolName);
             return Ok(userSettings);
         }
         
