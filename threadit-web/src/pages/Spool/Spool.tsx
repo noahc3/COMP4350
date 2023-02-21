@@ -1,4 +1,4 @@
-import { Box, Button, Container, VStack, Spacer, HStack } from "@chakra-ui/react";
+import { Box, Button, Container, VStack, Spacer, HStack, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useParams } from "react-router";
@@ -54,6 +54,10 @@ export const Spool = observer(() => {
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <HStack>
                                     <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='green'>Create Post</Button></NavLink>
+                                    {/* TODO: this can either be changed to be the owners Username or just remove it.*/}
+                                    <Spacer />
+                                    <Text as='i'>Owner: {spool!.ownerId}</Text>
+                                    {/* TODO: up to here*/}
                                     {spool.ownerId !== profile?.id && belongs &&<>
                                             <Spacer />
                                             <NavLink to={""}><Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>Leave Spool</Button></NavLink>
