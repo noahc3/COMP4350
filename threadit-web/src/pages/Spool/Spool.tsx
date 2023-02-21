@@ -11,7 +11,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
-import { DeleteIcon } from '@chakra-ui/icons'
+import { DeleteIcon, CheckIcon } from '@chakra-ui/icons'
 import UserSettingsAPI from "../../api/UserSettingsApi";
 
 export const Spool = observer(() => {
@@ -44,6 +44,10 @@ export const Spool = observer(() => {
         UserSettingsAPI.removeSpoolUser(profile!.id, id!);
     }
 
+    const joinSpool = () => {
+        UserSettingsAPI.joinSpoolUser(profile!.id, id!);
+    }
+
     return (
         <PageLayout title={spool ? spool.name + ": New Posts" : ""}>
             {spool &&
@@ -53,7 +57,7 @@ export const Spool = observer(() => {
                             {isAuthenticated &&
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <HStack>
-                                    <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='green'>Create Post</Button></NavLink>
+                                    <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue'>Create Post</Button></NavLink>
                                     {/* TODO: this can either be changed to be the owners Username or just remove it.*/}
                                     <Spacer />
                                     <Text as='i'>Owner: {spool!.ownerId}</Text>
@@ -61,6 +65,10 @@ export const Spool = observer(() => {
                                     {spool.ownerId !== profile?.id && belongs &&<>
                                             <Spacer />
                                             <NavLink to={"/"}><Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>Leave Spool</Button></NavLink>
+                                    </>}
+                                    {spool.ownerId !== profile?.id && !belongs && <>
+                                        <Spacer />
+                                        <NavLink to={""}><Button leftIcon={<CheckIcon />} colorScheme='green' onClick={() => { joinSpool() }}>Join Spool</Button></NavLink>
                                     </>}
                                 </HStack>
                                 </Box>

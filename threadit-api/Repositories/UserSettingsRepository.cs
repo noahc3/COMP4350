@@ -47,6 +47,25 @@ namespace ThreaditAPI.Repositories
             return resultSettings;
         }
 
+        public async Task<UserSettings> JoinUserSettingsAsync(string userId, string spoolName)
+        {
+            //get the user settings that needs to be edited
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+            {
+                throw new Exception("User Does not have settings.");
+            }
+
+            Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Name == spoolName);
+            if (dbSpool == null)
+                throw new Exception("Spool does not exist");
+
+            resultSettings.SpoolsJoined.Add(dbSpool!.Id);
+            await db.SaveChangesAsync();
+
+            return resultSettings;
+        }
+
         public async Task<bool> CheckSpoolUserAsync(string userId, string spoolName)
         {
             UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);

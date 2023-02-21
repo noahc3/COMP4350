@@ -47,6 +47,12 @@ namespace ThreaditAPI.Services
             return resultSettings;
         }
 
+        public async Task<UserSettings> JoinUserSettingsAsync(string userId, string spoolName)
+        {
+            UserSettings? resultSettings = await this.userSettingsRepository.JoinUserSettingsAsync(userId, spoolName);
+            return resultSettings;
+        }
+
         public async Task<bool> CheckSpoolUserAsync(string userId, string spoolName)
         {
             return await this.userSettingsRepository.CheckSpoolUserAsync(userId, spoolName);
