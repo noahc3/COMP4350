@@ -26,6 +26,19 @@ export const Spool = observer(() => {
         if (id) {
             SpoolAPI.getSpoolById(id).then((spool) => {
                 setSpool(spool);
+                if (profile && spool) {
+                    UserSettingsAPI.getJoinedSpool(profile!.id, id!).then((belongs) => {
+                        setBelongs(belongs);
+                    });
+                }
+            });
+        }
+    }, [])
+
+    React.useEffect(() => {
+        if (id) {
+            SpoolAPI.getSpoolById(id).then((spool) => {
+                setSpool(spool);
             });
 
             SpoolAPI.getSpoolThreads(id).then((threads) => {
@@ -38,7 +51,7 @@ export const Spool = observer(() => {
                 });
             }
         }
-    }, [id, profile, spool]);
+    }, [id, profile]);
 
     const removeSpool = () => {
         UserSettingsAPI.removeSpoolUser(profile!.id, id!);
