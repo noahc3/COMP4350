@@ -19,21 +19,9 @@ export const Spool = observer(() => {
     const { id } = useParams();
     const [spool, setSpool] = useState<ISpool>();
     const [threads, setThreads] = useState<IThreadFull[]>([]);
-    const [belongs, setBelongs] = useState<boolean>();
+    const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
+    const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
     const isAuthenticated = authStore.isAuthenticated;
-
-    React.useEffect(() => {
-        if (id) {
-            SpoolAPI.getSpoolById(id).then((spool) => {
-                setSpool(spool);
-                if (profile && spool) {
-                    UserSettingsAPI.getJoinedSpool(profile!.id, id!).then((belongs) => {
-                        setBelongs(belongs);
-                    });
-                }
-            });
-        }
-    }, [])
 
     React.useEffect(() => {
         if (id) {
@@ -44,21 +32,28 @@ export const Spool = observer(() => {
             SpoolAPI.getSpoolThreads(id).then((threads) => {
                 setThreads(threads);
             });
-
-            if (profile && spool) {
-                UserSettingsAPI.getJoinedSpool(profile!.id, id!).then((belongs) => {
-                    setBelongs(belongs);
-                });
-            }
         }
-    }, [id, profile]);
+    }, [id, profile])
+
+    React.useEffect(() => {
+        // dont ask.
+        (async () => { setBelongs(await UserSettingsAPI.getJoinedSpool(profile!.id, id!)) })()
+    }, [id, profile])
+
+    React.useEffect(() => {
+        setIsLoadingBelongs(belongs === undefined)
+    }, [belongs, setIsLoadingBelongs])
 
     const removeSpool = () => {
-        UserSettingsAPI.removeSpoolUser(profile!.id, id!);
+        UserSettingsAPI.removeSpoolUser(profile!.id, id!).then(
+            () => { setBelongs(false) }
+        );
     }
 
     const joinSpool = () => {
-        UserSettingsAPI.joinSpoolUser(profile!.id, id!);
+        UserSettingsAPI.joinSpoolUser(profile!.id, id!).then(
+            () => { setBelongs(true) }
+        );
     }
 
     return (
@@ -68,22 +63,28 @@ export const Spool = observer(() => {
                     <Container centerContent={false} maxW={"container.md"}>
                         <VStack>
                             {isAuthenticated &&
-                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
-                                <HStack>
-                                    <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue'>Create Post</Button></NavLink>
-                                    {/* TODO: this can either be changed to be the owners Username or just remove it.*/}
-                                    <Spacer />
-                                    <Text as='i'>Owner: {spool!.ownerId}</Text>
-                                    {/* TODO: up to here*/}
-                                    {spool.ownerId !== profile?.id && belongs &&<>
-                                            <Spacer />
-                                            <NavLink to={"/"}><Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>Leave Spool</Button></NavLink>
-                                    </>}
-                                    {spool.ownerId !== profile?.id && !belongs && <>
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
+                                    <HStack>
+                                        <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue'>Create Post</Button></NavLink>
+                                        {/* TODO: this can either be changed to be the owners Username or just remove it.*/}
                                         <Spacer />
-                                        <NavLink to={""}><Button leftIcon={<CheckIcon />} colorScheme='green' onClick={() => { joinSpool() }}>Join Spool</Button></NavLink>
-                                    </>}
-                                </HStack>
+                                        <Text as='i'>Owner: {spool!.ownerId}</Text>
+                                        {/* TODO: up to here*/}
+                                        {spool.ownerId !== profile?.id &&
+                                            <>
+                                                <Spacer />
+                                                {belongs ? <>
+                                                    <Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>
+                                                        Leave Spool
+                                                    </Button>
+                                                </> : <>
+                                                    <Button isLoading={isLoadingBelongs} leftIcon={<CheckIcon />} colorScheme={isLoadingBelongs ? 'gray' : 'green'} onClick={() => { joinSpool() }}>
+                                                        Join Spool
+                                                    </Button>
+                                                </>}
+                                            </>
+                                        }
+                                    </HStack>
                                 </Box>
                             }
                             <PostFeed threads={threads} />
