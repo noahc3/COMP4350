@@ -11,7 +11,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
-import { DeleteIcon, CheckIcon } from '@chakra-ui/icons'
+import { DeleteIcon, CheckIcon, SettingsIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
 
 export const Spool = observer(() => {
@@ -70,8 +70,7 @@ export const Spool = observer(() => {
                                         <Spacer />
                                         <Text as='i'>Owner: {spool!.ownerId}</Text>
                                         {/* TODO: up to here*/}
-                                        {spool.ownerId !== profile?.id &&
-                                            <>
+                                        {spool.ownerId !== profile?.id && <>
                                                 <Spacer />
                                                 {belongs ? <>
                                                     <Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>
@@ -82,8 +81,11 @@ export const Spool = observer(() => {
                                                         Join Spool
                                                     </Button>
                                                 </>}
-                                            </>
-                                        }
+                                        </>}
+                                        {spool.ownerId === profile?.id && <>
+                                            <Spacer />
+                                            <NavLink to={"/s/" + spool.name + "/manage"}><Button leftIcon={<SettingsIcon />} colorScheme='green'>Manage Spool</Button></NavLink>
+                                        </>}
                                     </HStack>
                                 </Box>
                             }
