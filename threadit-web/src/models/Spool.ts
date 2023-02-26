@@ -4,4 +4,5 @@ export interface ISpool {
     ownerId: string
     interests: string[]
     moderators: string[]
+    rules: string
 }

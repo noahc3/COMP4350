@@ -60,10 +60,38 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("joined/{userId}")]
-        public async Task<IActionResult> JoinedSpoolsEndpoint([FromRoute] string userId, [FromServices] SpoolService spoolService)
+        public async Task<IActionResult> JoinedSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
             List<Spool> spools = await spoolService.GetJoinedSpoolsAsync(userId);
             return Ok(spools);
+        }
+
+        [HttpGet("users/{spoolId}/{userId}")]
+        public async Task<IActionResult> AllUsersForSpool([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            UserDTO[] users = await spoolService.GetAllUsersForSpoolAsync(spoolId, userId);
+            return Ok(users);
+        }
+
+        [HttpGet("mods/{spoolId}")]
+        public async Task<IActionResult> AllModsForSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
+            UserDTO[]? users = await spoolService.GetAllModsForSpoolAsync(spoolId);
+            return Ok(users);
+        }
+
+        [HttpGet("mods/add/{spoolId}/{userId}")]
+        public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool = await spoolService.AddModeratorAsync(spoolId, userId);
+            return Ok(spool);
+        }
+
+        [HttpGet("mods/remove/{spoolId}/{userId}")]
+        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
+            return Ok(spool);
         }
     }
 }

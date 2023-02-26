@@ -10,6 +10,7 @@ import { IThreadFull } from "../../models/ThreadFull";
 import { IoCreateOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
+import { spoolUsersStore } from "../../stores/SpoolUsersStore";
 import { userStore } from "../../stores/UserStore";
 import { DeleteIcon, CheckIcon, SettingsIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
@@ -27,6 +28,8 @@ export const Spool = observer(() => {
         if (id) {
             SpoolAPI.getSpoolById(id).then((spool) => {
                 setSpool(spool);
+                spoolUsersStore.refreshAllUsers(spool.id, profile!.id);
+                spoolUsersStore.refreshAllModerators(spool.id);
             });
 
             SpoolAPI.getSpoolThreads(id).then((threads) => {

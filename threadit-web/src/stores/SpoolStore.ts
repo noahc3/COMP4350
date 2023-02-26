@@ -1,7 +1,7 @@
 import { makeObservable, action, observable, computed, runInAction } from "mobx";
 import { ISpool } from '../models/Spool';
-import SpoolAPI from '../api/SpoolAPI';
 import { authStore } from "./AuthStore";
+import SpoolAPI from '../api/SpoolAPI';
 
 export class SpoolStore {
 

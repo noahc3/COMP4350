@@ -1,6 +1,7 @@
 ﻿using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ThreaditAPI.Repositories
 {
@@ -44,26 +45,40 @@ namespace ThreaditAPI.Repositories
             await db.SaveChangesAsync();
         }
 
-        public async Task<List<string>?> GetModeratorsAsync(string spoolId)
+        public async Task<UserDTO[]?> GetModeratorsAsync(string spoolId)
         {
+            UserDTO[] users = Array.Empty<UserDTO>();
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
             if (dbSpool != null)
             {
-                return dbSpool.Moderators.First().Split(',').ToList();
+                if (!dbSpool.Moderators.IsNullOrEmpty())
+                {
+                    foreach (string currentId in dbSpool.Moderators)
+                    {
+                        Console.WriteLine("id: " + currentId);
+                        UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == currentId);
+                        if (currentUser != null)
+                        {
+                            Array.Resize(ref users, users.Length + 1);
+                            users[^1] = currentUser;
+                        }
+                    }
+                }
             }
-            return null;
+            return users;
         }
 
-        public async Task AddModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> AddModeratorAsync(string spoolId, string userId)
         {
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
             if (dbSpool == null)
-                return;
+                return null;
             dbSpool.Moderators.Add(userId);
             await db.SaveChangesAsync();
+            return dbSpool;
         }
 
-        public async Task<string?> RemoveModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
         {
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
             if (dbSpool == null)
@@ -72,7 +87,7 @@ namespace ThreaditAPI.Repositories
             }
             dbSpool.Moderators.Remove(userId);
             await db.SaveChangesAsync();
-            return userId;
+            return dbSpool;
         }
 
         public async Task<Spool[]> GetAllSpoolsAsync()
@@ -99,6 +114,55 @@ namespace ThreaditAPI.Repositories
                 }
             }
             return spools;
+        }
+
+        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
+        {
+            if(userId == null)
+            {
+                Console.WriteLine("userId was null");
+                return Array.Empty<UserDTO>();
+            }
+            UserSettings[]? userSettings = await db.UserSettings.OrderBy(u => u.Id).ToArrayAsync();
+            List<UserDTO> usersList = new List<UserDTO> { };
+            UserDTO[]? moderators = await this.GetModeratorsAsync(spoolId);
+            if(moderators == null)
+            {
+                moderators = Array.Empty<UserDTO>();
+            }
+            foreach (var setting in userSettings)
+            {
+                //if its not the spool owner
+                if (!setting.Id.Equals(userId))
+                {
+                    //if this user is part of the spool
+                    if (setting.SpoolsJoined.Contains(spoolId))
+                    {
+                        //if there are any moderators
+                        if (moderators != null)
+                        {
+                            //if this user is not a moderator of the spool
+                            if (!moderators.Any(mod => mod.Id.Equals(setting.Id)))
+                            {
+                                UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == setting.Id);
+                                if (currentUser != null)
+                                {
+                                    usersList.Add(currentUser);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == setting.Id);
+                            if (currentUser != null)
+                            {
+                                usersList.Add(currentUser);
+                            }
+                        }
+                    }
+                }
+            }
+            return usersList.ToArray();
         }
     }
 }
