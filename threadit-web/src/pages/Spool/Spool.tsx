@@ -28,6 +28,7 @@ export const Spool = observer(() => {
         if (id) {
             SpoolAPI.getSpoolById(id).then((spool) => {
                 setSpool(spool);
+                spoolUsersStore.refreshAllNonModerator(spool.id, profile!.id);
                 spoolUsersStore.refreshAllUsers(spool.id, profile!.id);
                 spoolUsersStore.refreshAllModerators(spool.id);
             });

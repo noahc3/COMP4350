@@ -13,8 +13,9 @@ import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
 import { spoolUsersStore } from "../../stores/SpoolUsersStore";
-import { DeleteIcon, CheckIcon, AddIcon, SettingsIcon } from '@chakra-ui/icons';
+import { DeleteIcon, CheckIcon, AddIcon, SettingsIcon, StarIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
+import { hasProp } from "mobx/dist/internal";
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
@@ -26,7 +27,7 @@ export const ManageSpool = observer(() => {
     const users = spoolUsersStore.users?.map(function (user) {
         return (
             <HStack mb={"1rem"} key={user.id}>
-                <Button size="sm" leftIcon={<AddIcon />} colorScheme='green' onClick={() => { addMod(user.id) }}></Button>
+                <Button size="sm" leftIcon={<StarIcon />} colorScheme='orange' onClick={() => { changeOwner(user.id) }}></Button>
                 <Text mb={"0.5rem"}>{user.username}</Text>
             </HStack>
         );
@@ -37,6 +38,15 @@ export const ManageSpool = observer(() => {
             <HStack mb={"1rem"} key={moderator.id}>
                 <Button size="sm" leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}></Button>
                 <Text mb={"0.5rem"}>{moderator.username}</Text>
+            </HStack>
+        );
+    });
+
+    const nonModerators = spoolUsersStore.nonModerators?.map(function (nonModerator) {
+        return (
+            <HStack mb={"1rem"} key={nonModerator.id}>
+                <Button size="sm" leftIcon={<AddIcon />} colorScheme='green' onClick={() => { addMod(nonModerator.id) }}></Button>
+                <Text mb={"0.5rem"}>{nonModerator.username}</Text>
             </HStack>
         );
     });
@@ -54,14 +64,20 @@ export const ManageSpool = observer(() => {
 
     const removeMod = (userId: string) => {
         SpoolAPI.removeModerator(spool!.id, userId);
+        spoolUsersStore.refreshAllNonModerator(spool!.id, profile!.id);
         spoolUsersStore.refreshAllUsers(spool!.id, profile!.id);
         spoolUsersStore.refreshAllModerators(spool!.id);
+
     }
 
     const addMod = (userId: string) => {
         SpoolAPI.addModerator(spool!.id, userId);
+        spoolUsersStore.refreshAllNonModerator(spool!.id, profile!.id);
         spoolUsersStore.refreshAllUsers(spool!.id, profile!.id);
         spoolUsersStore.refreshAllModerators(spool!.id);
+    }
+
+    const changeOwner = (userId: string) => {
     }
 
     const saveSettings = () => {
@@ -88,13 +104,19 @@ export const ManageSpool = observer(() => {
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <Text mb={"0.5rem"} fontWeight={"bold"}>Add Moderators</Text>
-                                    {users}
+                                    {nonModerators}
                                 </Box>
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <Text mb={"0.5rem"} fontWeight={"bold"}>Remove Moderators</Text>
                                     {moderators}
+                                </Box>
+
+                                <Divider />
+                                <Box overflowX="auto" h="50%">
+                                    <Text mb={"0.5rem"} fontWeight={"bold"}>Change Ownership</Text>
+                                    {users}
                                 </Box>
 
                                 <Divider />

@@ -11,10 +11,11 @@ const spoolThreadsEndpoint = ApiEndpoint('/v1/spool/threads/');
 const postSpoolEndpoint = ApiEndpoint('/v1/spool/create');
 const allSpoolsEndpoint = ApiEndpoint('/v1/spool/all');
 const joinedSpoolsEndpoint = ApiEndpoint('/v1/spool/joined/');
-const allUsersForSpoolEndpoint = ApiEndpoint('/v1/spool/users/');
+const allNonModeratorsForSpoolEndpoint = ApiEndpoint('/v1/spool/nonModerator/');
 const allModsForSpoolEndpoint = ApiEndpoint('/v1/spool/mods/');
 const removeModeratorEndpoint = ApiEndpoint('/v1/spool/mods/remove/');
 const addModeratorEndpoint = ApiEndpoint('/v1/spool/mods/add/');
+const allUsersForSpoolEndpoint = ApiEndpoint('/v1/spool/users/');
 
 export default class SpoolAPI {
     static async getSpoolThreads(spoolId: string): Promise<IThreadFull[]> {
@@ -71,6 +72,16 @@ export default class SpoolAPI {
 
         if (!response.ok) {
             throw new Error(`Failed to get joined spools: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async getAllNonModerator(spoolId: string, userId: string): Promise<IUserProfile[]> {
+        const response = await get(allNonModeratorsForSpoolEndpoint + spoolId + "/" + userId);
+
+        if (!response.ok) {
+            throw new Error(`Failed to get all non moderators who joined spool: ${await response.text()}`);
         }
 
         return await response.json();

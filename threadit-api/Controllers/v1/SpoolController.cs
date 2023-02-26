@@ -66,6 +66,13 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
+        [HttpGet("nonModerator/{spoolId}/{userId}")]
+        public async Task<IActionResult> AllNonModeratorsForSpool([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            UserDTO[] users = await spoolService.GetAllNonModeratorsForSpoolAsync(spoolId, userId);
+            return Ok(users);
+        }
+
         [HttpGet("users/{spoolId}/{userId}")]
         public async Task<IActionResult> AllUsersForSpool([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
         {

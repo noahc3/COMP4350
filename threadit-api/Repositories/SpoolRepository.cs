@@ -116,11 +116,10 @@ namespace ThreaditAPI.Repositories
             return spools;
         }
 
-        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
+        public async Task<UserDTO[]> GetAllNonModeratorsForSpoolAsync(string spoolId, string userId)
         {
             if(userId == null)
             {
-                Console.WriteLine("userId was null");
                 return Array.Empty<UserDTO>();
             }
             UserSettings[]? userSettings = await db.UserSettings.OrderBy(u => u.Id).ToArrayAsync();
@@ -158,6 +157,33 @@ namespace ThreaditAPI.Repositories
                             {
                                 usersList.Add(currentUser);
                             }
+                        }
+                    }
+                }
+            }
+            return usersList.ToArray();
+        }
+
+        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
+        {
+            if (userId == null)
+            {
+                return Array.Empty<UserDTO>();
+            }
+            UserSettings[]? userSettings = await db.UserSettings.OrderBy(u => u.Id).ToArrayAsync();
+            List<UserDTO> usersList = new List<UserDTO> { };
+            foreach (var setting in userSettings)
+            {
+                //if its not the spool owner
+                if (!setting.Id.Equals(userId))
+                {
+                    //if this user is part of the spool
+                    if (setting.SpoolsJoined.Contains(spoolId))
+                    {
+                        UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == setting.Id);
+                        if (currentUser != null)
+                        {
+                            usersList.Add(currentUser);
                         }
                     }
                 }

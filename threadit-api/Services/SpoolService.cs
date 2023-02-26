@@ -65,19 +65,6 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<UserDTO[]> GetModeratorsAsync(string spoolId)
-        {
-            UserDTO[]? moderators = await this.spoolRepository.GetModeratorsAsync(spoolId);
-            if (moderators != null)
-            {
-                return moderators;
-            }
-            else
-            {
-                throw new Exception("Spool does not exist.");
-            }
-        }
-
         public async Task<Spool?> AddModeratorAsync(string spoolId, string userId)
         {
             return await this.spoolRepository.AddModeratorAsync(spoolId, userId);
@@ -100,15 +87,21 @@ namespace ThreaditAPI.Services
             return spools;
         }
 
-        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
+        public async Task<UserDTO[]> GetAllNonModeratorsForSpoolAsync(string spoolId, string userId)
         {
-            UserDTO[] users = await this.spoolRepository.GetAllUsersForSpoolAsync(spoolId, userId);
+            UserDTO[]? users = await this.spoolRepository.GetAllNonModeratorsForSpoolAsync(spoolId, userId);
             return users;
         }
 
         public async Task<UserDTO[]?> GetAllModsForSpoolAsync(string spoolId)
         {
             UserDTO[]? users = await this.spoolRepository.GetModeratorsAsync(spoolId);
+            return users;
+        }
+
+        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
+        {
+            UserDTO[]? users = await this.spoolRepository.GetAllUsersForSpoolAsync(spoolId, userId);
             return users;
         }
     }

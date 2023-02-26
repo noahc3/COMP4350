@@ -5,20 +5,21 @@ import SpoolAPI from '../api/SpoolAPI';
 
 export class SpoolUsersStore {
     @observable
-    _users?: IUserProfile[] = undefined;
+    _nonModerators?: IUserProfile[] = undefined;
     _moderators?: IUserProfile[] = undefined;
+    _users?: IUserProfile[] = undefined;
 
     constructor() {
         makeObservable(this);
     }
 
     @action
-    async refreshAllUsers(spoolId: string, userId: string) {
-        const users = await SpoolAPI.getAllUsers(spoolId, userId);
+    async refreshAllNonModerator(spoolId: string, userId: string) {
+        const _nonModerators = await SpoolAPI.getAllNonModerator(spoolId, userId);
         runInAction(() => {
-            this._users = users;
+            this._nonModerators = _nonModerators;
         })
-        return this._users
+        return this._nonModerators
     }
 
     @action
@@ -30,9 +31,23 @@ export class SpoolUsersStore {
         return this._moderators
     }
 
+    @action
+    async refreshAllUsers(spoolId: string, userId: string) {
+        const _users = await SpoolAPI.getAllUsers(spoolId, userId);
+        runInAction(() => {
+            this._users = _users;
+        })
+        return this._users
+    }
+
     @computed
     get moderators() {
         return this._moderators;
+    }
+
+    @computed
+    get nonModerators() {
+        return this._nonModerators;
     }
 
     @computed
