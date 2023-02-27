@@ -41,7 +41,9 @@ export const Spool = observer(() => {
 
     React.useEffect(() => {
         // dont ask.
-        (async () => { setBelongs(await UserSettingsAPI.getJoinedSpool(profile!.id, id!)) })()
+        if (id && profile) {
+            (async () => { setBelongs(await UserSettingsAPI.getJoinedSpool(profile!.id, id!)) })()
+        }
     }, [id, profile])
 
     React.useEffect(() => {

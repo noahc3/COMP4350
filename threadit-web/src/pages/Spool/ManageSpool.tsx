@@ -110,7 +110,7 @@ export const ManageSpool = observer(() => {
 
     const save = async () => {
         if (spool) {
-            await SpoolAPI.saveSpool(spool.id, spool.rules);
+            await SpoolAPI.saveSpool(spool.id, rules);
             navStore.navigateTo("/s/" + spoolName);
         }
     }
