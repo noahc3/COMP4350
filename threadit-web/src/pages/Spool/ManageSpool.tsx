@@ -70,7 +70,8 @@ export const ManageSpool = observer(() => {
 
     const addMod = async () => {
         if (spool) {
-            await SpoolAPI.addModerator(spool.id, modToAdd);
+            //await SpoolAPI.addModerator(spool.id, modToAdd);
+            console.log("called addMod");
             setLastUpdate(new Date());
         }
     }
