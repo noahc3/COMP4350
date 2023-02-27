@@ -62,7 +62,8 @@ export const ManageSpool = observer(() => {
 
     const removeMod = async (userId: string) => {
         if (spool) {
-            await SpoolAPI.removeModerator(spool.id, userId);
+            //await SpoolAPI.removeModerator(spool.id, userId);
+            console.log("called removeMod");
             setLastUpdate(new Date());
         }
     }
@@ -76,7 +77,8 @@ export const ManageSpool = observer(() => {
 
     const changeOwner = async (userId: string) => {
         if (spool) {
-            await SpoolAPI.changeOwner(spool.id, userId);
+            //await SpoolAPI.changeOwner(spool.id, userId);
+            console.log("called changeOwner");
             navStore.navigateTo("/s/" + spoolName);
         }
     }
@@ -115,7 +117,6 @@ export const ManageSpool = observer(() => {
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
-                                    {/*<Text mb={"0.5rem"} fontWeight={"bold"}>Add Moderator</Text>*/}
                                     <FormControl>
                                         <FormLabel>Add Moderator:</FormLabel>
                                             <Input
@@ -145,8 +146,8 @@ export const ManageSpool = observer(() => {
                                             onChange={(e) => setOwnerToAdd(e.target.value)}
                                         />
                                     </FormControl>
-                                    <Button leftIcon={<DeleteIcon />} colorScheme={"green"} width='120px' onClick={() => { addMod() }}>
-                                        Add
+                                    <Button leftIcon={<DeleteIcon />} colorScheme={"orange"} width='120px' onClick={() => { changeOwner() }}>
+                                        Change
                                     </Button>
                                 </Box>
 
