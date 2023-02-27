@@ -102,7 +102,7 @@ export const ManageSpool = observer(() => {
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <FormControl>
                                     <FormLabel>Thread Rules</FormLabel>
-                                    <Input size='md' value={rules} onChange={(e) => setRules(e.target.value)} />
+                                    <Input size='md' value={rules || ""} onChange={(e) => setRules(e.target.value)} />
                                 </FormControl>
                                 <Spacer />
 
