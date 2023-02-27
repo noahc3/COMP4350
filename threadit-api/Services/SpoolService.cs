@@ -114,5 +114,10 @@ namespace ThreaditAPI.Services
         {
             await this.spoolRepository.DeleteSpoolAsync(spoolId);
         }
+
+        public async Task SaveRulesAsync(string spoolId, string rules)
+        {
+            await this.spoolRepository.SaveRulesAsync(spoolId, rules);
+        }
     }
 }

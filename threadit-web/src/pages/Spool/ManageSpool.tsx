@@ -15,6 +15,7 @@ import { userStore } from "../../stores/UserStore";
 import { spoolUsersStore } from "../../stores/SpoolUsersStore";
 import { DeleteIcon, CheckIcon, AddIcon, SettingsIcon, StarIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
+import { navStore } from "../../stores/NavStore";
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
@@ -23,7 +24,6 @@ export const ManageSpool = observer(() => {
     const isAuthenticated = authStore.isAuthenticated;
     const [rules, setRules] = React.useState(spool?.rules);
     const { isOpen, onOpen, onClose } = useDisclosure()
-    //const cancelRef = React.useRef()
     const cancelRef = useRef<HTMLButtonElement>(null);
 
     const users = spoolUsersStore.users?.map(function (user) {
@@ -84,10 +84,13 @@ export const ManageSpool = observer(() => {
     }
 
     const deleteSpool = () => {
-        var result = window.hasOwnProperty('confirm');
-        if (result) {
-            //SpoolAPI.deleteSpool(spool!.id);
-        }
+        SpoolAPI.deleteSpool(spool!.id);
+        navStore.navigateTo("/");
+    }
+
+    const save = () => {
+        SpoolAPI.saveSpool(spool!.id, spool!.rules);
+        navStore.navigateTo("/");
     }
 
     return (
@@ -123,9 +126,9 @@ export const ManageSpool = observer(() => {
 
                                 <Divider />
                                 <HStack>
-                                    <NavLink to={"/s/" + spool.name}><Button colorScheme={"purple"} width='120px'>
+                                    <Button colorScheme={"purple"} width='120px' onClick={() => { save() }}>
                                         Save
-                                    </Button></NavLink>
+                                    </Button>
                                     <Spacer />
                                     <Button colorScheme={"red"} width='120px' onClick={onOpen}>
                                         Delete
@@ -150,7 +153,7 @@ export const ManageSpool = observer(() => {
                                                     <Button ref={cancelRef} onClick={onClose}>
                                                         Cancel
                                                     </Button>
-                                                    <Button colorScheme='red' onClick={onClose} ml={3}>
+                                                    <Button colorScheme='red' onClick={deleteSpool} ml={3}>
                                                         Delete
                                                     </Button>
                                                 </AlertDialogFooter>

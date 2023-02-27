@@ -211,5 +211,15 @@ namespace ThreaditAPI.Repositories
                 await db.SaveChangesAsync();
             }
         }
+
+        public async Task SaveRulesAsync(string spoolId, string rules)
+        {
+            Spool? dbSpool = await GetSpoolAsync(spoolId);
+            if (dbSpool != null)
+            {
+                dbSpool.rules = rules;
+                await db.SaveChangesAsync();
+            }
+        }
     }
 }

@@ -121,5 +121,19 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("save/{spoolId}/{rules}")]
+        public async Task<IActionResult> SaveRules([FromRoute] string spoolId, [FromRoute] string rules, [FromServices] SpoolService spoolService)
+        {
+            try
+            {
+                await spoolService.SaveRulesAsync(spoolId, rules);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
