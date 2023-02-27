@@ -19,14 +19,40 @@ import { navStore } from "../../stores/NavStore";
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
-    const { id } = useParams();
-    const [spool, setSpool] = useState<ISpool>();
     const isAuthenticated = authStore.isAuthenticated;
-    const [rules, setRules] = React.useState(spool?.rules);
+    const { name: spoolName } = useParams();
+    const [spool, setSpool] = useState<ISpool>();
+    const [rules, setRules] = useState(spool?.rules);
+    const [nonModerators, setNonModerators] = useState<IUserProfile[]>([]);
+    const [moderators, setModerators] = useState<IUserProfile[]>([]);
+    const [allUsers, setAllUsers] = useState<IUserProfile[]>([]);
+    const [lastUpdate, setLastUpdate] = useState(new Date());
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef<HTMLButtonElement>(null);
 
-    const users = spoolUsersStore.users?.map(function (user) {
+    React.useEffect(() => {
+        if (spoolName) {
+            SpoolAPI.getSpoolByName(spoolName).then((res) => {
+                setSpool(res);
+            });
+        }
+    }, [spoolName])
+
+    React.useEffect(() => {
+        if (spool && profile) {
+            Promise.all([
+                SpoolAPI.getAllMods(spool.id),
+                SpoolAPI.getAllNonModerator(spool.id, profile.id),
+                SpoolAPI.getAllUsers(spool.id, profile.id)
+            ]).then((res) => {
+                setModerators(res[0]);
+                setNonModerators(res[1]);
+                setAllUsers(res[2]);
+            });
+        }
+    }, [spool, lastUpdate, profile])
+
+    const usersElements = allUsers.map(function (user) {
         return (
             <HStack mb={"1rem"} key={user.id}>
                 <Button size="sm" leftIcon={<StarIcon />} colorScheme='orange' onClick={() => { changeOwner(user.id) }}></Button>
@@ -35,7 +61,7 @@ export const ManageSpool = observer(() => {
         );
     });
 
-    const moderators = spoolUsersStore.moderators?.map(function (moderator) {
+    const moderatorsElements = moderators.map(function (moderator) {
         return (
             <HStack mb={"1rem"} key={moderator.id}>
                 <Button size="sm" leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}></Button>
@@ -44,7 +70,7 @@ export const ManageSpool = observer(() => {
         );
     });
 
-    const nonModerators = spoolUsersStore.nonModerators?.map(function (nonModerator) {
+    const nonModeratorsElements = nonModerators.map(function (nonModerator) {
         return (
             <HStack mb={"1rem"} key={nonModerator.id}>
                 <Button size="sm" leftIcon={<AddIcon />} colorScheme='green' onClick={() => { addMod(nonModerator.id) }}></Button>
@@ -53,55 +79,49 @@ export const ManageSpool = observer(() => {
         );
     });
 
-    React.useEffect(() => {
-        if (id) {
-            SpoolAPI.getSpoolById(id).then((spool) => {
-                setSpool(spool);
-                //if these are both uncommented, profile.id is apparently null, but it fixes the non mod users list. line 50 does not fix mods though
-                //spoolUsersStore.refreshAllUsers(spool.id, profile!.id);
-                //spoolUsersStore.refreshAllModerators(spool.id);
-            });
+    const removeMod = async (userId: string) => {
+        if (spool) {
+            await SpoolAPI.removeModerator(spool.id, userId);
+            setLastUpdate(new Date());
         }
-    }, [id, profile])
-
-    const removeMod = (userId: string) => {
-        SpoolAPI.removeModerator(spool!.id, userId);
-        spoolUsersStore.refreshAllNonModerator(spool!.id, profile!.id);
-        spoolUsersStore.refreshAllUsers(spool!.id, profile!.id);
-        spoolUsersStore.refreshAllModerators(spool!.id);
-
     }
 
-    const addMod = (userId: string) => {
-        SpoolAPI.addModerator(spool!.id, userId);
-        spoolUsersStore.refreshAllNonModerator(spool!.id, profile!.id);
-        spoolUsersStore.refreshAllUsers(spool!.id, profile!.id);
-        spoolUsersStore.refreshAllModerators(spool!.id);
+    const addMod = async (userId: string) => {
+        if (spool) {
+            await SpoolAPI.addModerator(spool.id, userId);
+            setLastUpdate(new Date());
+        }
     }
 
-    const changeOwner = (userId: string) => {
-        SpoolAPI.changeOwner(spool!.id, userId);
+    const changeOwner = async (userId: string) => {
+        if (spool) {
+            await SpoolAPI.changeOwner(spool.id, userId);
+            navStore.navigateTo("/s/" + spoolName);
+        }
     }
 
-    const deleteSpool = () => {
-        SpoolAPI.deleteSpool(spool!.id);
-        navStore.navigateTo("/");
+    const deleteSpool = async () => {
+        if (spool) {
+            await SpoolAPI.deleteSpool(spool.id);
+            navStore.navigateTo("/");
+        }
     }
 
-    const save = () => {
-        SpoolAPI.saveSpool(spool!.id, spool!.rules);
-        navStore.navigateTo("/");
+    const save = async () => {
+        if (spool) {
+            await SpoolAPI.saveSpool(spool.id, spool.rules);
+            navStore.navigateTo("/s/" + spoolName);
+        }
     }
 
     return (
         <PageLayout title={spool ? spool.name + ": Settings" : ""}>
-            {spool && spool.ownerId === profile?.id && (
-                    <Container centerContent={false} maxW={"container.md"}>
-                        <VStack>
-                            {isAuthenticated &&
+            <Container centerContent={false} maxW={"container.md"}>
+                    <VStack>
+                        {(spool && isAuthenticated) &&
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <Text as='b'>Current Rules: </Text>
-                                <Text as='i'>{spool.rules}</Text>
+                                <Text as='i'>{spool?.rules}</Text>
                                 <FormControl>
                                     <FormLabel>New Rules:</FormLabel>
                                     <Input
@@ -115,19 +135,19 @@ export const ManageSpool = observer(() => {
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <Text mb={"0.5rem"} fontWeight={"bold"}>Add Moderators</Text>
-                                    {nonModerators}
+                                    {nonModeratorsElements}
                                 </Box>
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <Text mb={"0.5rem"} fontWeight={"bold"}>Remove Moderators</Text>
-                                    {moderators}
+                                    {moderatorsElements}
                                 </Box>
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <Text mb={"0.5rem"} fontWeight={"bold"}>Change Ownership</Text>
-                                    {users}
+                                    {usersElements}
                                 </Box>
 
                                 <Divider />
@@ -143,7 +163,7 @@ export const ManageSpool = observer(() => {
                                     <AlertDialog
                                         isOpen={isOpen}
                                         onClose={onClose}
-                                        leastDestructiveRef = {cancelRef}
+                                        leastDestructiveRef={cancelRef}
                                     >
                                         <AlertDialogOverlay>
                                             <AlertDialogContent>
@@ -168,11 +188,9 @@ export const ManageSpool = observer(() => {
                                     </AlertDialog>
                                 </HStack>
                             </Box>
-
-                            }
-                        </VStack>
-                    </Container>
-                )}
+                        }
+                    </VStack>
+                </Container>
         </PageLayout>
     );
 });

@@ -31,8 +31,8 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async getSpoolById(spoolId: string): Promise<ISpool> {
-        const response = await get(spoolEndpoint + spoolId);
+    static async getSpoolByName(spoolName: string): Promise<ISpool> {
+        const response = await get(spoolEndpoint + spoolName);
 
         if (!response.ok) {
             throw new Error(`Failed to get spool: ${await response.text()}`);

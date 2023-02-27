@@ -26,7 +26,7 @@ export const Spool = observer(() => {
 
     React.useEffect(() => {
         if (id) {
-            SpoolAPI.getSpoolById(id).then((spool) => {
+            SpoolAPI.getSpoolByName(id).then((spool) => {
                 setSpool(spool);
                 spoolUsersStore.refreshAllNonModerator(spool.id, profile!.id);
                 spoolUsersStore.refreshAllUsers(spool.id, profile!.id);

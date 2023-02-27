@@ -17,10 +17,10 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(threads);
         }
 
-        [HttpGet("{spoolId}")]
-        public async Task<IActionResult> GetSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        [HttpGet("{spoolName}")]
+        public async Task<IActionResult> GetSpool([FromRoute] string spoolName, [FromServices] SpoolService spoolService)
         {
-            Spool? spool = await spoolService.GetSpoolByNameAsync(spoolId);
+            Spool? spool = await spoolService.GetSpoolByNameAsync(spoolName);
             return Ok(spool);
         }
 

@@ -23,7 +23,7 @@ export const Router: React.FC = observer(() => {
                 <Route path="/createSpool" element={<PostSpool />} />
                 <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
-                <Route path="/s/:id/manage" element={<ManageSpool />} />
+                <Route path="/s/:name/manage" element={<ManageSpool />} />
             </Routes>
         </HistoryRouter>
     )
