@@ -100,9 +100,15 @@ export const ManageSpool = observer(() => {
                         <VStack>
                             {isAuthenticated &&
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
+                                <Text as='b'>Current Rules: </Text>
+                                <Text as='i'>{spool.rules}</Text>
                                 <FormControl>
-                                    <FormLabel>Thread Rules</FormLabel>
-                                    <Input size='md' value={rules || ""} onChange={(e) => setRules(e.target.value)} />
+                                    <FormLabel>New Rules:</FormLabel>
+                                    <Input
+                                        size='md'
+                                        value={rules || ""}
+                                        onChange={(e) => setRules(e.target.value)}
+                                    />
                                 </FormControl>
                                 <Spacer />
 
