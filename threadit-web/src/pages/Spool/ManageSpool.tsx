@@ -23,12 +23,12 @@ export const ManageSpool = observer(() => {
     const { name: spoolName } = useParams();
     const [spool, setSpool] = useState<ISpool>();
     const [rules, setRules] = useState(spool?.rules || "");
-    const [nonModerators, setNonModerators] = useState<IUserProfile[]>([]);
     const [moderators, setModerators] = useState<IUserProfile[]>([]);
-    const [allUsers, setAllUsers] = useState<IUserProfile[]>([]);
     const [lastUpdate, setLastUpdate] = useState(new Date());
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef<HTMLButtonElement>(null);
+    const [modToAdd, setModToAdd] = useState<string>("");
+    const [ownerToAdd, setOwnerToAdd] = useState<string>("");
 
     React.useEffect(() => {
         if (spoolName) {
@@ -47,35 +47,15 @@ export const ManageSpool = observer(() => {
                 SpoolAPI.getAllUsers(spool.id, profile.id)
             ]).then((res) => {
                 setModerators(res[0]);
-                setNonModerators(res[1]);
-                setAllUsers(res[2]);
             });
         }
     }, [spool, lastUpdate, profile])
-
-    const usersElements = allUsers.map(function (user) {
-        return (
-            <HStack mb={"1rem"} key={user.id}>
-                <Button size="sm" leftIcon={<StarIcon />} colorScheme='orange' onClick={() => { changeOwner(user.id) }}></Button>
-                <Text mb={"0.5rem"}>{user.username}</Text>
-            </HStack>
-        );
-    });
 
     const moderatorsElements = moderators.map(function (moderator) {
         return (
             <HStack mb={"1rem"} key={moderator.id}>
                 <Button size="sm" leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}></Button>
                 <Text mb={"0.5rem"}>{moderator.username}</Text>
-            </HStack>
-        );
-    });
-
-    const nonModeratorsElements = nonModerators.map(function (nonModerator) {
-        return (
-            <HStack mb={"1rem"} key={nonModerator.id}>
-                <Button size="sm" leftIcon={<AddIcon />} colorScheme='green' onClick={() => { addMod(nonModerator.id) }}></Button>
-                <Text mb={"0.5rem"}>{nonModerator.username}</Text>
             </HStack>
         );
     });
@@ -87,9 +67,9 @@ export const ManageSpool = observer(() => {
         }
     }
 
-    const addMod = async (userId: string) => {
+    const addMod = async () => {
         if (spool) {
-            await SpoolAPI.addModerator(spool.id, userId);
+            await SpoolAPI.addModerator(spool.id, modToAdd);
             setLastUpdate(new Date());
         }
     }
@@ -135,8 +115,18 @@ export const ManageSpool = observer(() => {
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
-                                    <Text mb={"0.5rem"} fontWeight={"bold"}>Add Moderators</Text>
-                                    {nonModeratorsElements}
+                                    {/*<Text mb={"0.5rem"} fontWeight={"bold"}>Add Moderator</Text>*/}
+                                    <FormControl>
+                                        <FormLabel>Add Moderator:</FormLabel>
+                                            <Input
+                                                size='md'
+                                                value={modToAdd}
+                                                onChange={(e) => setModToAdd(e.target.value)}
+                                            />
+                                    </FormControl>
+                                    <Button leftIcon={<DeleteIcon />} colorScheme={"green"} width='120px' onClick={() => { addMod() }}>
+                                        Add
+                                    </Button>
                                 </Box>
 
                                 <Divider />
@@ -147,8 +137,17 @@ export const ManageSpool = observer(() => {
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
-                                    <Text mb={"0.5rem"} fontWeight={"bold"}>Change Ownership</Text>
-                                    {usersElements}
+                                    <FormControl>
+                                        <FormLabel>Change Owner:</FormLabel>
+                                        <Input
+                                            size='md'
+                                            value={ownerToAdd}
+                                            onChange={(e) => setOwnerToAdd(e.target.value)}
+                                        />
+                                    </FormControl>
+                                    <Button leftIcon={<DeleteIcon />} colorScheme={"green"} width='120px' onClick={() => { addMod() }}>
+                                        Add
+                                    </Button>
                                 </Box>
 
                                 <Divider />
