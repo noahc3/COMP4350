@@ -125,7 +125,7 @@ export const ManageSpool = observer(() => {
                                                 onChange={(e) => setModToAdd(e.target.value)}
                                             />
                                     </FormControl>
-                                    <Button leftIcon={<AddIcon />} colorScheme={"green"} width='120px' onClick={() => { addMod() }}>
+                                    <Button leftIcon={<AddIcon />} colorScheme={"green"} width='100px' onClick={() => { addMod() }}>
                                         Add
                                     </Button>
                                 </Box>
@@ -146,7 +146,7 @@ export const ManageSpool = observer(() => {
                                             onChange={(e) => setOwnerToAdd(e.target.value)}
                                         />
                                     </FormControl>
-                                    <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='120px' onClick={() => { changeOwner() }}>
+                                    <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='100px' onClick={() => { changeOwner() }}>
                                         Change
                                     </Button>
                                 </Box>
