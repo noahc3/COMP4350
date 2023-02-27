@@ -75,7 +75,7 @@ export const ManageSpool = observer(() => {
         }
     }
 
-    const changeOwner = async (userId: string) => {
+    const changeOwner = async () => {
         if (spool) {
             //await SpoolAPI.changeOwner(spool.id, userId);
             console.log("called changeOwner");
