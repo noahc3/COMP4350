@@ -71,6 +71,7 @@ export const ManageSpool = observer(() => {
     const addMod = async () => {
         if (spool) {
             //await SpoolAPI.addModerator(spool.id, modToAdd);
+            //TODO: need to add check in back end so mod does not get added if its already within the list, and only gets added if it is a user. show error to user otherwise.
             console.log("called addMod");
             setLastUpdate(new Date());
         }
