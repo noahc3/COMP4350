@@ -67,7 +67,15 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> AddModeratorAsync(string spoolId, string userId)
         {
-            return await this.spoolRepository.AddModeratorAsync(spoolId, userId);
+            Spool dbSpool = await this.spoolRepository.AddModeratorAsync(spoolId, userId);
+            if(dbSpool != null)
+            {
+                return dbSpool;
+            }
+            else
+            {
+                throw new Exception("User does not exist.")
+            }
         }
 
         public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)

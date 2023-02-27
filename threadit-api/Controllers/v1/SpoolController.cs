@@ -66,20 +66,6 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
-        [HttpGet("nonModerator/{spoolId}/{userId}")]
-        public async Task<IActionResult> AllNonModeratorsForSpool([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
-        {
-            UserDTO[] users = await spoolService.GetAllNonModeratorsForSpoolAsync(spoolId, userId);
-            return Ok(users);
-        }
-
-        [HttpGet("users/{spoolId}/{userId}")]
-        public async Task<IActionResult> AllUsersForSpool([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
-        {
-            UserDTO[] users = await spoolService.GetAllUsersForSpoolAsync(spoolId, userId);
-            return Ok(users);
-        }
-
         [HttpGet("mods/{spoolId}")]
         public async Task<IActionResult> AllModsForSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
         {
@@ -90,7 +76,15 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpGet("mods/add/{spoolId}/{userId}")]
         public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
-            Spool? spool = await spoolService.AddModeratorAsync(spoolId, userId);
+            SpoolController? spool;
+            try { 
+                spool = await spoolService.AddModeratorAsync(spoolId, userId);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
             return Ok(spool);
         }
 
@@ -98,13 +92,6 @@ namespace ThreaditAPI.Controllers.v1 {
         public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
             Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
-            return Ok(spool);
-        }
-
-        [HttpGet("change/{spoolId}/{userId}")]
-        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
-        {
-            Spool? spool = await spoolService.ChangeOwnerAsync(spoolId, userId);
             return Ok(spool);
         }
 
