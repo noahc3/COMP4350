@@ -2,6 +2,7 @@
 using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading;
 
 namespace ThreaditAPI.Repositories
 {
@@ -55,7 +56,6 @@ namespace ThreaditAPI.Repositories
                 {
                     foreach (string currentId in dbSpool.Moderators)
                     {
-                        Console.WriteLine("id: " + currentId);
                         UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == currentId);
                         if (currentUser != null)
                         {
@@ -189,6 +189,27 @@ namespace ThreaditAPI.Repositories
                 }
             }
             return usersList.ToArray();
+        }
+
+        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userId)
+        {
+            Spool? dbSpool = await GetSpoolAsync(spoolId);
+            if (dbSpool != null)
+            {
+                dbSpool.OwnerId = userId;
+                await db.SaveChangesAsync();
+            }
+            return dbSpool;
+        }
+
+        public async Task DeleteSpoolAsync(string spoolId)
+        {
+            Spool? dbSpool = await GetSpoolAsync(spoolId);
+            if (dbSpool != null)
+            {
+                db.Spools.Remove(dbSpool);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

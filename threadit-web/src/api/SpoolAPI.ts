@@ -16,6 +16,8 @@ const allModsForSpoolEndpoint = ApiEndpoint('/v1/spool/mods/');
 const removeModeratorEndpoint = ApiEndpoint('/v1/spool/mods/remove/');
 const addModeratorEndpoint = ApiEndpoint('/v1/spool/mods/add/');
 const allUsersForSpoolEndpoint = ApiEndpoint('/v1/spool/users/');
+const changeOwnerEndpoint = ApiEndpoint('/v1/spool/change/');
+const deleteSpoolEndpoint = ApiEndpoint('/v1/spool/delete/');
 
 export default class SpoolAPI {
     static async getSpoolThreads(spoolId: string): Promise<IThreadFull[]> {
@@ -125,5 +127,23 @@ export default class SpoolAPI {
         }
 
         return await response.json();
+    }
+
+    static async changeOwner(spoolId: string, userId: string): Promise<IUserProfile[]> {
+        const response = await get(changeOwnerEndpoint + spoolId + '/' + userId);
+
+        if (!response.ok) {
+            throw new Error(`Failed to change the owner of the spool: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async deleteSpool(spoolId: string): Promise<void> {
+        const response = await get(deleteSpoolEndpoint + spoolId);
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete the spool: ${await response.text()}`);
+        }
     }
 }

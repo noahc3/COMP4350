@@ -104,5 +104,15 @@ namespace ThreaditAPI.Services
             UserDTO[]? users = await this.spoolRepository.GetAllUsersForSpoolAsync(spoolId, userId);
             return users;
         }
+
+        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userId)
+        {
+            return await this.spoolRepository.ChangeOwnerAsync(spoolId, userId);
+        }
+
+        public async Task DeleteSpoolAsync(string spoolId)
+        {
+            await this.spoolRepository.DeleteSpoolAsync(spoolId);
+        }
     }
 }

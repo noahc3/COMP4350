@@ -100,5 +100,26 @@ namespace ThreaditAPI.Controllers.v1 {
             Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
             return Ok(spool);
         }
+
+        [HttpGet("change/{spoolId}/{userId}")]
+        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool = await spoolService.ChangeOwnerAsync(spoolId, userId);
+            return Ok(spool);
+        }
+
+        [HttpGet("delete/{spoolId}")]
+        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
+            try
+            {
+                await spoolService.DeleteSpoolAsync(spoolId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

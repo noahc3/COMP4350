@@ -1,6 +1,6 @@
-import { Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider } from "@chakra-ui/react";
+import { Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure, } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
 import SpoolAPI from "../../api/SpoolAPI";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
@@ -15,7 +15,6 @@ import { userStore } from "../../stores/UserStore";
 import { spoolUsersStore } from "../../stores/SpoolUsersStore";
 import { DeleteIcon, CheckIcon, AddIcon, SettingsIcon, StarIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
-import { hasProp } from "mobx/dist/internal";
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
@@ -23,6 +22,9 @@ export const ManageSpool = observer(() => {
     const [spool, setSpool] = useState<ISpool>();
     const isAuthenticated = authStore.isAuthenticated;
     const [rules, setRules] = React.useState(spool?.rules);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    //const cancelRef = React.useRef()
+    const cancelRef = useRef<HTMLButtonElement>(null);
 
     const users = spoolUsersStore.users?.map(function (user) {
         return (
@@ -78,14 +80,14 @@ export const ManageSpool = observer(() => {
     }
 
     const changeOwner = (userId: string) => {
-    }
-
-    const saveSettings = () => {
-
+        SpoolAPI.changeOwner(spool!.id, userId);
     }
 
     const deleteSpool = () => {
-
+        var result = window.hasOwnProperty('confirm');
+        if (result) {
+            //SpoolAPI.deleteSpool(spool!.id);
+        }
     }
 
     return (
@@ -121,13 +123,40 @@ export const ManageSpool = observer(() => {
 
                                 <Divider />
                                 <HStack>
-                                    <Button colorScheme={"purple"} width='120px' onClick={() => { saveSettings() }}>
+                                    <NavLink to={"/s/" + spool.name}><Button colorScheme={"purple"} width='120px'>
                                         Save
-                                    </Button>
+                                    </Button></NavLink>
                                     <Spacer />
-                                    <Button colorScheme={"red"} width='120px' onClick={() => { deleteSpool() }}>
+                                    <Button colorScheme={"red"} width='120px' onClick={onOpen}>
                                         Delete
                                     </Button>
+
+                                    <AlertDialog
+                                        isOpen={isOpen}
+                                        onClose={onClose}
+                                        leastDestructiveRef = {cancelRef}
+                                    >
+                                        <AlertDialogOverlay>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                                    Delete Spool
+                                                </AlertDialogHeader>
+
+                                                <AlertDialogBody>
+                                                    Are you sure? You can't undo this action afterwards.
+                                                </AlertDialogBody>
+
+                                                <AlertDialogFooter>
+                                                    <Button ref={cancelRef} onClick={onClose}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button colorScheme='red' onClick={onClose} ml={3}>
+                                                        Delete
+                                                    </Button>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialogOverlay>
+                                    </AlertDialog>
                                 </HStack>
                             </Box>
 
