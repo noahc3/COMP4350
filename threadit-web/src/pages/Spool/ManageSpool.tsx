@@ -54,7 +54,7 @@ export const ManageSpool = observer(() => {
     const moderatorsElements = moderators.map(function (moderator) {
         return (
             <HStack mb={"1rem"} key={moderator.id}>
-                <Button size="sm" width='100px' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}></Button>
+                <Button size="sm" width='100px' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}>Delete</Button>
                 <Text mb={"0.5rem"}>{moderator.username}</Text>
             </HStack>
         );
