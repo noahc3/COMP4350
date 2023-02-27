@@ -22,7 +22,7 @@ export const ManageSpool = observer(() => {
     const isAuthenticated = authStore.isAuthenticated;
     const { name: spoolName } = useParams();
     const [spool, setSpool] = useState<ISpool>();
-    const [rules, setRules] = useState(spool?.rules);
+    const [rules, setRules] = useState(spool?.rules || "");
     const [nonModerators, setNonModerators] = useState<IUserProfile[]>([]);
     const [moderators, setModerators] = useState<IUserProfile[]>([]);
     const [allUsers, setAllUsers] = useState<IUserProfile[]>([]);
@@ -34,6 +34,7 @@ export const ManageSpool = observer(() => {
         if (spoolName) {
             SpoolAPI.getSpoolByName(spoolName).then((res) => {
                 setSpool(res);
+                setRules(res.rules);
             });
         }
     }, [spoolName])
