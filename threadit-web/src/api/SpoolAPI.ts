@@ -1,7 +1,7 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { ISpool } from "../models/Spool";
 import { IThreadFull } from "../models/ThreadFull";
-import { get, postWithAuth } from "./Request";
+import { get, post, postWithAuth } from "./Request";
 import { spoolStore } from "../stores/SpoolStore";
 import UserAPI from '../api/UserAPI';
 import { IUserProfile } from "../models/UserProfile";
@@ -149,7 +149,9 @@ export default class SpoolAPI {
     }
 
     static async saveSpool(spoolId: string, rules: string): Promise<void> {
-        const response = await get(saveSpoolEndpoint + spoolId + '/' + rules);
+        const response = await post(saveSpoolEndpoint + spoolId, {
+            rules
+        });
 
         if (!response.ok) {
             throw new Error(`Failed to save the spool: ${await response.text()}`);
