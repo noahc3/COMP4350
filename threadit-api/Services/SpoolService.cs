@@ -108,21 +108,9 @@ namespace ThreaditAPI.Services
             return spools;
         }
 
-        public async Task<UserDTO[]> GetAllNonModeratorsForSpoolAsync(string spoolId, string userId)
-        {
-            UserDTO[]? users = await this.spoolRepository.GetAllNonModeratorsForSpoolAsync(spoolId, userId);
-            return users;
-        }
-
         public async Task<UserDTO[]?> GetAllModsForSpoolAsync(string spoolId)
         {
             UserDTO[]? users = await this.spoolRepository.GetModeratorsAsync(spoolId);
-            return users;
-        }
-
-        public async Task<UserDTO[]> GetAllUsersForSpoolAsync(string spoolId, string userId)
-        {
-            UserDTO[]? users = await this.spoolRepository.GetAllUsersForSpoolAsync(spoolId, userId);
             return users;
         }
 

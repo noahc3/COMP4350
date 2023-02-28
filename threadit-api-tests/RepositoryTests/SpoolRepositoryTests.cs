@@ -510,4 +510,59 @@ public class SpoolRepositoryTests
         //checks
         Assert.True(mods.IsNullOrEmpty());
     }
+
+    [Test]
+    public async Task ChangeOwner_SpoolAndOwnerExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task ChangeOwner_OwnerNotExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task ChangeOwner_SpoolNotExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task SaveRules_SpoolExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task SaveRules_SpoolNotExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task DeleteSpool_SpoolExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task DeleteSpool_SpoolNotExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task GetJoinedSpools_UserExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task GetJoinedSpools_UserNotExist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task GetAllSpools_Exist_ShouldPass()
+    {
+    }
+
+    [Test]
+    public async Task GetAllSpools_NoneExist_ShouldPass()
+    {
+    }
 }
