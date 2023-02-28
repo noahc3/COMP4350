@@ -23,7 +23,7 @@ export const Spool = observer(() => {
     const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
     const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
     const isAuthenticated = authStore.isAuthenticated;
-    const [lockInputs, setLockInputs] = React.useState(true);
+    const [lockInputs] = React.useState(true);
 
     React.useEffect(() => {
         if (id) {

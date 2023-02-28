@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { HistoryRouter } from "./HistoryRouter";
 import { navStore } from "../../stores/NavStore";
 import { observer } from "mobx-react";
-import UserSettings from "../../pages/UserSettings/UserSettings";
 import { Home } from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
 import PostThread from "../../pages/PostThread/PostThread";
