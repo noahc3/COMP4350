@@ -80,26 +80,6 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async getAllNonModerator(spoolId: string, userId: string): Promise<IUserProfile[]> {
-        const response = await get(allNonModeratorsForSpoolEndpoint + spoolId + "/" + userId);
-
-        if (!response.ok) {
-            throw new Error(`Failed to get all non moderators who joined spool: ${await response.text()}`);
-        }
-
-        return await response.json();
-    }
-
-    static async getAllUsers(spoolId: string, userId: string): Promise<IUserProfile[]> {
-        const response = await get(allUsersForSpoolEndpoint + spoolId + "/" + userId);
-
-        if (!response.ok) {
-            throw new Error(`Failed to get all users who joined spool: ${await response.text()}`);
-        }
-
-        return await response.json();
-    }
-
     static async getAllMods(spoolId: string): Promise<IUserProfile[]> {
         const response = await get(allModsForSpoolEndpoint + spoolId);
 
@@ -110,8 +90,8 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async removeModerator(spoolId: string, userId: string): Promise<IUserProfile[]> {
-        const response = await get(removeModeratorEndpoint + spoolId + '/' + userId);
+    static async removeModerator(spoolId: string, userName: string): Promise<IUserProfile[]> {
+        const response = await get(removeModeratorEndpoint + spoolId + '/' + userName);
 
         if (!response.ok) {
             throw new Error(`Failed to remove moderator from spool: ${await response.text()}`);
@@ -120,24 +100,24 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async addModerator(spoolId: string, userId: string): Promise<IUserProfile[]> {
-        const response = await get(addModeratorEndpoint + spoolId + '/' + userId);
+    static async addModerator(spoolId: string, userName: string): Promise<boolean> {
+        const response = await get(addModeratorEndpoint + spoolId + '/' + userName);
 
         if (!response.ok) {
-            throw new Error(`Failed to add moderator to spool: ${await response.text()}`);
+            console.error(`Failed to add moderator to spool: ${await response.text()}`);
         }
 
-        return await response.json();
+        return response.ok;
     }
 
-    static async changeOwner(spoolId: string, userId: string): Promise<IUserProfile[]> {
-        const response = await get(changeOwnerEndpoint + spoolId + '/' + userId);
+    static async changeOwner(spoolId: string, userName: string): Promise<boolean> {
+        const response = await get(changeOwnerEndpoint + spoolId + '/' + userName);
 
         if (!response.ok) {
-            throw new Error(`Failed to change the owner of the spool: ${await response.text()}`);
+            console.error(`Failed to change the owner of the spool: ${await response.text()}`);
         }
 
-        return await response.json();
+        return response.ok;
     }
 
     static async deleteSpool(spoolId: string): Promise<void> {
@@ -154,7 +134,7 @@ export default class SpoolAPI {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to save the spool: ${await response.text()}`);
+            console.error(`Failed to save the spool: ${await response.text()}`);
         }
     }
 }

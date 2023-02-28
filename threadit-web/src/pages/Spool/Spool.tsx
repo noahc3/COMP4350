@@ -1,4 +1,4 @@
-import { Box, Button, Container, VStack, Spacer, HStack, Text } from "@chakra-ui/react";
+import { Textarea, Box, Button, Container, VStack, Spacer, HStack, Text, Center } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useParams } from "react-router";
@@ -23,13 +23,12 @@ export const Spool = observer(() => {
     const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
     const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
     const isAuthenticated = authStore.isAuthenticated;
+    const [lockInputs, setLockInputs] = React.useState(true);
 
     React.useEffect(() => {
         if (id) {
             SpoolAPI.getSpoolByName(id).then((spool) => {
                 setSpool(spool);
-                spoolUsersStore.refreshAllNonModerator(spool.id, profile!.id);
-                spoolUsersStore.refreshAllUsers(spool.id, profile!.id);
                 spoolUsersStore.refreshAllModerators(spool.id);
             });
 
@@ -68,14 +67,11 @@ export const Spool = observer(() => {
                 (
                     <Container centerContent={false} maxW={"container.md"}>
                         <VStack>
-                            {isAuthenticated &&
+                        {isAuthenticated &&
+                            <VStack>
                                 <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                     <HStack>
                                         <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue'>Create Post</Button></NavLink>
-                                        {/* TODO: this can either be changed to be the owners Username or just remove it.*/}
-                                        <Spacer />
-                                        <Text as='i'>Owner: {spool!.ownerId}</Text>
-                                        {/* TODO: up to here*/}
                                         {spool.ownerId !== profile?.id && <>
                                                 <Spacer />
                                                 {belongs ? <>
@@ -94,6 +90,13 @@ export const Spool = observer(() => {
                                         </>}
                                     </HStack>
                                 </Box>
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                                    <Center>
+                                        <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES</Text></Text>
+                                    </Center>
+                                    <Textarea disabled={lockInputs} fontSize='xl'>{spool.rules || ""}</Textarea>
+                                </Box>
+                            </VStack>
                             }
                             <PostFeed threads={threads} />
                         </VStack>

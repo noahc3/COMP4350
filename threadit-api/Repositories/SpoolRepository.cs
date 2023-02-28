@@ -3,6 +3,7 @@ using ThreaditAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading;
+using System.Linq;
 
 namespace ThreaditAPI.Repositories
 {
@@ -68,24 +69,39 @@ namespace ThreaditAPI.Repositories
             return users;
         }
 
-        public async Task<Spool?> AddModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> AddModeratorAsync(string spoolId, string userName)
         {
-            Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
-            if (dbSpool == null)
+            Spool? dbSpool = await GetSpoolAsync(spoolId);
+            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
+            if (dbSpool == null || dbUser == null|| dbSpool.Moderators.Contains(dbUser.Id))
                 return null;
-            dbSpool.Moderators.Add(userId);
+            dbSpool.Moderators.Add(dbUser.Id);
             await db.SaveChangesAsync();
             return dbSpool;
         }
 
-        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userName)
         {
-            Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
-            if (dbSpool == null)
+            Spool? dbSpool = await GetSpoolAsync(spoolId);
+            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
+            if (dbSpool == null || dbUser == null)
             {
                 return null;
             }
-            dbSpool.Moderators.Remove(userId);
+            dbSpool!.OwnerId = dbUser!.Id;
+            await db.SaveChangesAsync();
+            return dbSpool;
+        }
+
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userName)
+        {
+            Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
+            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
+            if (dbSpool == null || dbUser == null)
+            {
+                return null;
+            }
+            dbSpool.Moderators.Remove(dbUser.Id);
             await db.SaveChangesAsync();
             return dbSpool;
         }
@@ -189,17 +205,6 @@ namespace ThreaditAPI.Repositories
                 }
             }
             return usersList.ToArray();
-        }
-
-        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userId)
-        {
-            Spool? dbSpool = await GetSpoolAsync(spoolId);
-            if (dbSpool != null)
-            {
-                dbSpool.OwnerId = userId;
-                await db.SaveChangesAsync();
-            }
-            return dbSpool;
         }
 
         public async Task DeleteSpoolAsync(string spoolId)

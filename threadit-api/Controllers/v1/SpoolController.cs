@@ -73,12 +73,12 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(users);
         }
 
-        [HttpGet("mods/add/{spoolId}/{userId}")]
-        public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        [HttpGet("mods/add/{spoolId}/{userName}")]
+        public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
-            SpoolController? spool;
+            Spool? spool;
             try { 
-                spool = await spoolService.AddModeratorAsync(spoolId, userId);
+                spool = await spoolService.AddModeratorAsync(spoolId, userName);
             }
             catch (Exception e)
             {
@@ -88,25 +88,26 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spool);
         }
 
-        [HttpGet("mods/remove/{spoolId}/{userId}")]
-        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        [HttpGet("change/{spoolId}/{userName}")]
+        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
-            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
-            return Ok(spool);
-        }
-
-        [HttpGet("delete/{spoolId}")]
-        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
-        {
+            Spool? spool;
             try
             {
-                await spoolService.DeleteSpoolAsync(spoolId);
-                return Ok();
+                spool = await spoolService.ChangeOwnerAsync(spoolId, userName);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+            return Ok(spool);
+        }
+
+        [HttpGet("mods/remove/{spoolId}/{userName}")]
+        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userName);
+            return Ok(spool);
         }
 
         [HttpPost("save/{spoolId}")]

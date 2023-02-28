@@ -65,22 +65,35 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<Spool?> AddModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> AddModeratorAsync(string spoolId, string userName)
         {
-            Spool dbSpool = await this.spoolRepository.AddModeratorAsync(spoolId, userId);
+            Spool? dbSpool = await this.spoolRepository.AddModeratorAsync(spoolId, userName);
             if(dbSpool != null)
             {
                 return dbSpool;
             }
             else
             {
-                throw new Exception("User does not exist.")
+                throw new Exception("User does not exist.");
             }
         }
 
-        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
+        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userName)
         {
-            return await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
+            Spool? dbSpool = await this.spoolRepository.ChangeOwnerAsync(spoolId, userName);
+            if (dbSpool != null)
+            {
+                return dbSpool;
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
+            }
+        }
+
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userName)
+        {
+            return await this.spoolRepository.RemoveModeratorAsync(spoolId, userName);
         }
 
         public async Task<Spool[]> GetAllSpoolsAsync()
@@ -111,11 +124,6 @@ namespace ThreaditAPI.Services
         {
             UserDTO[]? users = await this.spoolRepository.GetAllUsersForSpoolAsync(spoolId, userId);
             return users;
-        }
-
-        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userId)
-        {
-            return await this.spoolRepository.ChangeOwnerAsync(spoolId, userId);
         }
 
         public async Task DeleteSpoolAsync(string spoolId)

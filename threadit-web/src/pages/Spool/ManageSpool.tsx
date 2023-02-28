@@ -1,20 +1,14 @@
-import { Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure, } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider, Textarea, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure, } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
 import SpoolAPI from "../../api/SpoolAPI";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
-import { PostFeed } from "../../containers/Posts/PostFeed";
 import { ISpool } from "../../models/Spool";
 import { IUserProfile } from "../../models/UserProfile";
-import { IThreadFull } from "../../models/ThreadFull";
-import { IoCreateOutline } from "react-icons/io5";
-import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
-import { spoolUsersStore } from "../../stores/SpoolUsersStore";
-import { DeleteIcon, CheckIcon, AddIcon, SettingsIcon, StarIcon } from '@chakra-ui/icons';
-import UserSettingsAPI from "../../api/UserSettingsApi";
+import { DeleteIcon, AddIcon, StarIcon } from '@chakra-ui/icons';
 import { navStore } from "../../stores/NavStore";
 
 export const ManageSpool = observer(() => {
@@ -29,6 +23,8 @@ export const ManageSpool = observer(() => {
     const cancelRef = useRef<HTMLButtonElement>(null);
     const [modToAdd, setModToAdd] = useState<string>("");
     const [ownerToAdd, setOwnerToAdd] = useState<string>("");
+    const [addError, setAddError] = React.useState('');
+    const [changeError, setChangeError] = React.useState('');
 
     React.useEffect(() => {
         if (spoolName) {
@@ -42,9 +38,7 @@ export const ManageSpool = observer(() => {
     React.useEffect(() => {
         if (spool && profile) {
             Promise.all([
-                SpoolAPI.getAllMods(spool.id),
-                SpoolAPI.getAllNonModerator(spool.id, profile.id),
-                SpoolAPI.getAllUsers(spool.id, profile.id)
+                SpoolAPI.getAllMods(spool.id)
             ]).then((res) => {
                 setModerators(res[0]);
             });
@@ -62,7 +56,7 @@ export const ManageSpool = observer(() => {
 
     const removeMod = async (userId: string) => {
         if (spool) {
-            //await SpoolAPI.removeModerator(spool.id, userId);
+            await SpoolAPI.removeModerator(spool.id, userId);
             console.log("called removeMod");
             setLastUpdate(new Date());
         }
@@ -70,18 +64,36 @@ export const ManageSpool = observer(() => {
 
     const addMod = async () => {
         if (spool) {
-            //await SpoolAPI.addModerator(spool.id, modToAdd);
-            //TODO: need to add check in back end so mod does not get added if its already within the list, and only gets added if it is a user. show error to user otherwise.
-            console.log("called addMod");
-            setLastUpdate(new Date());
+            try {
+                const success = await SpoolAPI.addModerator(spool.id, modToAdd);
+                if (!success) {
+                    setAddError('Invalid username');
+                } else {
+                    setAddError('');
+                    setLastUpdate(new Date());
+                }
+            }
+            finally {
+                //do nothing
+            }
         }
     }
 
     const changeOwner = async () => {
         if (spool) {
-            //await SpoolAPI.changeOwner(spool.id, userId);
-            console.log("called changeOwner");
-            navStore.navigateTo("/s/" + spoolName);
+            try {
+                const success = await SpoolAPI.changeOwner(spool.id, ownerToAdd);
+                if (!success) {
+                    setChangeError('Invalid username');
+                } else {
+                    setLastUpdate(new Date());
+                    setChangeError('');
+                    navStore.navigateTo("/s/" + spoolName);
+                }
+            }
+            finally {
+                //do nothing
+            }
         }
     }
 
@@ -105,12 +117,10 @@ export const ManageSpool = observer(() => {
                     <VStack>
                         {(spool && isAuthenticated) &&
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
-                                <Text as='b'>Current Rules: </Text>
-                                <Text as='i'>{spool?.rules}</Text>
                                 <FormControl>
-                                    <FormLabel>New Rules:</FormLabel>
-                                    <Input
-                                        size='md'
+                                    <FormLabel>Rules:</FormLabel>
+                                    <Textarea 
+                                        size='lg'
                                         value={rules || ""}
                                         onChange={(e) => setRules(e.target.value)}
                                     />
@@ -127,6 +137,12 @@ export const ManageSpool = observer(() => {
                                                 onChange={(e) => setModToAdd(e.target.value)}
                                             />
                                     </FormControl>
+                                    {addError.length > 0 && (
+                                        <Alert status='error'>
+                                            <AlertIcon />
+                                            {addError}
+                                        </Alert>
+                                    )}
                                     <Button leftIcon={<AddIcon />} colorScheme={"green"} width='100px' onClick={() => { addMod() }}>
                                         Add
                                     </Button>
@@ -148,6 +164,13 @@ export const ManageSpool = observer(() => {
                                             onChange={(e) => setOwnerToAdd(e.target.value)}
                                         />
                                     </FormControl>
+
+                                    {changeError.length > 0 && (
+                                        <Alert status='error'>
+                                            <AlertIcon />
+                                            {changeError}
+                                        </Alert>
+                                    )}
                                     <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='100px' onClick={() => { changeOwner() }}>
                                         Change
                                     </Button>
