@@ -60,8 +60,11 @@ namespace ThreaditAPI.Repositories
             if (dbSpool == null)
                 throw new Exception("Spool does not exist");
 
-            resultSettings.SpoolsJoined.Add(dbSpool!.Id);
-            await db.SaveChangesAsync();
+            if (!resultSettings.SpoolsJoined.Contains(dbSpool!.Id))
+            {
+                resultSettings.SpoolsJoined.Add(dbSpool!.Id);
+                await db.SaveChangesAsync();
+            }
 
             return resultSettings;
         }
