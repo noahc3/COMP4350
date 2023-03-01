@@ -147,7 +147,7 @@ namespace ThreaditAPI.Repositories
             Spool? dbSpool = await GetSpoolAsync(spoolId);
             if (dbSpool != null)
             {
-                dbSpool.rules = rules;
+                dbSpool.Rules = rules;
                 await db.SaveChangesAsync();
             }
         }

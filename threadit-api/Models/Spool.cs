@@ -7,7 +7,7 @@
         public required string OwnerId { get; set; }
         public List<string> Interests { get; set; } = new List<string>();
         public List<string> Moderators { get; set; } = new List<string>();
-        public string rules { get; set; } = "";
+        public string Rules { get; set; } = "";
 
 
         public Spool()
