@@ -1,6 +1,7 @@
 import { Box, HStack, VStack, Text, Button, Heading } from "@chakra-ui/react"
 import { observer } from "mobx-react"
 import { CgNotes } from "react-icons/cg"
+import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons"
 import { IThreadFull } from "../../models/ThreadFull";
 import { NavLink } from "../Router/NavLink";
 import Moment from 'react-moment';
@@ -33,6 +34,12 @@ export const FeedPostItem = observer(({thread}: {thread: IThreadFull | any}) => 
                         <NavLink to={"/s/" + thread.spoolName + "/post/" + thread.id}>
                             <Button leftIcon={<CgNotes />}>View Thread </Button>
                         </NavLink>
+                    </HStack>
+                    <HStack>
+                        <Button leftIcon={<ArrowUpIcon />}>Upvote </Button>
+                        <Text>{thread.stitches.length}</Text>
+                        <Button leftIcon={<ArrowDownIcon />}>Downvote </Button>
+                        <Text>{thread.rips.length}</Text>
                     </HStack>
                 </VStack>
             </Box>

@@ -100,6 +100,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
+                    Stitches = threads[i].Stitches,
+                    Rips = threads[i].Rips,
                     AuthorName = user.Username,
                     SpoolName = spool.Name
                 };
@@ -136,6 +138,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
+                    Stitches = threads[i].Stitches,
+                    Rips = threads[i].Rips,
                     AuthorName = user.Username,
                     SpoolName = spool.Name
                 };

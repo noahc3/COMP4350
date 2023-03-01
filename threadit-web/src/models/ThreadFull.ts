@@ -8,4 +8,6 @@ export interface IThreadFull {
     authorName: string
     spoolName: string
     dateCreated: string
+    stitches: string[]
+    rips: string[]
 }

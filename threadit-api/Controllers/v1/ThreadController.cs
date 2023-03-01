@@ -106,5 +106,37 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost("stitch")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> StitchThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {
+            if (String.IsNullOrWhiteSpace(threadId)) {
+                return BadRequest("Thread data is invalid.");
+            }
+
+            UserDTO? profile = Request.HttpContext.GetUser();
+            if (profile == null) {
+                return Unauthorized();
+            }
+
+            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
+            if (threadFromDb == null) {
+                return BadRequest("Thread does not exist.");
+            }
+
+            if(threadFromDb.Stitches.Contains(profile.Id))
+            {
+                return BadRequest($"User {profile.Id} already stitched thread.");
+            }
+
+            threadFromDb.Stitches.Add(profile.Id);
+
+            try {
+                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
+                return Ok(updatedThread);
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
