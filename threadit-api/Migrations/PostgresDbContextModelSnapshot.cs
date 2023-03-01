@@ -75,7 +75,7 @@ namespace ThreaditAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("rules")
+                    b.Property<string>("Rules")
                         .IsRequired()
                         .HasColumnType("text");
 

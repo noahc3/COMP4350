@@ -124,6 +124,9 @@ export default class SpoolAPI {
         if (!response.ok) {
             throw new Error(`Failed to delete the spool: ${await response.text()}`);
         }
+
+        spoolStore.refreshAllSpools();
+        spoolStore.refreshJoinedSpools();
     }
 
     static async saveSpool(spoolId: string, rules: string): Promise<void> {

@@ -23,7 +23,6 @@ export const Spool = observer(() => {
     const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
     const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
     const isAuthenticated = authStore.isAuthenticated;
-    const [lockInputs] = React.useState(true);
 
     React.useEffect(() => {
         if (id) {
@@ -69,9 +68,9 @@ export const Spool = observer(() => {
                         <VStack>
                         {isAuthenticated &&
                             <VStack>
-                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="230%" p="0.5rem">
                                     <HStack>
-                                        <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue'>Create Post</Button></NavLink>
+                                        <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue' >Create Post</Button></NavLink>
                                         {spool.ownerId !== profile?.id && <>
                                                 <Spacer />
                                                 {belongs ? <>
@@ -90,11 +89,11 @@ export const Spool = observer(() => {
                                         </>}
                                     </HStack>
                                 </Box>
-                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="230%" h="50%" p="0.5rem">
                                     <Center>
                                         <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES</Text></Text>
                                     </Center>
-                                    <Textarea disabled={lockInputs} fontSize='xl'>{spool.rules || ""}</Textarea>
+                                    <Textarea disabled={true} fontSize='xl'>{spool.rules || ""}</Textarea>
                                 </Box>
                             </VStack>
                             }

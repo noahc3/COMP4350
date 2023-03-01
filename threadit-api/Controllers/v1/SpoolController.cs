@@ -59,6 +59,13 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
+        [HttpGet("delete/{spoolId}")]
+        public async Task<IActionResult> DeleteSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
+            await spoolService.DeleteSpoolAsync(spoolId);
+            return Ok();
+        }
+
         [HttpGet("joined/{userId}")]
         public async Task<IActionResult> JoinedSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
         {

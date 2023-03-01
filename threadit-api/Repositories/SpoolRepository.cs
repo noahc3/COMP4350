@@ -32,10 +32,32 @@ namespace ThreaditAPI.Repositories
 
         public async Task InsertSpoolAsync(Spool spool)
         {
+            //verify the mods exist
+            List<string> moderatorIds = spool.Moderators;
+            foreach (var moderatorId in moderatorIds)
+            {
+                UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == moderatorId);
+                if(dbUser == null)
+                {
+                    spool.Moderators.Remove(moderatorId);
+                }
+                else
+                {
+                    //add spool to users joined list for the mod
+                    UserSettings? modSettings = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == moderatorId);
+
+                    if (modSettings == null)
+                    {
+                        throw new Exception("User Does not have settings.");
+                    }
+                    modSettings.SpoolsJoined.Add(spool.Id);
+                }
+            }
+
             //add spool to spools table
             await db.Spools.AddAsync(spool);
 
-            //add spool to users joined list
+            //add spool to users joined list for the owner
             UserSettings? setting = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == spool.OwnerId);
 
             if(setting == null)
@@ -137,6 +159,18 @@ namespace ThreaditAPI.Repositories
             Spool? dbSpool = await GetSpoolAsync(spoolId);
             if (dbSpool != null)
             {
+                Models.Thread[] dbThreads = await db.Threads.Where(u => u.SpoolId == spoolId).ToArrayAsync();
+                foreach (var dbThread in dbThreads)
+                {
+                    //TODO once comments are implemented, in here you can delete all the comments for the thread.
+                    db.Threads.Remove(dbThread);
+                }
+                UserDTO[] spoolUsers = await GetUsersForSpool(spoolId);
+                UserSettingsRepository userSettingsRepository = new UserSettingsRepository( new PostgresDbContext() );
+                foreach (var spoolUser in spoolUsers)
+                {
+                    await userSettingsRepository.RemoveUserSettingsAsync(spoolUser.Id, dbSpool.Name);
+                }
                 db.Spools.Remove(dbSpool);
                 await db.SaveChangesAsync();
             }
@@ -150,6 +184,26 @@ namespace ThreaditAPI.Repositories
                 dbSpool.Rules = rules;
                 await db.SaveChangesAsync();
             }
+        }
+
+        private async Task<UserDTO[]> GetUsersForSpool(string spoolId)
+        {
+            UserDTO[] users = Array.Empty<UserDTO>();
+            UserSettings[] allUsers = await db.UserSettings.ToArrayAsync();
+
+            foreach (var user in allUsers)
+            {
+                if (user.SpoolsJoined.Contains(spoolId))
+                {
+                    UserDTO? currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+                    if (currentUser != null)
+                    {
+                        Array.Resize(ref users, users.Length + 1);
+                        users[^1] = currentUser;
+                    }
+                }
+            }
+            return users;
         }
     }
 }

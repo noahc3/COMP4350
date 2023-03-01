@@ -38,7 +38,7 @@ namespace ThreaditAPI.Migrations
                     OwnerId = table.Column<string>(type: "text", nullable: false),
                     Interests = table.Column<List<string>>(type: "text[]", nullable: false),
                     Moderators = table.Column<List<string>>(type: "text[]", nullable: false),
-                    rules = table.Column<string>(type: "text", nullable: false)
+                    Rules = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
