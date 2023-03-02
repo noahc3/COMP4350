@@ -137,7 +137,7 @@ export const ManageSpool = observer(() => {
                         {(spool && isAuthenticated) &&
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <FormControl>
-                                    <FormLabel>Rules:</FormLabel>
+                                    <FormLabel>Rules and Description:</FormLabel>
                                     <Textarea 
                                         size='lg'
                                         value={rules || ""}
@@ -202,7 +202,7 @@ export const ManageSpool = observer(() => {
                                 <Divider />
                                 <HStack>
                                     <Button colorScheme={"purple"} width='120px' onClick={() => { save() }}>
-                                        Save
+                                        Save Rules
                                     </Button>
                                     <Spacer />
                                     <Button colorScheme={"red"} width='120px' onClick={onOpen}>

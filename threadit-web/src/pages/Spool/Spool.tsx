@@ -91,7 +91,7 @@ export const Spool = observer(() => {
                                 </Box>
                                 <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="230%" h="50%" p="0.5rem">
                                     <Center>
-                                        <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES</Text></Text>
+                                        <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES AND DESCRIPTION</Text></Text>
                                     </Center>
                                     <Textarea disabled={true} fontSize='xl'>{spool.rules || ""}</Textarea>
                                 </Box>
