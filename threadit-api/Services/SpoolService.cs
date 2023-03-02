@@ -1,4 +1,5 @@
-﻿using ThreaditAPI.Database;
+﻿using Microsoft.IdentityModel.Tokens;
+using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
@@ -85,11 +86,14 @@ namespace ThreaditAPI.Services
             }
             UserDTO[]? mods = await this.spoolRepository.GetModeratorsAsync(spoolId);
             UserDTO? newMod = await userRepository.GetUserByLoginIdentifierAsync(userName);
-            foreach (UserDTO mod in mods)
+            if (!mods.IsNullOrEmpty())
             {
-                if (newMod != null && mod.Id == newMod.Id)
+                foreach (UserDTO mod in mods)
                 {
-                    throw new Exception("User is already a mod.");
+                    if (newMod != null && mod.Id == newMod.Id)
+                    {
+                        throw new Exception("User is already a mod.");
+                    }
                 }
             }
 
