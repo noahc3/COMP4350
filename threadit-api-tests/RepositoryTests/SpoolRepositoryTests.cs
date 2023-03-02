@@ -306,7 +306,7 @@ public class SpoolRepositoryTests
         User mod1 = new User()
         {
             Id = "923f3675-90e5-458f-a997-73f263d01f95",
-            Username = "mod2",
+            Username = "mod1",
             Email = "testUser2@test.com"
         };
 
@@ -331,7 +331,6 @@ public class SpoolRepositoryTests
         // Ensure Spool is not in database
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
         Assert.That(returnedSpool, Is.Null);
-
         // Add Spool to database
         await _spoolRepository.InsertSpoolAsync(testSpool);
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
@@ -344,7 +343,7 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
 
         //remove moderator
-        Spool? removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, mod1.Username);
+        Spool? removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, mod1.Id);
 
         //get the Spool again
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
