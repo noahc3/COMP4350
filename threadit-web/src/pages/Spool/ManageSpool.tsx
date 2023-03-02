@@ -65,18 +65,18 @@ export const ManageSpool = observer(() => {
         if (spool) {
             try {
                 const successNumber = await SpoolAPI.addModerator(spool.id, modToAdd);
-                if (successNumber == 1) {
+                if (successNumber === 1) {
                     //was successful
                     setLastUpdate(new Date());
                     setAddError('');
                     setModToAdd('');
-                } else if (successNumber == 2) {
+                } else if (successNumber === 2) {
                     //user does not exist
                     setAddError("User does not exist.");
-                } else if (successNumber == 3) {
+                } else if (successNumber === 3) {
                     //user is already a mod
                     setAddError("User is already a mod.");
-                } else if (successNumber == 4) {
+                } else if (successNumber === 4) {
                     //user was owner
                     setAddError("Cannot add owner as moderator.");
                 } else {
@@ -94,15 +94,15 @@ export const ManageSpool = observer(() => {
         if (spool) {
             try {
                 const successNumber = await SpoolAPI.changeOwner(spool.id, ownerToAdd);
-                if (successNumber == 1) {
+                if (successNumber === 1) {
                     //was successful
                     setLastUpdate(new Date());
                     setChangeError('');
                     navStore.navigateTo("/s/" + spoolName);
-                } else if (successNumber == 2) {
+                } else if (successNumber === 2) {
                     //user is already the owner
                     setChangeError("User is already the owner.");
-                } else if (successNumber == 3) {
+                } else if (successNumber === 3) {
                     //user does not exist
                     setChangeError("User does not exist.");
                 } else {
