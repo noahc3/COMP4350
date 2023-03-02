@@ -88,7 +88,7 @@ namespace ThreaditAPI.Services
             UserDTO? newMod = await userRepository.GetUserByLoginIdentifierAsync(userName);
             if (!mods.IsNullOrEmpty())
             {
-                foreach (UserDTO mod in mods)
+                foreach (UserDTO mod in mods!)
                 {
                     if (newMod != null && mod.Id == newMod.Id)
                     {
