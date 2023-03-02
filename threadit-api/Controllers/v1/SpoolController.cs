@@ -110,10 +110,10 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spool);
         }
 
-        [HttpGet("mods/remove/{spoolId}/{userName}")]
-        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
+        [HttpGet("mods/remove/{spoolId}/{userId}")]
+        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
-            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userName);
+            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
             return Ok(spool);
         }
 

@@ -95,7 +95,7 @@ namespace ThreaditAPI.Repositories
         {
             Spool? dbSpool = await GetSpoolAsync(spoolId);
             UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
-            if (dbSpool == null || dbUser == null|| dbSpool.Moderators.Contains(dbUser.Id))
+            if (dbSpool == null || dbUser == null)
                 return null;
             dbSpool.Moderators.Add(dbUser.Id);
             await db.SaveChangesAsync();
@@ -115,11 +115,15 @@ namespace ThreaditAPI.Repositories
             return dbSpool;
         }
 
-        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userName)
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
         {
             Spool? dbSpool = await db.Spools.FirstOrDefaultAsync(u => u.Id == spoolId);
-            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Username == userName);
-            if (dbSpool == null || dbUser == null)
+            UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (dbSpool == null)
+            {
+                return null;
+            }
+            if (dbUser == null)
             {
                 return null;
             }

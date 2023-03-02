@@ -67,6 +67,24 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> AddModeratorAsync(string spoolId, string userName)
         {
+            UserRepository userRepository = new UserRepository(new PostgresDbContext());
+
+            Spool? currentSpool = await this.GetSpoolAsync(spoolId);
+            UserDTO spoolOwner = await userRepository.GetUserAsync(currentSpool.OwnerId);
+            if(spoolOwner.Username == userName)
+            {
+                throw new Exception("Cannot add owner as moderator.");
+            }
+            UserDTO[]? mods = await this.spoolRepository.GetModeratorsAsync(spoolId);
+            UserDTO? newMod = await userRepository.GetUserByLoginIdentifierAsync(userName);
+            foreach (UserDTO mod in mods)
+            {
+                if (newMod != null && mod.Id == newMod.Id)
+                {
+                    throw new Exception("User is already a mod.");
+                }
+            }
+
             Spool? dbSpool = await this.spoolRepository.AddModeratorAsync(spoolId, userName);
             if(dbSpool != null)
             {
@@ -80,6 +98,20 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userName)
         {
+            UserRepository userRepository = new UserRepository( new PostgresDbContext() );
+            Spool? currentSpool = await spoolRepository.GetSpoolAsync(spoolId);
+            if(currentSpool == null)
+            {
+                throw new Exception("Spool does not exist");
+            }
+            UserDTO? currentOwner = await userRepository.GetUserAsync(currentSpool!.OwnerId);
+            UserDTO? newOwner = await userRepository.GetUserByLoginIdentifierAsync(userName);
+
+            if (currentOwner != null && currentSpool != null && newOwner != null && currentOwner.Id == newOwner.Id)
+            {
+                throw new Exception("User is already the owner.");
+            }
+
             Spool? dbSpool = await this.spoolRepository.ChangeOwnerAsync(spoolId, userName);
             if (dbSpool != null)
             {
@@ -91,9 +123,9 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userName)
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
         {
-            return await this.spoolRepository.RemoveModeratorAsync(spoolId, userName);
+            return await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
         }
 
         public async Task<Spool[]> GetAllSpoolsAsync()

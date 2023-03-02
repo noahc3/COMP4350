@@ -57,7 +57,6 @@ export const ManageSpool = observer(() => {
     const removeMod = async (userId: string) => {
         if (spool) {
             await SpoolAPI.removeModerator(spool.id, userId);
-            console.log("called removeMod");
             setLastUpdate(new Date());
         }
     }
@@ -65,12 +64,24 @@ export const ManageSpool = observer(() => {
     const addMod = async () => {
         if (spool) {
             try {
-                const success = await SpoolAPI.addModerator(spool.id, modToAdd);
-                if (!success) {
-                    setAddError('Invalid username');
-                } else {
-                    setAddError('');
+                const successNumber = await SpoolAPI.addModerator(spool.id, modToAdd);
+                if (successNumber == 1) {
+                    //was successful
                     setLastUpdate(new Date());
+                    setAddError('');
+                    setModToAdd('');
+                } else if (successNumber == 2) {
+                    //user does not exist
+                    setAddError("User does not exist.");
+                } else if (successNumber == 3) {
+                    //user is already a mod
+                    setAddError("User is already a mod.");
+                } else if (successNumber == 4) {
+                    //user was owner
+                    setAddError("Cannot add owner as moderator.");
+                } else {
+                    //different error
+                    setAddError("Add failed. Please Try again.");
                 }
             }
             finally {
@@ -82,13 +93,21 @@ export const ManageSpool = observer(() => {
     const changeOwner = async () => {
         if (spool) {
             try {
-                const success = await SpoolAPI.changeOwner(spool.id, ownerToAdd);
-                if (!success) {
-                    setChangeError('Invalid username');
-                } else {
+                const successNumber = await SpoolAPI.changeOwner(spool.id, ownerToAdd);
+                if (successNumber == 1) {
+                    //was successful
                     setLastUpdate(new Date());
                     setChangeError('');
                     navStore.navigateTo("/s/" + spoolName);
+                } else if (successNumber == 2) {
+                    //user is already the owner
+                    setChangeError("User is already the owner.");
+                } else if (successNumber == 3) {
+                    //user does not exist
+                    setChangeError("User does not exist.");
+                } else {
+                    //different error
+                    setChangeError("Change failed. Please Try again.");
                 }
             }
             finally {
@@ -137,11 +156,13 @@ export const ManageSpool = observer(() => {
                                                 onChange={(e) => setModToAdd(e.target.value)}
                                             />
                                     </FormControl>
-                                    {addError.length > 0 && (
+                                {addError.length > 0 && (
+                                    <Container p="0.5rem">
                                         <Alert status='error'>
                                             <AlertIcon />
                                             {addError}
                                         </Alert>
+                                    </Container>
                                     )}
                                     <Button leftIcon={<AddIcon />} colorScheme={"green"} width='100px' onClick={() => { addMod() }}>
                                         Add
@@ -166,10 +187,12 @@ export const ManageSpool = observer(() => {
                                     </FormControl>
 
                                     {changeError.length > 0 && (
+                                    <Container p="0.5rem">
                                         <Alert status='error'>
                                             <AlertIcon />
                                             {changeError}
                                         </Alert>
+                                        </Container>
                                     )}
                                     <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='100px' onClick={() => { changeOwner() }}>
                                         Change
