@@ -70,7 +70,15 @@ namespace ThreaditAPI.Services
             UserRepository userRepository = new UserRepository(new PostgresDbContext());
 
             Spool? currentSpool = await this.GetSpoolAsync(spoolId);
-            UserDTO spoolOwner = await userRepository.GetUserAsync(currentSpool.OwnerId);
+            if(currentSpool == null)
+            {
+                throw new Exception("Spool does not exist.");
+            }
+            UserDTO? spoolOwner = await userRepository.GetUserAsync(currentSpool!.OwnerId);
+            if(spoolOwner == null)
+            {
+                throw new Exception("Error getting owner");
+            }
             if(spoolOwner.Username == userName)
             {
                 throw new Exception("Cannot add owner as moderator.");
