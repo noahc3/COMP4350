@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using ThreaditAPI.Extensions;
+using ThreaditAPI.Middleware;
 using ThreaditAPI.Models;
 using ThreaditAPI.Services;
 
@@ -9,24 +11,45 @@ namespace ThreaditAPI.Controllers.v1
     public class UserSettingsController : ControllerBase
     {
 
-        [HttpGet("remove/{userId}/{spoolName}")]
-        public async Task<IActionResult> RemoveSpoolUser([FromRoute] string userId, [FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
+        [HttpGet("remove/{spoolName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RemoveSpoolUser([FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
         {
-            UserSettings userSettings = await userSettingsService.RemoveUserSettingsAsync(userId, spoolName);
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            UserSettings userSettings = await userSettingsService.RemoveUserSettingsAsync(userDTO.Id, spoolName);
             return Ok(userSettings);
         }
 
-        [HttpGet("join/{userId}/{spoolName}")]
-        public async Task<IActionResult> JoinSpoolUser([FromRoute] string userId, [FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
+        [HttpGet("join/{spoolName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> JoinSpoolUser([FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
         {
-            UserSettings userSettings = await userSettingsService.JoinUserSettingsAsync(userId, spoolName);
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            UserSettings userSettings = await userSettingsService.JoinUserSettingsAsync(userDTO.Id, spoolName);
             return Ok(userSettings);
         }
 
-        [HttpGet("check/{userId}/{spoolName}")]
-        public async Task<IActionResult> CheckSpoolUser([FromRoute] string userId, [FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
+        [HttpGet("check/{spoolName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> CheckSpoolUser([FromRoute] string spoolName, [FromServices] UserSettingsService userSettingsService)
         {
-            bool belongs = await userSettingsService.CheckSpoolUserAsync(userId, spoolName);
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            bool belongs = await userSettingsService.CheckSpoolUserAsync(userDTO.Id, spoolName);
             return Ok(belongs);
         }
     }

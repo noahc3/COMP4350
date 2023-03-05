@@ -1,6 +1,6 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { IUserSettings } from "../models/UserSettings";
-import { get } from "./Request";
+import { get, getWithAuth } from "./Request";
 import { spoolStore } from "../stores/SpoolStore";
 
 const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");
@@ -9,8 +9,8 @@ const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 
 export default class UserSettingsAPI {
 
-    static async removeSpoolUser(userId: string, spoolName: string): Promise<IUserSettings[]> {
-        const response = await get(removeSpoolForUserEndpoint + userId + "/" + spoolName);
+    static async removeSpoolUser(spoolName: string): Promise<IUserSettings[]> {
+        const response = await getWithAuth(removeSpoolForUserEndpoint + spoolName);
 
         if (!response.ok) {
             throw new Error(`Failed to remove the user from the spool: ${await response.text()}`);
@@ -21,8 +21,8 @@ export default class UserSettingsAPI {
         return await response.json();
     }
 
-    static async joinSpoolUser(userId: string, spoolName: string): Promise<IUserSettings[]> {
-        const response = await get(joinSpoolForUserEndpoint + userId + "/" + spoolName);
+    static async joinSpoolUser(spoolName: string): Promise<IUserSettings[]> {
+        const response = await getWithAuth(joinSpoolForUserEndpoint + spoolName);
 
         if (!response.ok) {
             throw new Error(`Failed to add the user to the spool: ${await response.text()}`);
@@ -33,8 +33,8 @@ export default class UserSettingsAPI {
         return await response.json();
     }
 
-    static async getJoinedSpool(userId: string, spoolName: string): Promise<boolean> {
-        const response = await get(checkSpoolForUserEndpoint + userId + "/" + spoolName);
+    static async getJoinedSpool(spoolName: string): Promise<boolean> {
+        const response = await getWithAuth(checkSpoolForUserEndpoint + spoolName);
 
         if (!response.ok) {
             throw new Error(`Failed to check if the user is in the spool: ${await response.text()}`);

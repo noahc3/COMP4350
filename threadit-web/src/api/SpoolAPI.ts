@@ -1,7 +1,7 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { ISpool } from "../models/Spool";
 import { IThreadFull } from "../models/ThreadFull";
-import { get, post, postWithAuth } from "./Request";
+import { get, getWithAuth, postWithAuth } from "./Request";
 import { spoolStore } from "../stores/SpoolStore";
 import UserAPI from '../api/UserAPI';
 import { IUserProfile } from "../models/UserProfile";
@@ -89,7 +89,7 @@ export default class SpoolAPI {
     }
 
     static async removeModerator(spoolId: string, userId: string): Promise<IUserProfile> {
-        const response = await get(removeModeratorEndpoint + spoolId + '/' + userId);
+        const response = await getWithAuth(removeModeratorEndpoint + spoolId + '/' + userId);
 
         if (!response.ok) {
             throw new Error(`Failed to remove moderator from spool: ${await response.text()}`);
@@ -98,55 +98,37 @@ export default class SpoolAPI {
         return await response.json();
     }
 
-    static async addModerator(spoolId: string, userName: string): Promise<number> {
-        const response = await get(addModeratorEndpoint + spoolId + '/' + userName);
+    static async addModerator(spoolId: string, userName: string): Promise<boolean | string> {
+        const response = await getWithAuth(addModeratorEndpoint + spoolId + '/' + userName);
         if (response.ok) {
             //returns 1 if the add was successful
-            return 1;
+            return true;
         }
 
         else {
             //otherwise change failed and need to see why
             const errorText = await response.text();
-            if (errorText === "User does not exist.") {
-                return 2; // return type 2 if user does not exist
-            } else if (errorText === "User is already a mod.") {
-                return 3; // return type 3 if user is already a mod
-            } else if (errorText === "Cannot add owner as moderator.") {
-                return 4; // return type 3 if user is already a mod
-            } else {
-                console.error(`Failed to add the user as a mod: ${errorText}`);
-                return 0; // return type 0 for any other error
-            }
+            return errorText;
         }
     }
 
-    
-
-    static async changeOwner(spoolId: string, userName: string): Promise<number> {
-        const response = await get(changeOwnerEndpoint + spoolId + '/' + userName);
+    static async changeOwner(spoolId: string, userName: string): Promise<boolean | string> {
+        const response = await getWithAuth(changeOwnerEndpoint + spoolId + '/' + userName);
 
         if (response.ok) {
             //returns 1 if the change was successful
-            return 1;
+            return true;
         }
 
         else {
             //otherwise change failed and need to see why
             const errorText = await response.text();
-            if (errorText === "User is already the owner.") {
-                return 2; // return type 2 if user is already the owner
-            } else if (errorText === "User does not exist.") {
-                return 3; // return type 3 if user does not exist
-            } else {
-                console.error(`Failed to change the owner of the spool: ${errorText}`);
-                return 0; // return type 0 for any other error
-            }
+            return errorText;
         }
     }
 
     static async deleteSpool(spoolId: string): Promise<void> {
-        const response = await get(deleteSpoolEndpoint + spoolId);
+        const response = await getWithAuth(deleteSpoolEndpoint + spoolId);
 
         if (!response.ok) {
             throw new Error(`Failed to delete the spool: ${await response.text()}`);
@@ -157,7 +139,7 @@ export default class SpoolAPI {
     }
 
     static async saveSpool(spoolId: string, rules: string): Promise<void> {
-        const response = await post(saveSpoolEndpoint + spoolId, {
+        const response = await postWithAuth(saveSpoolEndpoint + spoolId, {
             rules
         });
 

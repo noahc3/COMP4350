@@ -60,8 +60,10 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("delete/{spoolId}")]
+        [AuthenticationRequired]
         public async Task<IActionResult> DeleteSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
         {
+            //TODO: make sure the requesting user is the spool owner
             await spoolService.DeleteSpoolAsync(spoolId);
             return Ok();
         }
@@ -81,6 +83,7 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("mods/add/{spoolId}/{userName}")]
+        [AuthenticationRequired]
         public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
             Spool? spool;
@@ -96,6 +99,7 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("change/{spoolId}/{userName}")]
+        [AuthenticationRequired]
         public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
             Spool? spool;
@@ -111,6 +115,7 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpGet("mods/remove/{spoolId}/{userId}")]
+        [AuthenticationRequired]
         public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
             Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
@@ -118,6 +123,7 @@ namespace ThreaditAPI.Controllers.v1 {
         }
 
         [HttpPost("save/{spoolId}")]
+        [AuthenticationRequired]
         public async Task<IActionResult> SaveRules([FromRoute] string spoolId, [FromBody] SaveRulesRequest rules, [FromServices] SpoolService spoolService)
         {
             try

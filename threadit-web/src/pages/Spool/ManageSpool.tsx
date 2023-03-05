@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider, Textarea, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure, } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Container, VStack, Spacer, HStack, Text, FormControl, FormLabel, Input, Divider, Textarea, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure, InputGroup, InputRightElement, IconButton, Flex, } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -10,6 +10,7 @@ import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
 import { DeleteIcon, AddIcon, StarIcon } from '@chakra-ui/icons';
 import { navStore } from "../../stores/NavStore";
+import { NavLink } from "react-router-dom";
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
@@ -48,7 +49,7 @@ export const ManageSpool = observer(() => {
     const moderatorsElements = moderators.map(function (moderator) {
         return (
             <HStack mb={"1rem"} key={moderator.id}>
-                <Button width='100px' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}>Delete</Button>
+                <IconButton size="sm" aria-label='Delete Moderator' icon={<DeleteIcon />} colorScheme='red' onClick={() => { removeMod(moderator.id) }}>Delete</IconButton >
                 <Text mb={"0.5rem"}>{moderator.username}</Text>
             </HStack>
         );
@@ -65,23 +66,14 @@ export const ManageSpool = observer(() => {
         if (spool) {
             try {
                 const successNumber = await SpoolAPI.addModerator(spool.id, modToAdd);
-                if (successNumber === 1) {
+                if (successNumber === true) {
                     //was successful
                     setLastUpdate(new Date());
                     setAddError('');
                     setModToAdd('');
-                } else if (successNumber === 2) {
-                    //user does not exist
-                    setAddError("User does not exist.");
-                } else if (successNumber === 3) {
-                    //user is already a mod
-                    setAddError("User is already a mod.");
-                } else if (successNumber === 4) {
-                    //user was owner
-                    setAddError("Cannot add owner as moderator.");
                 } else {
-                    //different error
-                    setAddError("Add failed. Please Try again.");
+                    //user does not exist
+                    setAddError(successNumber.toString());
                 }
             }
             finally {
@@ -94,20 +86,14 @@ export const ManageSpool = observer(() => {
         if (spool) {
             try {
                 const successNumber = await SpoolAPI.changeOwner(spool.id, ownerToAdd);
-                if (successNumber === 1) {
+                if (successNumber === true) {
                     //was successful
                     setLastUpdate(new Date());
                     setChangeError('');
                     navStore.navigateTo("/s/" + spoolName);
-                } else if (successNumber === 2) {
-                    //user is already the owner
-                    setChangeError("User is already the owner.");
-                } else if (successNumber === 3) {
-                    //user does not exist
-                    setChangeError("User does not exist.");
                 } else {
-                    //different error
-                    setChangeError("Change failed. Please Try again.");
+                    //user is already the owner
+                    setChangeError(successNumber.toString());
                 }
             }
             finally {
@@ -126,7 +112,6 @@ export const ManageSpool = observer(() => {
     const save = async () => {
         if (spool) {
             await SpoolAPI.saveSpool(spool.id, rules);
-            navStore.navigateTo("/s/" + spoolName);
         }
     }
 
@@ -138,11 +123,18 @@ export const ManageSpool = observer(() => {
                             <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                 <FormControl>
                                     <FormLabel>Rules and Description:</FormLabel>
+                                <InputGroup size='md'>
                                     <Textarea 
                                         size='lg'
                                         value={rules || ""}
                                         onChange={(e) => setRules(e.target.value)}
                                     />
+                                </InputGroup>
+                                <Flex direction='row'>
+                                        <Spacer /><Button colorScheme={"purple"} width='120px' onClick={() => { save() }}>
+                                            Save Rules
+                                        </Button>
+                                </Flex>
                                 </FormControl>
                                 <Spacer />
 
@@ -150,40 +142,53 @@ export const ManageSpool = observer(() => {
                                 <Box overflowX="auto" h="50%">
                                     <FormControl>
                                         <FormLabel>Add Moderator:</FormLabel>
+                                        <InputGroup size='md'>
                                             <Input
                                                 size='md'
                                                 value={modToAdd}
                                                 onChange={(e) => setModToAdd(e.target.value)}
                                             />
+                                            <InputRightElement width='100px'>
+                                                <Button leftIcon={<AddIcon />} colorScheme={"green"} width='100px' onClick={() => { addMod() }}>
+                                                    Add
+                                                </Button>
+                                            </InputRightElement>
+                                        </InputGroup>
                                     </FormControl>
-                                {addError.length > 0 && (
-                                    <Container p="0.5rem">
-                                        <Alert status='error'>
-                                            <AlertIcon />
-                                            {addError}
-                                        </Alert>
-                                    </Container>
+                                    {addError.length > 0 && (
+                                        <Container p="0.5rem">
+                                            <Alert status='error'>
+                                                <AlertIcon />
+                                                {addError}
+                                            </Alert>
+                                        </Container>
                                     )}
-                                    <Button leftIcon={<AddIcon />} colorScheme={"green"} width='100px' onClick={() => { addMod() }}>
-                                        Add
-                                    </Button>
                                 </Box>
 
-                                <Divider />
-                                <Box overflowX="auto" h="50%">
-                                    <Text mb={"0.5rem"} fontWeight={"bold"}>Remove Moderators</Text>
-                                    {moderatorsElements}
-                                </Box>
+                                { moderators.length > 0 && <>
+                                    <Divider />
+                                    <Box overflowX="auto" h="50%">
+                                        <Text mb={"0.5rem"} fontWeight={"bold"}>Remove Moderators</Text>
+                                        {moderatorsElements}
+                                    </Box>
+                                </>}
 
                                 <Divider />
                                 <Box overflowX="auto" h="50%">
                                     <FormControl>
-                                        <FormLabel>Change Owner:</FormLabel>
+                                    <FormLabel>Change Owner:</FormLabel>
+                                    <InputGroup size="md">
                                         <Input
                                             size='md'
                                             value={ownerToAdd}
                                             onChange={(e) => setOwnerToAdd(e.target.value)}
                                         />
+                                        <InputRightElement width='100px'>
+                                            <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='100px' onClick={() => { changeOwner() }}>
+                                                Change
+                                            </Button>
+                                        </InputRightElement>
+                                    </InputGroup>
                                     </FormControl>
 
                                     {changeError.length > 0 && (
@@ -194,16 +199,15 @@ export const ManageSpool = observer(() => {
                                         </Alert>
                                         </Container>
                                     )}
-                                    <Button leftIcon={<StarIcon />} colorScheme={"orange"} width='100px' onClick={() => { changeOwner() }}>
-                                        Change
-                                    </Button>
                                 </Box>
 
                                 <Divider />
                                 <HStack>
-                                    <Button colorScheme={"purple"} width='120px' onClick={() => { save() }}>
-                                        Save Rules
-                                    </Button>
+                                    <NavLink to={"/s/" + spoolName}>
+                                        <Button colorScheme={"purple"} width='120px'>
+                                            Back
+                                        </Button>
+                                    </NavLink>
                                     <Spacer />
                                     <Button colorScheme={"red"} width='120px' onClick={onOpen}>
                                         Delete

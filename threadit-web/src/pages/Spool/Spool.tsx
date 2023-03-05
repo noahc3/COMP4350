@@ -40,7 +40,7 @@ export const Spool = observer(() => {
     React.useEffect(() => {
         // dont ask.
         if (id && profile) {
-            (async () => { setBelongs(await UserSettingsAPI.getJoinedSpool(profile!.id, id!)) })()
+            (async () => { setBelongs(await UserSettingsAPI.getJoinedSpool(id!)) })()
         }
     }, [id, profile])
 
@@ -49,13 +49,13 @@ export const Spool = observer(() => {
     }, [belongs, setIsLoadingBelongs])
 
     const removeSpool = () => {
-        UserSettingsAPI.removeSpoolUser(profile!.id, id!).then(
+        UserSettingsAPI.removeSpoolUser(id!).then(
             () => { setBelongs(false) }
         );
     }
 
     const joinSpool = () => {
-        UserSettingsAPI.joinSpoolUser(profile!.id, id!).then(
+        UserSettingsAPI.joinSpoolUser(id!).then(
             () => { setBelongs(true) }
         );
     }
@@ -67,8 +67,8 @@ export const Spool = observer(() => {
                     <Container centerContent={false} maxW={"container.md"}>
                         <VStack>
                         {isAuthenticated &&
-                            <VStack>
-                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="230%" p="0.5rem">
+                            <VStack w='100%'>
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
                                     <HStack>
                                         <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue' >Create Post</Button></NavLink>
                                         {spool.ownerId !== profile?.id && <>
@@ -89,14 +89,14 @@ export const Spool = observer(() => {
                                         </>}
                                     </HStack>
                                 </Box>
-                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="230%" h="50%" p="0.5rem">
-                                    <Center>
-                                        <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES AND DESCRIPTION</Text></Text>
-                                    </Center>
-                                    <Textarea disabled={true} fontSize='xl'>{spool.rules || ""}</Textarea>
-                                </Box>
                             </VStack>
-                            }
+                        }
+                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                                <Center>
+                                    <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES AND DESCRIPTION</Text></Text>
+                                </Center>
+                                <Text align="center" whiteSpace="pre-wrap">{spool.rules || ""}</Text>
+                            </Box>
                             <PostFeed threads={threads} />
                         </VStack>
                     </Container>
