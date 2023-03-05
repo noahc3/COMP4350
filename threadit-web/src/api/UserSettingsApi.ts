@@ -1,6 +1,6 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { IUserSettings } from "../models/UserSettings";
-import { get, getWithAuth } from "./Request";
+import { getWithAuth } from "./Request";
 import { spoolStore } from "../stores/SpoolStore";
 
 const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");

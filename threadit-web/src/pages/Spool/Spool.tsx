@@ -1,4 +1,4 @@
-import { Textarea, Box, Button, Container, VStack, Spacer, HStack, Text, Center } from "@chakra-ui/react";
+import { Box, Button, Container, VStack, Spacer, HStack, Text, Center } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useParams } from "react-router";
