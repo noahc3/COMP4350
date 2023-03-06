@@ -17,10 +17,10 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(threads);
         }
 
-        [HttpGet("{spoolId}")]
-        public async Task<IActionResult> GetSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        [HttpGet("{spoolName}")]
+        public async Task<IActionResult> GetSpool([FromRoute] string spoolName, [FromServices] SpoolService spoolService)
         {
-            Spool? spool = await spoolService.GetSpoolByNameAsync(spoolId);
+            Spool? spool = await spoolService.GetSpoolByNameAsync(spoolName);
             return Ok(spool);
         }
 
@@ -59,11 +59,82 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
+        [HttpGet("delete/{spoolId}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> DeleteSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
+            //TODO: make sure the requesting user is the spool owner
+            await spoolService.DeleteSpoolAsync(spoolId);
+            return Ok();
+        }
+
         [HttpGet("joined/{userId}")]
-        public async Task<IActionResult> JoinedSpoolsEndpoint([FromRoute] string userId, [FromServices] SpoolService spoolService)
+        public async Task<IActionResult> JoinedSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
             List<Spool> spools = await spoolService.GetJoinedSpoolsAsync(userId);
             return Ok(spools);
+        }
+
+        [HttpGet("mods/{spoolId}")]
+        public async Task<IActionResult> AllModsForSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
+        {
+            UserDTO[]? users = await spoolService.GetAllModsForSpoolAsync(spoolId);
+            return Ok(users);
+        }
+
+        [HttpGet("mods/add/{spoolId}/{userName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool;
+            try { 
+                spool = await spoolService.AddModeratorAsync(spoolId, userName);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return Ok(spool);
+        }
+
+        [HttpGet("change/{spoolId}/{userName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool;
+            try
+            {
+                spool = await spoolService.ChangeOwnerAsync(spoolId, userName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(spool);
+        }
+
+        [HttpGet("mods/remove/{spoolId}/{userId}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RemoveModerator([FromRoute] string spoolId, [FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            Spool? spool = await spoolService.RemoveModeratorAsync(spoolId, userId);
+            return Ok(spool);
+        }
+
+        [HttpPost("save/{spoolId}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> SaveRules([FromRoute] string spoolId, [FromBody] SaveRulesRequest rules, [FromServices] SpoolService spoolService)
+        {
+            try
+            {
+                await spoolService.SaveRulesAsync(spoolId, rules.Rules);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

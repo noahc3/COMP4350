@@ -1,4 +1,5 @@
-﻿using ThreaditAPI.Database;
+﻿using Microsoft.IdentityModel.Tokens;
+using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
@@ -65,35 +66,78 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<List<string>> GetModeratorsAsync(string spoolId)
+        public async Task<Spool?> AddModeratorAsync(string spoolId, string userName)
         {
-            List<string>? moderators = await this.spoolRepository.GetModeratorsAsync(spoolId);
-            if (moderators != null)
-            {
-                return moderators;
-            }
-            else
+            UserRepository userRepository = new UserRepository(new PostgresDbContext());
+
+            Spool? currentSpool = await this.GetSpoolAsync(spoolId);
+            if(currentSpool == null)
             {
                 throw new Exception("Spool does not exist.");
             }
-        }
-
-        public async Task AddModeratorAsync(string spoolId, string userId)
-        {
-            await this.spoolRepository.AddModeratorAsync(spoolId, userId);
-        }
-
-        public async Task RemoveModeratorAsync(string spoolId, string userId)
-        {
-            string? removedUser = await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
-            if(removedUser != null)
+            UserDTO? spoolOwner = await userRepository.GetUserAsync(currentSpool!.OwnerId);
+            if(spoolOwner == null)
             {
-                return;
+                throw new Exception("Error getting owner");
+            }
+            if(spoolOwner.Username == userName)
+            {
+                throw new Exception("Cannot add owner as moderator.");
+            }
+            UserDTO[]? mods = await this.spoolRepository.GetModeratorsAsync(spoolId);
+            UserDTO? newMod = await userRepository.GetUserByLoginIdentifierAsync(userName);
+            if (!mods.IsNullOrEmpty())
+            {
+                foreach (UserDTO mod in mods!)
+                {
+                    if (newMod != null && mod.Id == newMod.Id)
+                    {
+                        throw new Exception("User is already a mod.");
+                    }
+                }
+            }
+
+            Spool? dbSpool = await this.spoolRepository.AddModeratorAsync(spoolId, userName);
+            if(dbSpool != null)
+            {
+                return dbSpool;
             }
             else
             {
-                throw new Exception("Spool does not exist.");
+                throw new Exception("User does not exist.");
             }
+        }
+
+        public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userName)
+        {
+            UserRepository userRepository = new UserRepository( new PostgresDbContext() );
+            Spool? currentSpool = await spoolRepository.GetSpoolAsync(spoolId);
+            if(currentSpool == null)
+            {
+                throw new Exception("Spool does not exist");
+            }
+            UserDTO? currentOwner = await userRepository.GetUserAsync(currentSpool!.OwnerId);
+            UserDTO? newOwner = await userRepository.GetUserByLoginIdentifierAsync(userName);
+
+            if (currentOwner != null && currentSpool != null && newOwner != null && currentOwner.Id == newOwner.Id)
+            {
+                throw new Exception("User is already the owner.");
+            }
+
+            Spool? dbSpool = await this.spoolRepository.ChangeOwnerAsync(spoolId, userName);
+            if (dbSpool != null)
+            {
+                return dbSpool;
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
+            }
+        }
+
+        public async Task<Spool?> RemoveModeratorAsync(string spoolId, string userId)
+        {
+            return await this.spoolRepository.RemoveModeratorAsync(spoolId, userId);
         }
 
         public async Task<Spool[]> GetAllSpoolsAsync()
@@ -106,6 +150,22 @@ namespace ThreaditAPI.Services
         {
             List<Spool> spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
             return spools;
+        }
+
+        public async Task<UserDTO[]?> GetAllModsForSpoolAsync(string spoolId)
+        {
+            UserDTO[]? users = await this.spoolRepository.GetModeratorsAsync(spoolId);
+            return users;
+        }
+
+        public async Task DeleteSpoolAsync(string spoolId)
+        {
+            await this.spoolRepository.DeleteSpoolAsync(spoolId);
+        }
+
+        public async Task SaveRulesAsync(string spoolId, string rules)
+        {
+            await this.spoolRepository.SaveRulesAsync(spoolId, rules);
         }
     }
 }

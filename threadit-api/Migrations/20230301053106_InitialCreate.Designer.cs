@@ -13,7 +13,7 @@ using ThreaditAPI.Database;
 namespace ThreaditAPI.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20230220201616_InitialCreate")]
+    [Migration("20230301053106_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -75,6 +75,10 @@ namespace ThreaditAPI.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Rules")
                         .IsRequired()
                         .HasColumnType("text");
 
