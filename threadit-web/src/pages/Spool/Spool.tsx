@@ -12,6 +12,7 @@ import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
 import { spoolUsersStore } from "../../stores/SpoolUsersStore";
 import { userStore } from "../../stores/UserStore";
+import { spoolStore } from "../../stores/SpoolStore";
 import { DeleteIcon, CheckIcon, SettingsIcon } from '@chakra-ui/icons';
 import UserSettingsAPI from "../../api/UserSettingsApi";
 
@@ -29,6 +30,7 @@ export const Spool = observer(() => {
             SpoolAPI.getSpoolByName(id).then((spool) => {
                 setSpool(spool);
                 spoolUsersStore.refreshAllModerators(spool.id);
+                spoolStore.refreshSpool(spool);
             });
 
             SpoolAPI.getSpoolThreads(id).then((threads) => {
