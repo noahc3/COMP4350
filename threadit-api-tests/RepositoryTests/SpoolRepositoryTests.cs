@@ -495,13 +495,13 @@ public class SpoolRepositoryTests
         //delete user that is mod
         await _userRepository.DeleteUserAsync(mod1.Id);
 
-        //remove moderator
+        //remove moderator that just isnt anywhere
         Spool? removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, mod1.Id);
 
         //get the Spool again
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
 
-        //make sure thread has been updated properly
+        //make sure spool has been updated properly
         Assert.That(returnedSpool, Is.Not.Null);
         Assert.That(removeReturnedSpool, Is.Not.Null);
         Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
@@ -509,6 +509,12 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
         Assert.IsFalse(returnedSpool.Moderators.Contains(mod1.Id));
+
+        //remove moderator
+        removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "0fc935bc-fa2e-4d7b-b986-2f5e0781e4df");
+
+        //make sure spool has been updated properly
+        Assert.That(removeReturnedSpool, Is.Null);
     }
 
     [Test]
