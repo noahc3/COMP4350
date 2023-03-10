@@ -530,4 +530,71 @@ public class UserSettingsRepositoryTests
         bool inSpool = await _userSettingsRepository.CheckSpoolUserAsync(testUser.Id, testSpool.Name);
         Assert.True(inSpool);
     }
+
+    [Test]
+    public async Task InsertUserSettings_NotExists_ShouldPass()
+    {
+        //User
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+
+        //ensure UserSettings not in database
+        UserSettings? returnedSettings = await _userSettingsRepository.GetUserSettingsAsync(testUser.Id);
+        Assert.That(returnedSettings, Is.Null);
+
+        //add usersettings to db
+        UserSettings testUserSettings = new UserSettings()
+        {
+            Id = testUser.Id
+        };
+        await _userSettingsRepository.InsertUserSettingsAsync(testUserSettings);
+
+        //get userSettings again
+        returnedSettings = await _userSettingsRepository.GetUserSettingsAsync(testUser.Id);
+        Assert.That(returnedSettings, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task InsertUserSettings_Exists_ShouldPass()
+    {
+        //User
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
+        //ensure UserSettings is in database
+        UserSettings? returnedSettings = await _userSettingsRepository.GetUserSettingsAsync(testUser.Id);
+        Assert.That(returnedSettings, Is.Not.Null);
+
+        //add usersettings to db
+        UserSettings testUserSettings = new UserSettings()
+        {
+            Id = testUser.Id
+        };
+        try
+        {
+            await _userSettingsRepository.InsertUserSettingsAsync(testUserSettings);
+            Assert.Fail();
+        }
+        catch
+        {
+            Assert.Pass();
+        }
+    }
 }

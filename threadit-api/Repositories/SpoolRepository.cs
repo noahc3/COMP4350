@@ -34,24 +34,25 @@ namespace ThreaditAPI.Repositories
         {
             //verify the mods exist
             List<string> moderatorIds = spool.Moderators;
+            List<string> modsToRemove = new List<string>();
             foreach (var moderatorId in moderatorIds)
             {
                 UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == moderatorId);
                 if(dbUser == null)
                 {
-                    spool.Moderators.Remove(moderatorId);
+                    modsToRemove.Add(moderatorId);
                 }
                 else
                 {
                     //add spool to users joined list for the mod
                     UserSettings? modSettings = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == moderatorId);
-
-                    if (modSettings == null)
-                    {
-                        throw new Exception("User Does not have settings.");
-                    }
-                    modSettings.SpoolsJoined.Add(spool.Id);
+                    modSettings?.SpoolsJoined.Add(spool.Id);
                 }
+            }
+            
+            foreach(var moderatorId in modsToRemove)
+            {
+                spool.Moderators.Remove(moderatorId);
             }
 
             //add spool to spools table
@@ -123,11 +124,11 @@ namespace ThreaditAPI.Repositories
             {
                 return null;
             }
-            if (dbUser == null)
+            if (dbUser == null && !dbSpool.Moderators.Contains(userId))
             {
                 return null;
             }
-            dbSpool.Moderators.Remove(dbUser.Id);
+            dbSpool.Moderators.Remove(userId);
             await db.SaveChangesAsync();
             return dbSpool;
         }
