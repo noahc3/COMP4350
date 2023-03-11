@@ -15,6 +15,7 @@ public class SpoolRepositoryTests
     private UserRepository _userRepository;
     private UserSettingsRepository _userSettingsRepository;
     private PostgresDbContext _dbContext;
+    private ThreadRepository _threadRepository;
 
     [SetUp]
     public void Setup()
@@ -23,6 +24,7 @@ public class SpoolRepositoryTests
         _spoolRepository = new SpoolRepository(_dbContext);
         _userRepository = new UserRepository(_dbContext);
         _userSettingsRepository = new UserSettingsRepository(_dbContext);
+        _threadRepository = new ThreadRepository(_dbContext);
     }
 
     [Test]
@@ -179,6 +181,81 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
+    }
+
+    [Test]
+    public async Task InsertSpool_ModNotExists_ShouldPass()
+    {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+
+        // Create Spool
+        Spool testSpool = new Spool()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool",
+            OwnerId = testUser.Id,
+            Interests = new List<string>() { "Interest1", "Interest2" },
+            Moderators = new List<string>() { "d89945fa-8ced-4849-bda9-dee94456e804" }
+        };
+
+        // Ensure Spool is not in database
+        Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
+        Assert.That(returnedSpool, Is.Null);
+        // Add Spool to database
+        try
+        {
+            await _spoolRepository.InsertSpoolAsync(testSpool);
+            Assert.Fail();
+        }
+        catch
+        {
+            returnedSpool = await _spoolRepository.GetSpoolByNameAsync(testSpool.Name);
+            Assert.That(returnedSpool, Is.Null);
+        }
+    }
+
+    [Test]
+    public async Task InsertSpool_ModUserSettingsNotExist_ShouldPass()
+    {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
+        // Create Spool
+        Spool testSpool = new Spool()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool",
+            OwnerId = testUser.Id,
+            Interests = new List<string>() { "Interest1", "Interest2" },
+            Moderators = new List<string>() { "d89945fa-8ced-4849-bda9-dee94456e804" }
+        };
+
+        // Ensure Spool is not in database
+        Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
+        Assert.That(returnedSpool, Is.Null);
+        // Add Spool to database
+        await _spoolRepository.InsertSpoolAsync(testSpool);
+        returnedSpool = await _spoolRepository.GetSpoolByNameAsync(testSpool.Name);
     }
 
     [Test]
@@ -356,6 +433,88 @@ public class SpoolRepositoryTests
         Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
         Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
         Assert.IsFalse(returnedSpool.Moderators.Contains(mod1.Id));
+    }
+
+    [Test]
+    public async Task RemoveModerator_ModeratorNotExists_ShouldPass()
+    {
+        //owner
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+
+
+        //mod1
+        User mod1 = new User()
+        {
+            Id = "923f3675-90e5-458f-a997-73f263d01f95",
+            Username = "mod1",
+            Email = "testUser2@test.com"
+        };
+
+        // Ensure User is not in database
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod1.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(mod1);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(mod1.Username);
+        Assert.That(returnedUser, Is.Not.Null);
+
+        // Create Spool
+        Spool testSpool = new Spool()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool",
+            OwnerId = testUser.Id,
+            Interests = new List<string>() { "Interest1", "Interest2" },
+            Moderators = new List<string>() { "923f3675-90e5-458f-a997-73f263d01f95" }
+        };
+        // Ensure Spool is not in database
+        Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+        Assert.That(returnedSpool, Is.Null);
+        // Add Spool to database
+        await _spoolRepository.InsertSpoolAsync(testSpool);
+        returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+
+        // Ensure Spool is added correctly
+        Assert.That(returnedSpool, Is.Not.Null);
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
+        Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
+        Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
+
+        //delete user that is mod
+        await _userRepository.DeleteUserAsync(mod1.Id);
+
+        //remove moderator that just isnt anywhere
+        Spool? removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, mod1.Id);
+
+        //get the Spool again
+        returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+
+        //make sure spool has been updated properly
+        Assert.That(returnedSpool, Is.Not.Null);
+        Assert.That(removeReturnedSpool, Is.Not.Null);
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
+        Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
+        Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
+        Assert.IsFalse(returnedSpool.Moderators.Contains(mod1.Id));
+
+        //remove moderator
+        removeReturnedSpool = await _spoolRepository.RemoveModeratorAsync(testSpool.Id, "0fc935bc-fa2e-4d7b-b986-2f5e0781e4df");
+
+        //make sure spool has been updated properly
+        Assert.That(removeReturnedSpool, Is.Null);
     }
 
     [Test]
@@ -816,6 +975,78 @@ public class SpoolRepositoryTests
         await _spoolRepository.DeleteSpoolAsync(testSpool.Id);
         returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
         Assert.That(returnedSpool, Is.Null);
+    }
+
+    [Test]
+    public async Task DeleteSpool_AlsoDeletesThreads_ShouldPass()
+    {
+        //create user
+        User testUser = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "testUser",
+            Email = "testUser@test.com"
+        };
+        // Ensure User is not in database
+        UserDTO? returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Null);
+        // Add User to database
+        await _userRepository.InsertUserAsync(testUser);
+        returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
+        Assert.That(returnedUser, Is.Not.Null);
+
+        // Create Spool
+        Spool testSpool = new Spool()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool",
+            OwnerId = testUser.Id,
+            Interests = new List<string>() { "Interest1", "Interest2" },
+            Moderators = new List<string>() { },
+            Rules = "First Rules"
+        };
+        // Ensure Spool is not in database
+        Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+        Assert.That(returnedSpool, Is.Null);
+        // Add Spool to database
+        await _spoolRepository.InsertSpoolAsync(testSpool);
+        returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+
+        // Ensure Spool is added correctly
+        Assert.That(returnedSpool, Is.Not.Null);
+        Assert.IsTrue(returnedSpool!.Id.Equals(testSpool.Id));
+        Assert.IsTrue(returnedSpool.Name.Equals(testSpool.Name));
+        Assert.IsTrue(returnedSpool.OwnerId.Equals(testSpool.OwnerId));
+        Assert.IsTrue(returnedSpool.Interests.Equals(testSpool.Interests));
+        Assert.IsTrue(returnedSpool.Rules.Equals(testSpool.Rules));
+
+
+        // Create Thread
+        ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = "Thread Title",
+            Content = "Thread Content",
+            OwnerId = testUser.Id,
+            SpoolId = testSpool.Id
+        };
+        // Ensure Thread is not in database
+        ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        Assert.That(returnedThread, Is.Null);
+        // Add Thread to database
+        await _threadRepository.InsertThreadAsync(testThread);
+        returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        Assert.That(returnedThread, Is.Not.Null);
+
+        //delete spool
+        await _spoolRepository.DeleteSpoolAsync(testSpool.Id);
+        returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
+        Assert.That(returnedSpool, Is.Null);
+
+        //retrieve thread
+        returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        Assert.That(returnedThread, Is.Null);
     }
 
     [Test]
