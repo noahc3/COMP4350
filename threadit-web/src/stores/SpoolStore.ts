@@ -1,7 +1,7 @@
 import { makeObservable, action, observable, computed, runInAction } from "mobx";
 import { ISpool } from '../models/Spool';
-import SpoolAPI from '../api/SpoolAPI';
 import { authStore } from "./AuthStore";
+import SpoolAPI from '../api/SpoolAPI';
 
 export class SpoolStore {
 
@@ -10,6 +10,9 @@ export class SpoolStore {
 
     @observable
     _joinedSpools?: ISpool[] = undefined;
+
+    @observable
+    _currentSpool?: ISpool = undefined;
 
     constructor() {
         makeObservable(this);
@@ -22,6 +25,12 @@ export class SpoolStore {
             this._allSpools = spools;
         })
         return this._allSpools
+    }
+
+    @action
+    async refreshSpool(spool: ISpool) {
+        this._currentSpool = spool;
+        return this._currentSpool
     }
 
     @action
@@ -49,6 +58,11 @@ export class SpoolStore {
         this._joinedSpools = undefined;
     }
 
+    @action
+    async clearCurrentSpool() {
+        this._currentSpool = undefined;
+    }
+
     @computed
     get allSpools() {
         if (this._allSpools === undefined) this.refreshAllSpools();
@@ -59,6 +73,11 @@ export class SpoolStore {
     @computed
     get joinedSpools() {
         return this._joinedSpools;
+    }
+
+    @computed
+    get currentSpool() {
+        return this._currentSpool;
     }
 }
 

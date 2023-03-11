@@ -10,6 +10,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineDelete } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
 import { navStore } from "../../stores/NavStore";
+import { spoolStore } from "../../stores/SpoolStore";
 import { Link } from "react-router-dom";
 import "./ThreadPost.scss";
 
@@ -22,6 +23,8 @@ export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
     const [editedText, setEditedText] = React.useState("");
     const isAuthenticated = authStore.isAuthenticated;
     const isThreadOwner = (isAuthenticated && thread) ? thread.ownerId === userStore.userProfile?.id : false;
+    const isSpoolOwner = (isAuthenticated && thread) ? spoolStore.currentSpool!.ownerId === userStore.userProfile?.id : false;
+    const isModerator = (isAuthenticated && thread) ? spoolStore.currentSpool?.moderators.includes(userStore.userProfile!.id) : false;
     const disableInputs = isSaving || isDeleting;
 
     React.useEffect(() => {
@@ -94,7 +97,7 @@ export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
                         </>
                     }
 
-                    {isThreadOwner &&
+                    {(isThreadOwner || isSpoolOwner || isModerator) &&
                         <HStack>
                             {!isConfirmingDelete ?
                                 (

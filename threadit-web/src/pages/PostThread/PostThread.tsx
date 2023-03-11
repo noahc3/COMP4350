@@ -16,7 +16,7 @@ export default function PostThread() {
 
     React.useEffect(() => {
         if (spoolName) {
-            SpoolAPI.getSpoolById(spoolName).then((spool) => {
+            SpoolAPI.getSpoolByName(spoolName).then((spool) => {
                 setSpool(spool);
             });
         }
