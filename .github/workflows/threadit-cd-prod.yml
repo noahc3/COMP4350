@@ -63,7 +63,6 @@ jobs:
     needs: build-api
     runs-on: ubuntu-latest
     environment: Publish API
-    if: github.ref == 'refs/heads/master'
 
     steps:
     - name: Checkout code
@@ -101,7 +100,6 @@ jobs:
     needs: build-web
     runs-on: ubuntu-latest
     environment: Publish Web
-    if: github.ref == 'refs/heads/master'
 
     steps:
     - name: Checkout code
