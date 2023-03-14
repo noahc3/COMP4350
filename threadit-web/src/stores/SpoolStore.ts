@@ -12,6 +12,9 @@ export class SpoolStore {
     _joinedSpools?: ISpool[] = undefined;
 
     @observable
+    _suggestedSpools?: ISpool[] = undefined;
+
+    @observable
     _currentSpool?: ISpool = undefined;
 
     constructor() {
@@ -49,6 +52,21 @@ export class SpoolStore {
     }
 
     @action
+    async refreshSuggestedSpools() {
+        if (authStore.isAuthenticated) {
+            const spools = await SpoolAPI.getSuggestedSpools();
+            runInAction(() => {
+                this._suggestedSpools = spools;
+            })
+        } else {
+            runInAction(() => {
+                this._suggestedSpools = [];
+            })
+        }
+        return this._suggestedSpools
+    }
+
+    @action
     async clearAllSpools() {
         this._allSpools = undefined;
     }
@@ -61,6 +79,11 @@ export class SpoolStore {
     @action
     async clearCurrentSpool() {
         this._currentSpool = undefined;
+    }
+
+    @action
+    async clearSuggestedSpools() {
+        this._suggestedSpools = undefined;
     }
 
     @computed
@@ -78,6 +101,11 @@ export class SpoolStore {
     @computed
     get currentSpool() {
         return this._currentSpool;
+    }
+
+    @computed
+    get suggestedSpools() {
+        return this._suggestedSpools;
     }
 }
 

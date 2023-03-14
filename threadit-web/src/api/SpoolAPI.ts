@@ -11,6 +11,7 @@ const spoolThreadsEndpoint = ApiEndpoint('/v1/spool/threads/');
 const postSpoolEndpoint = ApiEndpoint('/v1/spool/create');
 const allSpoolsEndpoint = ApiEndpoint('/v1/spool/all');
 const joinedSpoolsEndpoint = ApiEndpoint('/v1/spool/joined/');
+const suggestedSpoolsEndpoint = ApiEndpoint('/v1/spool/suggested/');
 const allModsForSpoolEndpoint = ApiEndpoint('/v1/spool/mods/');
 const removeModeratorEndpoint = ApiEndpoint('/v1/spool/mods/remove/');
 const addModeratorEndpoint = ApiEndpoint('/v1/spool/mods/add/');
@@ -73,6 +74,17 @@ export default class SpoolAPI {
 
         if (!response.ok) {
             throw new Error(`Failed to get joined spools: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async getSuggestedSpools(): Promise<ISpool[]> {
+        const userProfile = await UserAPI.getUserProfile();
+        const response = await get(suggestedSpoolsEndpoint + userProfile.id);
+
+        if (!response.ok) {
+            throw new Error(`Failed to get suggested spools: ${await response.text()}`);
         }
 
         return await response.json();

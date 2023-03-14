@@ -16,6 +16,7 @@ export const Sidebar = observer(() => {
     const isAuthenticated = authStore.isAuthenticated;
     const allSpools = spoolStore.allSpools;
     const joinedSpools = spoolStore.joinedSpools;
+    const suggestedSpools = spoolStore.suggestedSpools;
     const allButtons = allSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
@@ -23,6 +24,14 @@ export const Sidebar = observer(() => {
             </NavLink>
         );
     });
+
+    const suggestedButtons = suggestedSpools?.map(function (spool) {
+        return (
+            <NavLink to={"/s/" + spool.name} key={spool.id}>
+                <Button colorScheme={"purple"}>{spool.name}</Button>
+            </NavLink>
+        );
+    }); //code is wip for now, need to set up the right calls for this to work
 
     const joinedButtons = joinedSpools?.map(function (spool) {
         return (
@@ -59,6 +68,15 @@ export const Sidebar = observer(() => {
                     <Spacer />
                     <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>
                     <>{joinedButtons}</>
+                </>}
+                <Spacer />
+            </Box>
+        
+            <Box overflowX="auto" h="50%">
+                {profile && <>
+                    <Spacer />
+                    <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>
+                    <>{suggestedButtons}</>
                 </>}
                 <Spacer />
             </Box>
