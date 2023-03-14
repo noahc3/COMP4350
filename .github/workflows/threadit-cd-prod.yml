@@ -50,7 +50,7 @@ jobs:
     - name: Build threadit-api (Linux x64 musl)
       run: |
         dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
-        dotnet publish -c Release -r linux-musl-x64 -o ./app-linux-musl-x64 --self-contained true --no-restore /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:UseAppHost=true
+        dotnet publish ThreaditAPI -c Release -r linux-musl-x64 -o ./app-linux-musl-x64 --self-contained true --no-restore /p:PublishReadyToRun=true /p:PublishSingleFile=true /p:UseAppHost=true
         
     - name: Upload backend build artifacts (Linux x64 musl)
       uses: actions/upload-artifact@v2
