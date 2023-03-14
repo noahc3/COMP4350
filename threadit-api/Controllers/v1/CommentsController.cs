@@ -63,12 +63,12 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(editedComment);
         }
 
-        [HttpDelete("{threadId}/{parentCommentId}")]
+        [HttpDelete("{threadId}/{commentId}")]
         [AuthenticationRequired]
-        public async Task<IActionResult> DeleteComment([FromRoute] string threadId, [FromRoute] string parentCommentId, [FromServices] CommentService commentService) {            
+        public async Task<IActionResult> DeleteComment([FromRoute] string threadId, [FromRoute] string commentId, [FromServices] CommentService commentService) {            
             UserDTO user = Request.HttpContext.GetUser();
 
-            Comment deletedComment = await commentService.DeleteCommentAsync(user.Id, parentCommentId);
+            Comment deletedComment = await commentService.DeleteCommentAsync(user.Id, commentId);
 
             return Ok(deletedComment);
         }

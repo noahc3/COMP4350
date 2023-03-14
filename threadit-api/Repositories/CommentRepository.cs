@@ -9,6 +9,7 @@ namespace ThreaditAPI.Repositories
     {
         private const int TOP_LEVEL_EXPAND_COUNT = 10;
         private const int SUB_LEVEL_EXPAND_COUNT = 3;
+        private const int TOP_LEVEL_BASE_REPLY_COUNT = 2;
         public CommentRepository(PostgresDbContext dbContext) : base(dbContext)
         {
         }
@@ -24,6 +25,18 @@ namespace ThreaditAPI.Repositories
                                                   .OrderByDescending((c) => c.DateCreated)
                                                   .Take(TOP_LEVEL_EXPAND_COUNT)
                                                   .ToListAsync();
+
+            List<Comment> replies = new List<Comment>();
+
+            foreach (Comment comment in comments) {
+                replies.AddRange(await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == comment.Id)
+                                                  .OrderByDescending((c) => c.DateCreated)
+                                                  .Take(TOP_LEVEL_BASE_REPLY_COUNT)
+                                                  .ToListAsync());
+            }
+            
+            comments.AddRange(replies);
+
             return comments;
         }
 
@@ -67,8 +80,21 @@ namespace ThreaditAPI.Repositories
 
             List<Comment> comments = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == sibling.ParentCommentId && c.DateCreated < sibling.DateCreated)
                                                   .OrderByDescending((c) => c.DateCreated)
-                                                  .Take(SUB_LEVEL_EXPAND_COUNT)
+                                                  .Take(sibling.ParentCommentId == null ? TOP_LEVEL_EXPAND_COUNT : SUB_LEVEL_EXPAND_COUNT)
                                                   .ToListAsync();
+
+            if (sibling.ParentCommentId == null) {
+                List<Comment> replies = new List<Comment>();
+
+                foreach (Comment comment in comments) {
+                    replies.AddRange(await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == comment.Id)
+                                                    .OrderByDescending((c) => c.DateCreated)
+                                                    .Take(TOP_LEVEL_BASE_REPLY_COUNT)
+                                                    .ToListAsync());
+                }
+                
+                comments.AddRange(replies);
+            }
 
             comments.Add(sibling);
 
@@ -116,6 +142,16 @@ namespace ThreaditAPI.Repositories
 
         public async Task<int> ImmediateChildCommentCountAsync(string commentId) {
             int count = await db.Comments.Where(c => c.ParentCommentId == commentId).CountAsync();
+            return count;
+        }
+
+        public async Task<int> TotalThreadCommentCount(string threadId) {
+            int count = await db.Comments.Where(c => c.ThreadId == threadId).CountAsync();
+            return count;
+        }
+
+        public async Task<int> TopLevelThreadCommentCount(string threadId) {
+            int count = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == null).CountAsync();
             return count;
         }
     }

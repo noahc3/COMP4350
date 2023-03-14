@@ -7,9 +7,11 @@ namespace ThreaditAPI.Services
     public class ThreadService
     {
         private readonly ThreadRepository threadRepository;
+        private readonly CommentRepository commentRepository;
         public ThreadService(PostgresDbContext context)
         {
             this.threadRepository = new ThreadRepository(context);
+            this.commentRepository = new CommentRepository(context);
         }
 
         public async Task<Models.Thread?> GetThreadAsync(string threadId)
@@ -63,7 +65,9 @@ namespace ThreaditAPI.Services
                     OwnerId = returnedThread.OwnerId,
                     DateCreated = returnedThread.DateCreated,
                     AuthorName = user.Username,
-                    SpoolName = spool.Name
+                    SpoolName = spool.Name,
+                    CommentCount = await commentRepository.TotalThreadCommentCount(returnedThread.Id),
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(returnedThread.Id)
                 };
                 return fullThread;
             }          
