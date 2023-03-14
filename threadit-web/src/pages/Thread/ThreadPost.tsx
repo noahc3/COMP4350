@@ -15,8 +15,7 @@ import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
 import SpoolAPI from "../../api/SpoolAPI";
 
-export const ThreadPost = observer(({ thread }: { thread: IThreadFull }) => {
-    const [spool, setSpool] = useState<ISpool>();
+export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
     const [isEditing, setIsEditing] = React.useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -28,14 +27,6 @@ export const ThreadPost = observer(({ thread }: { thread: IThreadFull }) => {
     const isSpoolOwner = (isAuthenticated && thread) ? spool?.ownerId === userStore.userProfile?.id : false;
     const isModerator = (isAuthenticated && thread) ? spool?.moderators.includes(userStore.userProfile!.id) : false;
     const disableInputs = isSaving || isDeleting;
-
-    React.useEffect(() => {
-        if (thread) {
-            SpoolAPI.getSpoolByName(thread.spoolName).then((spool) => {
-                setSpool(spool);
-            });
-        }
-    }, [thread])
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>

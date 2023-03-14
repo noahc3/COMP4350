@@ -6,13 +6,14 @@ import { IoCreateOutline } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineDelete, MdReply } from "react-icons/md";
 import Moment from "react-moment";
 import CommentAPI from "../../api/CommentAPI";
+import { ISpool } from "../../models/Spool";
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
 import { CommentBox } from "./CommentBox";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
 
 export const CommentItem = observer(
-    ({ commentId, commentTree }: { commentId: string, commentTree: CommentTree }) => {
+    ({ spool, commentId, commentTree }: { spool: ISpool, commentId: string, commentTree: CommentTree }) => {
         const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
         const [isReplying, setIsReplying] = useState<boolean>(false);
         const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
@@ -30,14 +31,15 @@ export const CommentItem = observer(
         const unloadedReplyCount = (comment?.childCommentCount ?? 0) - loadedReplyCount;
 
         const isAuthenticated = authStore.isAuthenticated;
+        const userid = userStore.userProfile?.id ?? '';
         const canEdit = isAuthenticated && comment?.ownerId === userStore.userProfile?.id;
-        const canDelete = isAuthenticated && comment?.ownerId === userStore.userProfile?.id;
+        const canDelete = !comment?.isDeleted && isAuthenticated && (comment?.ownerId === userStore.userProfile?.id || spool.moderators.includes(userid) || spool.ownerId === userid);
         const disableInputs = isLoadingReplies || isSubmittingReply || isSubmittingEdit || isDeleting;
 
         const mapComment = (comment: CommentTreeNode) => {
             return (
                 <>
-                    {comment.comment && <CommentItem key={comment.id} commentId={comment.comment.id} commentTree={commentTree} />}
+                    {comment.comment && <CommentItem key={comment.id} spool={spool} commentId={comment.comment.id} commentTree={commentTree} />}
                 </>
             );
         }

@@ -3,12 +3,13 @@ import { Button } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import CommentAPI from "../../api/CommentAPI";
+import { ISpool } from "../../models/Spool";
 import { IThreadFull } from "../../models/ThreadFull";
 import { CommentBox } from "./CommentBox";
 import { CommentItem } from "./CommentItem";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
 
-export const CommentFeed = observer(({thread}: {thread: IThreadFull}) => {
+export const CommentFeed = observer(({spool, thread}: {spool: ISpool, thread: IThreadFull}) => {
     const [commentTree, setCommentTree] = useState<CommentTree>(new CommentTree());
     const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,7 +32,7 @@ export const CommentFeed = observer(({thread}: {thread: IThreadFull}) => {
     const mapComment = (comment: CommentTreeNode) => {
         return (
             <>
-                {comment.comment && <CommentItem key={comment.id} commentId={comment.comment.id} commentTree={commentTree} />}
+                {comment.comment && <CommentItem key={comment.id} spool={spool} commentId={comment.comment.id} commentTree={commentTree} />}
             </>
         );
     }
