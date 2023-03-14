@@ -32,7 +32,7 @@ jobs:
         path: ./threadit-web/build
         
   build-api:
-    name: Build API
+    name: 'threadit-api: continuous deployment - build'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -59,7 +59,7 @@ jobs:
         path: ./threadit-api/app-linux-musl-x64/
 
   publish-docker-api:
-    name: Publish Docker (API)
+    name: 'threadit-api: continuous deployment - publish'
     needs: build-api
     runs-on: ubuntu-latest
     environment: Publish API
@@ -97,7 +97,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
   publish-docker-web:
-    name: Publish Docker (Web)
+    name: 'threadit-web: continuous deployment - publish'
     needs: build-web
     runs-on: ubuntu-latest
     environment: Publish Web
