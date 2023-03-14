@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React from "react";
 import ThreadAPI from "../../api/ThreadAPI";
 import { IThreadFull } from "../../models/ThreadFull";
 import Moment from 'react-moment';
@@ -13,7 +13,6 @@ import { navStore } from "../../stores/NavStore";
 import { Link } from "react-router-dom";
 import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
-import SpoolAPI from "../../api/SpoolAPI";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
     const [isEditing, setIsEditing] = React.useState(false);
