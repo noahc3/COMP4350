@@ -6,8 +6,14 @@ namespace ThreaditAPI.Extensions {
             context.Items["User"] = user;
         }
 
-        public static UserDTO? GetUser(this HttpContext context) {
-            return context.Items["User"] as UserDTO;
+        public static UserDTO GetUser(this HttpContext context) {
+            if (!context.Items.ContainsKey("User")) {
+                // It should never be possible for this to happen 
+                // (the middleware won't run a controller if the user isn't authenticated)
+                throw new Exception("User not authenticated.");
+            }
+
+            return (context.Items["User"] as UserDTO)!;
         }
     }
 }
