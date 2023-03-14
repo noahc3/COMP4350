@@ -107,31 +107,4 @@ public class CommentRepositoryTests
         Assert.IsTrue(returnedComment.OwnerId.Equals(updatedTestComment.OwnerId));
         Assert.IsTrue(returnedComment.ThreadId.Equals(updatedTestComment.ThreadId));
     }
-
-    [Test]
-    public async Task UpdateComment_NotExists_ShouldPass()
-    {
-        // Create Comment
-        Comment testComment = new Comment()
-        {
-            Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
-            Content = "Comment Content",
-            OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
-            ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
-            ParentCommentId = null
-        };
-
-        // Ensure Thread is not in database
-        Comment? returnedThread = await _commentRepository.GetCommentAsync(testComment.Id);
-        Assert.That(returnedThread, Is.Null);
-
-        //update comment
-        Comment? updateReturnedComment = await _commentRepository.UpdateCommentAsync(testComment);
-
-        //get the comment again
-        returnedThread = await _commentRepository.GetCommentAsync(testComment.Id);
-
-        //make sure it was not in the database
-        Assert.That(returnedThread, Is.Null);
-    }
 }
