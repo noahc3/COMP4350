@@ -10,30 +10,32 @@ import { IoCreateOutline } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineDelete } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
 import { navStore } from "../../stores/NavStore";
-import { spoolStore } from "../../stores/SpoolStore";
 import { Link } from "react-router-dom";
 import "./ThreadPost.scss";
+import { ISpool } from "../../models/Spool";
+import SpoolAPI from "../../api/SpoolAPI";
 
-export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
-    const [thread, setThread] = useState<IThreadFull>();
+export const ThreadPost = observer(({ thread }: { thread: IThreadFull }) => {
+    const [spool, setSpool] = useState<ISpool>();
     const [isEditing, setIsEditing] = React.useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
     const [isSaving, setIsSaving] = React.useState(false);
     const [editedText, setEditedText] = React.useState("");
+    const threadId = thread.id;
     const isAuthenticated = authStore.isAuthenticated;
     const isThreadOwner = (isAuthenticated && thread) ? thread.ownerId === userStore.userProfile?.id : false;
-    const isSpoolOwner = (isAuthenticated && thread) ? spoolStore.currentSpool!.ownerId === userStore.userProfile?.id : false;
-    const isModerator = (isAuthenticated && thread) ? spoolStore.currentSpool?.moderators.includes(userStore.userProfile!.id) : false;
+    const isSpoolOwner = (isAuthenticated && thread) ? spool?.ownerId === userStore.userProfile?.id : false;
+    const isModerator = (isAuthenticated && thread) ? spool?.moderators.includes(userStore.userProfile!.id) : false;
     const disableInputs = isSaving || isDeleting;
 
     React.useEffect(() => {
-        if (threadId) {
-            ThreadAPI.getThreadById(threadId).then((thread) => {
-                setThread(thread);
+        if (thread) {
+            SpoolAPI.getSpoolByName(thread.spoolName).then((spool) => {
+                setSpool(spool);
             });
         }
-    }, [threadId]);
+    }, [thread])
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>
@@ -52,7 +54,6 @@ export const ThreadPost = observer(({ threadId }: { threadId: string }) => {
                 await ThreadAPI.editThread(thread);
             } finally {
                 ThreadAPI.getThreadById(threadId).then((thread) => {
-                    setThread(thread);
                     setIsSaving(false);
                     setIsEditing(false);
                 });
