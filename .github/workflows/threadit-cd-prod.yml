@@ -56,7 +56,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: threadit-api-linux-musl-x64
-        path: ./app-linux-musl-x64
+        path: ./threadit-api/app-linux-musl-x64/
 
   publish-docker-api:
     name: Publish Docker (API)
