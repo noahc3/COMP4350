@@ -96,7 +96,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-publish-docker-web:
+  publish-docker-web:
     name: Publish Docker (Web)
     needs: build-web
     runs-on: ubuntu-latest
