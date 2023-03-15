@@ -137,3 +137,13 @@ jobs:
         file: ./.docker/web/Dockerfile
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    name: 'threadit-web: continuous deployment - deploy'
+    runs-on: ubuntu-latest
+    needs: 
+      - publish-docker-api
+      - publish-docker-web
+    steps:
+    - name: Ping Webhook
+      run: curl -X POST ${{ secrets.WEBHOOK_REDEPLOY_PROD }}
