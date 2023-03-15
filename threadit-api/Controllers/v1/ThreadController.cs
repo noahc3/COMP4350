@@ -85,22 +85,10 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest("Thread ID is invalid.");
             }
 
-            UserDTO? profile = Request.HttpContext.GetUser();
-            if (profile == null) {
-                return Unauthorized();
-            }
-
-            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
-            if (threadFromDb == null) {
-                return BadRequest("Thread does not exist.");
-            }
-
-            if (threadFromDb.OwnerId != profile.Id) {
-                return Unauthorized();
-            }
+            UserDTO profile = Request.HttpContext.GetUser();
 
             try {
-                await threadService.DeleteThreadAsync(threadId);
+                await threadService.DeleteThreadAsync(threadId, profile.Id);
                 return Ok();
             } catch (Exception e) {
                 return BadRequest(e.Message);
