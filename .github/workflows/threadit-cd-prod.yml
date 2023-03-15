@@ -1,8 +1,9 @@
 name: 'threadit: continuous deployment (prod)'
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:
+    branches:
+      - master
 
 jobs:    
   build-web:
@@ -63,6 +64,7 @@ jobs:
     needs: build-api
     runs-on: ubuntu-latest
     environment: Publish API
+    if: github.ref == 'refs/heads/master'
 
     steps:
     - name: Checkout code
@@ -103,6 +105,7 @@ jobs:
     needs: build-web
     runs-on: ubuntu-latest
     environment: Publish Web
+    if: github.ref == 'refs/heads/master'
 
     steps:
     - name: Checkout code
@@ -141,6 +144,7 @@ jobs:
   deploy:
     name: 'threadit-web: continuous deployment - deploy'
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     needs: 
       - publish-docker-api
       - publish-docker-web
