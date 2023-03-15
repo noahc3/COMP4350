@@ -12,8 +12,26 @@ namespace ThreaditAPI.Controllers.v1 {
     [Route("v1/spool")]
     public class SpoolController : ControllerBase {
         [HttpGet("threads/{spoolName}")]
-        public async Task<IActionResult> GetSpoolThreads([FromRoute] string spoolName, [FromServices] ThreadService threadService) {            
+        public async Task<IActionResult> GetSpoolThreads([FromRoute] string spoolName, [FromServices] ThreadService threadService, [FromServices] FilterService filterService, [FromQuery(Name = "q")] string searchWord = "") {            
             List<ThreadFull> threads = await threadService.GetThreadsBySpoolAsync(spoolName);
+            if(searchWord != "")
+            {
+                threads = filterService.SearchThreads(threads.ToArray(), searchWord);
+            }
+            return Ok(threads);
+        }
+
+        [HttpGet("threads/{spoolName}/{sortType}")]
+        public async Task<IActionResult> GetSpoolThreadsFiltered([FromRoute] string spoolName, [FromRoute] string sortType, [FromServices] ThreadService threadService, [FromServices] FilterService filterService, [FromQuery(Name = "q")] string searchWord = "") {            
+            List<ThreadFull> threads = await threadService.GetThreadsBySpoolAsync(spoolName);            
+            if(searchWord != "")
+            {
+                threads = filterService.SearchThreads(threads.ToArray(), searchWord);
+            }
+            if(sortType != "")
+            {
+                threads = filterService.SortThreads(threads.ToArray(), sortType);
+            }
             return Ok(threads);
         }
 
