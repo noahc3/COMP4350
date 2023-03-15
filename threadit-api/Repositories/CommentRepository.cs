@@ -140,6 +140,19 @@ namespace ThreaditAPI.Repositories
             }
         }
 
+        public async Task HardDeleteAllSpoolCommentsAsync(string spoolId) {
+            await db.Comments.Join(db.Threads, c => c.ThreadId, t => t.Id, (c, t) => new { Comment = c, Thread = t })
+                             .Where(c => c.Thread.SpoolId == spoolId)
+                             .ForEachAsync(c => db.Comments.Remove(c.Comment));
+            await db.SaveChangesAsync();
+        }
+
+        public async Task HardDeleteAllThreadCommentsAsync(string threadId) {
+            await db.Comments.Where(c => c.ThreadId == threadId)
+                             .ForEachAsync(c => db.Comments.Remove(c));
+            await db.SaveChangesAsync();
+        }
+
         public async Task<int> ImmediateChildCommentCountAsync(string commentId) {
             int count = await db.Comments.Where(c => c.ParentCommentId == commentId).CountAsync();
             return count;
