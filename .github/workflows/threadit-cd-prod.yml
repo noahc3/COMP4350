@@ -92,7 +92,9 @@ jobs:
         context: .
         push: true
         file: ./.docker/api/Dockerfile
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: 
+          - ${{ steps.meta.outputs.tags }}
+          - latest
         labels: ${{ steps.meta.outputs.labels }}
 
   publish-docker-web:
@@ -129,5 +131,7 @@ jobs:
         context: .
         push: true
         file: ./.docker/web/Dockerfile
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: 
+          - ${{ steps.meta.outputs.tags }}
+          - latest
         labels: ${{ steps.meta.outputs.labels }}
