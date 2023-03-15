@@ -52,6 +52,21 @@ namespace ThreaditAPI.Controllers.v1
             bool belongs = await userSettingsService.CheckSpoolUserAsync(userDTO.Id, spoolName);
             return Ok(belongs);
         }
+
+        [HttpGet("check/newUser")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> NewUser([FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            bool newUser = await userSettingsService.CheckNewUserAsync(userDTO.Id);
+            return Ok(newUser);
+        }
+
     }
 }
 

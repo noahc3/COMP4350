@@ -82,5 +82,14 @@ namespace ThreaditAPI.Repositories
             bool belongs = resultSettings.SpoolsJoined.Contains(dbSpool.Id);
             return belongs;
         }
+
+        public async Task<bool> CheckNewUserAsync(string userId)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+            bool isNew = resultSettings.newUser;
+            return false;
+        }
     }
 }

@@ -36,7 +36,7 @@ export class AuthStore {
     @action
     async register(email: string, username: string, password: string): Promise<boolean | string> {
         try {
-            const success = await AuthAPI.register(email, username, password);
+            const success = await AuthAPI.register(email, username, password, true);
             return success;
         } catch (error: any) {
             return error.message;

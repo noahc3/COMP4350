@@ -22,17 +22,18 @@ export default class AuthAPI {
         return response.ok;
     }
 
-    static async register(email: string, username: string, password: string): Promise<boolean> {
+    static async register(email: string, username: string, password: string, newuser: boolean): Promise<boolean> {
         const response = await post(registerEndpoint, {
             email,
             username,
-            password
+            password,
+            newuser
         });
     
         if (!response.ok) {
             throw new Error(`Failed to register: ${await response.text()}`);
         }
-
+    
         return true;
     }
 
