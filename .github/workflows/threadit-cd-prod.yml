@@ -85,6 +85,9 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: noahc3/threadit-api
+        tags: |
+            type=raw,value=latest
+            type=sha
       
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -92,7 +95,7 @@ jobs:
         context: .
         push: true
         file: ./.docker/api/Dockerfile
-        tags: ${{ steps.meta.outputs.tags }} latest
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
   publish-docker-web:
@@ -122,6 +125,9 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: noahc3/threadit-web
+        tags: |
+            type=raw,value=latest
+            type=sha
       
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -129,5 +135,5 @@ jobs:
         context: .
         push: true
         file: ./.docker/web/Dockerfile
-        tags: ${{ steps.meta.outputs.tags }} latest
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
