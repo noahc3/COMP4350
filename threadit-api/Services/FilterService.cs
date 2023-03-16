@@ -20,7 +20,7 @@ namespace ThreaditAPI.Services
                 case "controversial":
                     return threads.OrderByDescending(thread => thread.Rips.Count / Math.Max(thread.Stitches.Count, 0.1)).ThenByDescending(thread => thread.DateCreated).ToList();               
                 case "comments":
-                    return threads.OrderByDescending(thread => thread.Stitches.Count).ThenByDescending(thread => thread.DateCreated).ToList();
+                    return threads.OrderByDescending(thread => thread.CommentCount).ThenByDescending(thread => thread.DateCreated).ToList();
                 default:
                     return threads.OrderByDescending(thread => thread.DateCreated).ToList();
             }
