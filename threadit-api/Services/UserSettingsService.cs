@@ -58,9 +58,19 @@ namespace ThreaditAPI.Services
             return await this.userSettingsRepository.CheckSpoolUserAsync(userId, spoolName);
         }
 
-        public async Task<string[]> GetAllInterestsAsync()
+        public async Task<string[]> GetUserInterestsAsync(string userId)
         {
-            return await this.userSettingsRepository.GetAllInterestsAsync();
+            return await this.userSettingsRepository.GetUserInterestsAsync(userId);
+        }
+
+        public async Task<string[]> AddUserInterestAsync(string userId, string interestName)
+        {
+            return await this.userSettingsRepository.AddUserInterestAsync(userId, interestName);
+        }
+
+        public async Task<string[]> RemoveUserInterestAsync(string userId, string interestName)
+        {
+            return await this.userSettingsRepository.RemoveUserInterestAsync(userId, interestName);
         }
 
     }

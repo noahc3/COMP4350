@@ -1,7 +1,7 @@
 import { observer } from "mobx-react"
 import { Avatar, Box, Button, Divider, Flex, HStack, Icon, Image, Spacer, Text } from "@chakra-ui/react";
 import "./Sidebar.scss";
-import { IoCog, IoStatsChart } from "react-icons/io5";
+import { IoStatsChart } from "react-icons/io5";
 import { IoMdLogIn } from "react-icons/io";
 import { MdOutlineExitToApp } from "react-icons/md";
 import { NavLink } from "../Router/NavLink";
@@ -70,7 +70,7 @@ export const Sidebar = observer(() => {
                     <HStack marginInlineStart={2}>
                         <Avatar size={'sm'} name='Dan Abrahmov' src='/img/avatar_placeholder.png' />
                         <Text>{profile.username}</Text>
-                        <NavLink to={"/settings"}><Button leftIcon={<Icon as={BiCog} />} colorScheme={"purple"}>Profile</Button></NavLink>
+                        <NavLink to={"/profile"}><Button leftIcon={<Icon as={BiCog} />} colorScheme={"purple"}>Profile</Button></NavLink>
                     </HStack>
                 </Box>
             </>}

@@ -7,7 +7,8 @@ const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");
 const joinSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/join/");
 const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
-const getAllInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/all");
+const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/add/");
+const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/remove/");
 
 export default class UserSettingsAPI {
 
@@ -49,7 +50,27 @@ export default class UserSettingsAPI {
         const response = await getWithAuth(getUserInterestsEndpoint);
 
         if (!response.ok) {
-            throw new Error(`Failed to check if the user is a new user: ${await response.text()}`);
+            throw new Error(`Failed to get user interests: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async addUserInterest(interest: string): Promise<string[]> {
+        const response = await getWithAuth(addUserInterestsEndpoint + interest);
+
+        if (!response.ok) {
+            throw new Error(`Failed to add new interest to user: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async removeUserInterest(interest: string): Promise<string[]> {
+        const response = await getWithAuth(addUserInterestsEndpoint + interest);
+
+        if (!response.ok) {
+            throw new Error(`Failed to remove interest from user: ${await response.text()}`);
         }
 
         return await response.json();

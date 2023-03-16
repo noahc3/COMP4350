@@ -15,5 +15,31 @@ namespace ThreaditAPI.Controllers.v1 {
             Interest[] interests = await interestService.GetAllInterestsAsync();
             return Ok(interests);
         }
+
+        [HttpGet("add/{interestName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> AddInterest([FromRoute] string interestName, [FromServices] InterestService interestService) {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null) {
+                return Unauthorized();
+            }
+
+            Interest interest = await interestService.AddInterestAsync(interestName);
+            return Ok(interest);
+        }
+
+        [HttpGet("remove/{interestName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RemoveInterest([FromRoute] string interestName, [FromServices] InterestService interestService) {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null) {
+                return Unauthorized();
+            }
+
+            bool result = await interestService.RemoveInterestAsync(interestName);
+            return Ok(result);
+        }
     }
 }

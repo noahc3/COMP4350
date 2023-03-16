@@ -4,7 +4,7 @@ import { getWithAuth } from "./Request";
 
 const allInterestsEndpoint = ApiEndpoint('/v1/interest/all');
 const addInterestEndpoint = ApiEndpoint('/v1/interest/add/');
-const removeInterestEndpoint = ApiEndpoint('/v1/interest/remove/');
+const removeInterestsEndpoint = ApiEndpoint('/v1/interest/remove/');
 
 export default class UserAPI {
     static async getAllInterests(): Promise<IInterest[]> 
@@ -24,6 +24,17 @@ export default class UserAPI {
 
         if(!response.ok){
             throw new Error('Failed to add interest: ' + await response.text())
+        }
+
+        return await response.json();
+    }
+
+    static async removeInterest(name: string)
+    {
+        const response = await getWithAuth(removeInterestsEndpoint + name);
+
+        if(!response.ok){
+            throw new Error('Failed to remove interest: ' + await response.text())
         }
 
         return await response.json();

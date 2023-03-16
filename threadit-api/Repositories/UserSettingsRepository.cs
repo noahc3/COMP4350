@@ -83,9 +83,45 @@ namespace ThreaditAPI.Repositories
             return belongs;
         }
 
-        public async Task<string[]> GetAllInterestsAsync()
+         public async Task<string[]> GetUserInterestsAsync(string userId)
         {
-            string[] interests = await db.Interests.Select(i => i.Name).ToArrayAsync();
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            string[] interests = resultSettings.Interests.ToArray();
+            return interests;
+        }
+
+        public async Task<string[]> AddUserInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            if (!resultSettings.Interests.Contains(interest))
+            {
+                resultSettings.Interests.Add(interest);
+                await db.SaveChangesAsync();
+            }
+
+            string[] interests = resultSettings.Interests.ToArray();
+            return interests;
+        }
+
+        public async Task<string[]> RemoveUserInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            if (resultSettings.Interests.Contains(interest))
+            {
+                resultSettings.Interests.Remove(interest);
+                await db.SaveChangesAsync();
+            }
+
+            string[] interests = resultSettings.Interests.ToArray();
             return interests;
         }
     }

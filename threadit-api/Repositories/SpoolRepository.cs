@@ -55,6 +55,13 @@ namespace ThreaditAPI.Repositories
                 spool.Moderators.Remove(moderatorId);
             }
 
+            //Adds the interests to the interest table if it doesn't exist, iterates SpoolCount if it does
+            InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
+            foreach(string interest in spool.Interests)
+                {
+                    await interestRepository.AddInterestAsync(interest);
+                }
+
             //add spool to spools table
             await db.Spools.AddAsync(spool);
 
@@ -170,6 +177,14 @@ namespace ThreaditAPI.Repositories
                     //TODO once comments are implemented, in here you can delete all the comments for the thread.
                     db.Threads.Remove(dbThread);
                 }
+
+                //Removes the interests from the interest table if no more Spools carry that interest, deiterates SpoolCount if it still has references
+                InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
+                foreach(string interest in dbSpool.Interests)
+                {
+                    await interestRepository.RemoveInterestAsync(interest);
+                }
+                
                 UserDTO[] spoolUsers = await GetUsersForSpool(spoolId);
                 UserSettingsRepository userSettingsRepository = new UserSettingsRepository( new PostgresDbContext() );
                 foreach (var spoolUser in spoolUsers)

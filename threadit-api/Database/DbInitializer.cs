@@ -66,9 +66,9 @@ namespace ThreaditAPI.Database {
             context.SaveChanges();
 
             var interests = new Interest[] {
-                new Interest {Name = "General", SpoolCount = 0 },
-                new Interest {Name = "Hockey", SpoolCount = 1 },
-                new Interest {Name = "Community", SpoolCount = 1}
+                new Interest {Id = "8846ae6d-1543-45b5-8e2f-b88857d0457b" , Name = "General", SpoolCount = 0 },
+                new Interest {Id = "efe692c1-186e-435f-bf97-bc9269771840" , Name = "Hockey", SpoolCount = 1 },
+                new Interest {Id = "7a220999-72e7-428c-a54d-d197f2f90bc4" , Name = "Community", SpoolCount = 1}
             };
 
             context.Interests.AddRange(interests);
