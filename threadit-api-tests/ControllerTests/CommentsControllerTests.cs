@@ -5,6 +5,8 @@ using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using System.Text.Json;
 
+namespace ThreaditTests.Controllers;
+
 public class CommentsControllerTests {
     private Spool _spool;
     private ThreaditAPI.Models.Thread _thread;
