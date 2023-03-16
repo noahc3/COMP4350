@@ -70,7 +70,7 @@ export default class UserSettingsAPI {
         const response = await getWithAuth(removeUserInterestsEndpoint + interest);
         
 
-        if (response.ok) {
+        if (!response.ok) {
             throw new Error(`Failed to remove interest from user: ${await response.text()}`);
         }
 
