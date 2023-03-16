@@ -58,8 +58,10 @@ namespace ThreaditAPI.Services
             return await this.userSettingsRepository.CheckSpoolUserAsync(userId, spoolName);
         }
 
-        public async Task<bool> CheckNewUserAsync(string userId){
-            return await this.userSettingsRepository.CheckNewUserAsync(userId);
+        public async Task<string[]> GetAllInterestsAsync()
+        {
+            return await this.userSettingsRepository.GetAllInterestsAsync();
         }
+
     }
 }

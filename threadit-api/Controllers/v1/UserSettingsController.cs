@@ -53,9 +53,9 @@ namespace ThreaditAPI.Controllers.v1
             return Ok(belongs);
         }
 
-        [HttpGet("check/newUser")]
+        [HttpGet("interests")]
         [AuthenticationRequired]
-        public async Task<IActionResult> NewUser([FromServices] UserSettingsService userSettingsService)
+        public async Task<IActionResult> GetInterests([FromServices] UserSettingsService userSettingsService)
         {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
@@ -63,8 +63,15 @@ namespace ThreaditAPI.Controllers.v1
             {
                 return Unauthorized();
             }
-            bool newUser = await userSettingsService.CheckNewUserAsync(userDTO.Id);
-            return Ok(newUser);
+            UserSettings? settings = await userSettingsService.GetUserSettingsAsync(userDTO.Id);
+            if(settings != null)
+            {
+                return Ok(settings.Interests);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
     }

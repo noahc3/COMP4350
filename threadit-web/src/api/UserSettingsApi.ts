@@ -6,7 +6,8 @@ import { spoolStore } from "../stores/SpoolStore";
 const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");
 const joinSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/join/");
 const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
-const checkNewUserEndpoint = ApiEndpoint("/v1/userSettings/check/newUser");
+const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
+const getAllInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/all");
 
 export default class UserSettingsAPI {
 
@@ -44,8 +45,8 @@ export default class UserSettingsAPI {
         return await response.json();
     }
 
-    static async getNewUser(): Promise<boolean> {
-        const response = await getWithAuth(checkNewUserEndpoint);
+    static async getUserInterests(): Promise<string[]> {
+        const response = await getWithAuth(getUserInterestsEndpoint);
 
         if (!response.ok) {
             throw new Error(`Failed to check if the user is a new user: ${await response.text()}`);

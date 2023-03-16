@@ -9,6 +9,7 @@ import PostSpool from "../../pages/PostSpool/PostSpool";
 import { Thread } from "../../pages/Thread/Thread";
 import { Spool } from "../../pages/Spool/Spool";
 import { ManageSpool } from "../../pages/Spool/ManageSpool";
+import  { UserSettings } from "../../pages/UserSettings/UserSettings";
 
 export const Router: React.FC = observer(() => {
     const history = navStore.history;
@@ -23,6 +24,7 @@ export const Router: React.FC = observer(() => {
                 <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
                 <Route path="/s/:name/manage" element={<ManageSpool />} />
+                <Route path="/profile" element={<UserSettings />} />
             </Routes>
         </HistoryRouter>
     )

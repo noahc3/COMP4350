@@ -65,6 +65,15 @@ namespace ThreaditAPI.Database {
             context.Spools.AddRange(spools);
             context.SaveChanges();
 
+            var interests = new Interest[] {
+                new Interest {Name = "General", SpoolCount = 0 },
+                new Interest {Name = "Hockey", SpoolCount = 1 },
+                new Interest {Name = "Community", SpoolCount = 1}
+            };
+
+            context.Interests.AddRange(interests);
+            context.SaveChanges();
+
             var threads = new Models.Thread[] {
                 new Models.Thread { 
                     Id = "65976296-d7db-497c-b2a2-36af72c325b1",

@@ -11,6 +11,7 @@ namespace ThreaditAPI.Database {
         public DbSet<Models.Thread> Threads { get; set; }
         public DbSet<Spool> Spools { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Interest> Interests { get; set; }
 
         public PostgresDbContext() {
 
