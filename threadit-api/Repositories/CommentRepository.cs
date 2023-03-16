@@ -61,12 +61,11 @@ namespace ThreaditAPI.Repositories
                 throw new Exception("Sibling comment does not exist.");
             }
 
-            List<Comment> comments = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == sibling.ParentCommentId && c.DateCreated > sibling.DateCreated)
+            List<Comment> comments = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == sibling.ParentCommentId && c.DateCreated >= sibling.DateCreated)
+                                                  .OrderBy((c) => c.DateCreated)
+                                                  .Take(sibling.ParentCommentId == null ? TOP_LEVEL_EXPAND_COUNT + 1 : SUB_LEVEL_EXPAND_COUNT + 1)
                                                   .OrderByDescending((c) => c.DateCreated)
-                                                  .Take(SUB_LEVEL_EXPAND_COUNT)
                                                   .ToListAsync();
-
-            comments.Add(sibling);
 
             return comments;
         }
@@ -78,9 +77,9 @@ namespace ThreaditAPI.Repositories
                 throw new Exception("Sibling comment does not exist.");
             }
 
-            List<Comment> comments = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == sibling.ParentCommentId && c.DateCreated < sibling.DateCreated)
+            List<Comment> comments = await db.Comments.Where(c => c.ThreadId == threadId && c.ParentCommentId == sibling.ParentCommentId && c.DateCreated <= sibling.DateCreated)
                                                   .OrderByDescending((c) => c.DateCreated)
-                                                  .Take(sibling.ParentCommentId == null ? TOP_LEVEL_EXPAND_COUNT : SUB_LEVEL_EXPAND_COUNT)
+                                                  .Take(sibling.ParentCommentId == null ? TOP_LEVEL_EXPAND_COUNT + 1 : SUB_LEVEL_EXPAND_COUNT + 1)
                                                   .ToListAsync();
 
             if (sibling.ParentCommentId == null) {
@@ -95,8 +94,6 @@ namespace ThreaditAPI.Repositories
                 
                 comments.AddRange(replies);
             }
-
-            comments.Add(sibling);
 
             return comments;
         }

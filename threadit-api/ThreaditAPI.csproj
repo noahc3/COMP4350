@@ -29,4 +29,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+     <InternalsVisibleTo Include="threadit-api-tests" />
+  </ItemGroup>
+
 </Project>

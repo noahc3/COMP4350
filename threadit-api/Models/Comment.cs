@@ -17,16 +17,5 @@ namespace ThreaditAPI.Models
         {
 
         }
-        public Comment(string ownerId, string threadId)
-        {
-            this.OwnerId = ownerId;
-            this.ThreadId = threadId;
-        }
-        public Comment(string ownerId, string threadId, string parentCommentId)
-        {
-            this.OwnerId = ownerId;
-            this.ThreadId = threadId;
-            this.ParentCommentId = parentCommentId;
-        }
     }
 }

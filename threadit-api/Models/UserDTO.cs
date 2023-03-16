@@ -12,11 +12,5 @@ namespace ThreaditAPI.Models
         {
 
         }
-
-        public UserDTO(string email, string username)
-        {
-            this.Email = email;
-            this.Username = username;
-        }
     }
 }

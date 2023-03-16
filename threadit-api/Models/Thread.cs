@@ -20,10 +20,5 @@ namespace ThreaditAPI.Models
         {
 
         }
-        public Thread(string ownerId, string spoolId)
-        {
-            this.OwnerId = ownerId;
-            this.SpoolId = spoolId;
-        }
     }
 }
