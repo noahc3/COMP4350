@@ -19,8 +19,8 @@ const deleteSpoolEndpoint = ApiEndpoint('/v1/spool/delete/');
 const saveSpoolEndpoint = ApiEndpoint('/v1/spool/save/');
 
 export default class SpoolAPI {
-    static async getSpoolThreads(spoolId: string): Promise<IThreadFull[]> {
-        const response = await get(spoolThreadsEndpoint + spoolId);
+    static async getSpoolThreads(spoolId: string, sortType: string, searchWord: string): Promise<IThreadFull[]> {
+        const response = await get(spoolThreadsEndpoint + spoolId + (sortType === '' ? '' : '/' + sortType) + (searchWord === '' ? '' : '/?q=' + searchWord));
 
         if (!response.ok) {
             throw new Error(`Failed to get all spool threads: ${await response.text()}`);

@@ -1,5 +1,6 @@
 import { createBrowserHistory } from "history";
 import { makeObservable, observable, action } from "mobx";
+import queryString from "query-string";
 
 export class NavStore {
     history = createBrowserHistory();
@@ -17,8 +18,9 @@ export class NavStore {
     }
 
     @action
-    async navigateTo(path: string) {
-        this.history.push(path);
+    async navigateTo(path: string, query?: Record<string, string>) {
+        const search = query ? `/?${queryString.stringify(query)}` : "";
+        this.history.push(`${path}${search}`);
     }
 }
 
