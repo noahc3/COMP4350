@@ -137,6 +137,21 @@ public static class Utils {
         return thread;
     }
 
+    public static UserSettings JoinSpool(HttpClient authenticatedClient, string spoolName)
+    {
+        var response = authenticatedClient.GetAsync(Endpoints.V1_USERSETTINGS_JOIN).Result;
+
+        Console.WriteLine(response);
+        var settings = ParseResponse<UserSettings>(response);
+
+        if (settings == null)
+        {
+            throw new Exception("Could not join spool");
+        }
+
+        return settings;
+    }
+
     public static string GetCleanUUIDString() {
         return Guid.NewGuid().ToString().Replace("-", "");
     }
