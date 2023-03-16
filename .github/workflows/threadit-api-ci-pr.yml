@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore -warnaserror
+        run: dotnet build ThreaditAPI.csproj --configuration Release --no-restore -warnaserror
       - name: Test
         env:
           dbUser: threadit
