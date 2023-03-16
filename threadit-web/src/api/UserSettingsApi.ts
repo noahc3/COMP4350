@@ -68,7 +68,6 @@ export default class UserSettingsAPI {
 
     static async removeUserInterest(interest: string): Promise<string[]> {
         const response = await getWithAuth(removeUserInterestsEndpoint + interest);
-        
 
         if (!response.ok) {
             throw new Error(`Failed to remove interest from user: ${await response.text()}`);

@@ -66,7 +66,7 @@ namespace ThreaditAPI.Controllers.v1
             UserSettings? settings = await userSettingsService.GetUserSettingsAsync(userDTO.Id);
             if(settings != null)
             {
-                return Ok(settings.Interests);
+                return Ok(settings.Interests.ToArray());
             }
             else
             {

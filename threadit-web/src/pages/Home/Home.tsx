@@ -1,5 +1,5 @@
-import { StarIcon} from "@chakra-ui/icons";
-import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack } from "@chakra-ui/react";
+import { AddIcon, StarIcon} from "@chakra-ui/icons";
+import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack, Tag, TagLabel, TagRightIcon } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
@@ -26,21 +26,24 @@ export const Home = observer(() => {
     }, []);
 
     React.useEffect(() => {
-        UserSettingsAPI.getUserInterests().then((userInterests) => {
-            setUserInterests(userInterests);
-        });
-    }, [isAuthenticated]);
-
-    React.useEffect(() => {
         InterestAPI.getAllInterests().then((interests) => {
             setInterests(interests);
         });
-    }, [isAuthenticated]);
+    }, []);
+
+    const addInterest = async (interestMod: IInterest) => {
+        await UserSettingsAPI.addUserInterest(interestMod.name);
+    }
+
 
 
     const interestButtons = interests?.map(function (interest) {
         return (
-            <Button colorScheme={"purple"}>{interest.name}</Button>
+            <HStack spacing={1} justifyContent={'center'} marginTop={50}>
+                <Button rightIcon={<AddIcon/>} size={"lg"} colorScheme={"purple"} variant={"outline"} >
+                    <label>{interest.name}</label>
+                </Button>
+            </HStack>
         );
     });
     

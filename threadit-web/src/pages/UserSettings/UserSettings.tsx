@@ -2,9 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { Box, Button, HStack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, useColorMode, VStack, Text, Avatar, Tag, TagLeftIcon, TagLabel, TagCloseButton } from "@chakra-ui/react";
-import { InterestList } from "../../containers/Interests/InterestList";
-import InterestAPI from "../../api/InterestAPI";
-import { IInterest } from "../../models/Interest";
+
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
 import UserSettingsAPI from "../../api/UserSettingsApi";
