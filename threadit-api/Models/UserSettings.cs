@@ -11,6 +11,5 @@
         //each string is a spool Id
         public  List<string> SpoolsJoined { get; set; } = new List<string>();
 
-        public bool newUser { get; set; } = true;
     }
 }
