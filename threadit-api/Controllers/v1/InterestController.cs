@@ -7,7 +7,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
-    [Route("v1/interests")]
+    [Route("v1/interest")]
     public class InterestController : ControllerBase {
         [HttpGet("all")]
         [AuthenticationRequired]

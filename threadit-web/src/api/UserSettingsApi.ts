@@ -9,6 +9,7 @@ const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
 const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/addInterest/");
 const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/removeInterest/");
+const belongUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/belong/")
 
 export default class UserSettingsAPI {
 
@@ -71,6 +72,16 @@ export default class UserSettingsAPI {
 
         if (!response.ok) {
             throw new Error(`Failed to remove interest from user: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async belongUserInterest(interest: string): Promise<boolean> {
+        const response = await getWithAuth(belongUserInterestsEndpoint + interest);
+
+        if(!response.ok) {
+            throw new Error(`Failed to check if user is interested in this interest: ${await response.text()}`)
         }
 
         return await response.json();

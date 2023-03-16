@@ -101,6 +101,21 @@ namespace ThreaditAPI.Controllers.v1
             string[] interests = await userSettingsService.RemoveUserInterestAsync(userDTO.Id, interestName);
             return Ok(interests);
         }
+
+        [HttpGet("belong/{interestName}")]
+        [AuthenticationRequired]
+
+        public async Task<IActionResult> BelongInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            bool belong = await userSettingsService.BelongInterestAsync(userDTO.Id, interestName);
+            return Ok(belong);
+        }
     }
 }
 

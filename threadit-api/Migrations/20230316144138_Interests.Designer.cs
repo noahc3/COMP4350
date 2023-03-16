@@ -13,7 +13,7 @@ using ThreaditAPI.Database;
 namespace ThreaditAPI.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20230316032145_[Interests]")]
+    [Migration("20230316144138_Interests")]
     partial class Interests
     {
         /// <inheritdoc />

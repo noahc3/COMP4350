@@ -124,5 +124,19 @@ namespace ThreaditAPI.Repositories
             string[] interests = resultSettings.Interests.ToArray();
             return interests;
         }
+
+        public async Task<bool> BelongInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            bool result = false;
+            if(resultSettings == null)
+                throw new Exception("settings do not exist.");
+            
+            if(resultSettings.Interests.Contains(interest))
+            {
+                result = true;
+            }
+            return result;
+        }
     }
 }

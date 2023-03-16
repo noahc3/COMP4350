@@ -1,5 +1,5 @@
 import { AddIcon, StarIcon} from "@chakra-ui/icons";
-import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack, Tag, TagLabel, TagRightIcon } from "@chakra-ui/react";
+import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack, Tag, TagLabel, TagRightIcon, Alert, AlertIcon } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
@@ -10,14 +10,18 @@ import { PostFeed } from "../../containers/Posts/PostFeed";
 import { IThreadFull } from "../../models/ThreadFull";
 import { IInterest } from "../../models/Interest";
 import { authStore } from "../../stores/AuthStore";
+import { useParams } from "react-router";
 
 export const Home = observer(() => {
 
     const isAuthenticated = authStore.isAuthenticated;
+    const { id } = useParams();
     const [threads, setThreads] = useState<IThreadFull[]>([]);
-    const [userInterests, setUserInterests] = useState<string[]>([]);
     const [interests, setInterests] = useState<IInterest[]>([]);
+    const [userInterests, setUserInterests] = useState<string[]>([]);
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
+    const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
     
     React.useEffect(() => {
         ThreadAPI.getAllThreads().then((threads) => {
@@ -31,16 +35,43 @@ export const Home = observer(() => {
         });
     }, []);
 
+    React.useEffect(() => {
+        UserSettingsAPI.getUserInterests().then((interests) => {
+            setUserInterests(interests);
+        });
+    }, [])
+
+    React.useEffect(() => {
+        setIsLoadingBelongs(belongs === undefined)
+    }, [belongs, setIsLoadingBelongs])
+
     const addInterest = async (interestMod: IInterest) => {
         await UserSettingsAPI.addUserInterest(interestMod.name);
     }
 
+    /*React.useEffect(() => {
+        // dont ask.
+        if (id && profile) {
+            (async () => { setBelongs(await UserSettingsAPI.belongUserInterest({interests.name})) })()
+        }
+    }, [id, profile])*/
 
+    /*
+        {belongs ? <>
+            <Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>
+                Leave Spool
+            </Button>
+        </> : <>
+            <Button isLoading={isLoadingBelongs} leftIcon={<CheckIcon />} colorScheme={isLoadingBelongs ? 'gray' : 'green'} onClick={() => { joinSpool() }}>
+                Join Spool
+            </Button>
+        </>}
+    */
 
     const interestButtons = interests?.map(function (interest) {
         return (
-            <HStack spacing={1} justifyContent={'center'} marginTop={50}>
-                <Button rightIcon={<AddIcon/>} size={"lg"} colorScheme={"purple"} variant={"outline"} >
+            <HStack spacing={1} justifyContent={'center'}>
+                <Button rightIcon={<AddIcon/>} size={"lg"} colorScheme={"purple"} variant={"outline"} onClick={() => {addInterest(interest)}}>
                     <label>{interest.name}</label>
                 </Button>
             </HStack>

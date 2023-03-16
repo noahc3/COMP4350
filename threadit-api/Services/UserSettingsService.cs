@@ -73,5 +73,10 @@ namespace ThreaditAPI.Services
             return await this.userSettingsRepository.RemoveUserInterestAsync(userId, interestName);
         }
 
+        public async Task<bool> BelongInterestAsync(string userId, string interestName)
+        {
+            return await this.userSettingsRepository.BelongInterestAsync(userId, interestName);
+        }
+
     }
 }
