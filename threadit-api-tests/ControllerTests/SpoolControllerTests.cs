@@ -68,8 +68,16 @@ public class SpoolControllerTests
         var endpoint = String.Format(Endpoints.V1_SPOOL_CREATE);
         var result = _client1.PostAsync(endpoint, Utils.WrapContent<Spool>(_spool1)).Result;
 
-        //it was already added in setup, but lets verify
+        //it was already added in setup, but lets verify we failed to add
         Assert.IsFalse(result.IsSuccessStatusCode);
+
+        //ensure it is there though
+        endpoint = String.Format(Endpoints.V1_SPOOL_GET, _spool1.Name);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var spool = Utils.ParseResponse<Spool>(result);
+        Assert.That(spool, Is.Not.Null);
+        Assert.IsTrue(_spool1.Id.Equals(spool.Id));
 
         //update the spool
         endpoint = String.Format(Endpoints.V1_SPOOL_SAVE_RULES, _spool1.Id);

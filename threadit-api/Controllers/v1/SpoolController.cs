@@ -47,10 +47,6 @@ namespace ThreaditAPI.Controllers.v1 {
         public async Task<IActionResult> PostSpool([FromBody] PostSpoolRequest request, [FromServices] SpoolService spoolService) {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
-            if (userDTO == null)
-            {
-                return Unauthorized();
-            }
 
             Spool spool = new Spool
             {
@@ -105,13 +101,7 @@ namespace ThreaditAPI.Controllers.v1 {
         public async Task<IActionResult> AddModerator([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
             Spool? spool;
-            try { 
-                spool = await spoolService.AddModeratorAsync(spoolId, userName);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            spool = await spoolService.AddModeratorAsync(spoolId, userName);
 
             return Ok(spool);
         }
@@ -121,14 +111,7 @@ namespace ThreaditAPI.Controllers.v1 {
         public async Task<IActionResult> ChangeOwner([FromRoute] string spoolId, [FromRoute] string userName, [FromServices] SpoolService spoolService)
         {
             Spool? spool;
-            try
-            {
-                spool = await spoolService.ChangeOwnerAsync(spoolId, userName);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            spool = await spoolService.ChangeOwnerAsync(spoolId, userName);
             return Ok(spool);
         }
 
@@ -144,15 +127,8 @@ namespace ThreaditAPI.Controllers.v1 {
         [AuthenticationRequired]
         public async Task<IActionResult> SaveRules([FromRoute] string spoolId, [FromBody] SaveRulesRequest rules, [FromServices] SpoolService spoolService)
         {
-            try
-            {
-                await spoolService.SaveRulesAsync(spoolId, rules.Rules);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await spoolService.SaveRulesAsync(spoolId, rules.Rules);
+            return Ok();
         }
     }
 }

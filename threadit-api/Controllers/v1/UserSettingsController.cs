@@ -17,10 +17,6 @@ namespace ThreaditAPI.Controllers.v1
         {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
-            if (userDTO == null)
-            {
-                return Unauthorized();
-            }
             UserSettings userSettings = await userSettingsService.RemoveUserSettingsAsync(userDTO.Id, spoolName);
             return Ok(userSettings);
         }
@@ -31,10 +27,6 @@ namespace ThreaditAPI.Controllers.v1
         {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
-            if (userDTO == null)
-            {
-                return Unauthorized();
-            }
             UserSettings userSettings = await userSettingsService.JoinUserSettingsAsync(userDTO.Id, spoolName);
             return Ok(userSettings);
         }
@@ -45,10 +37,6 @@ namespace ThreaditAPI.Controllers.v1
         {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
-            if (userDTO == null)
-            {
-                return Unauthorized();
-            }
             bool belongs = await userSettingsService.CheckSpoolUserAsync(userDTO.Id, spoolName);
             return Ok(belongs);
         }
