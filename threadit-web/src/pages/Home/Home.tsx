@@ -41,32 +41,9 @@ export const Home = observer(() => {
         });
     }, [])
 
-    React.useEffect(() => {
-        setIsLoadingBelongs(belongs === undefined)
-    }, [belongs, setIsLoadingBelongs])
-
     const addInterest = async (interestMod: IInterest) => {
         await UserSettingsAPI.addUserInterest(interestMod.name);
     }
-
-    /*React.useEffect(() => {
-        // dont ask.
-        if (id && profile) {
-            (async () => { setBelongs(await UserSettingsAPI.belongUserInterest({interests.name})) })()
-        }
-    }, [id, profile])*/
-
-    /*
-        {belongs ? <>
-            <Button leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => { removeSpool() }}>
-                Leave Spool
-            </Button>
-        </> : <>
-            <Button isLoading={isLoadingBelongs} leftIcon={<CheckIcon />} colorScheme={isLoadingBelongs ? 'gray' : 'green'} onClick={() => { joinSpool() }}>
-                Join Spool
-            </Button>
-        </>}
-    */
 
     const interestButtons = interests?.map(function (interest) {
         return (

@@ -49,7 +49,7 @@ namespace ThreaditAPI.Repositories {
             if(interest == null)
                 throw new Exception("Interest does not exist");
             int spoolCount = await DeIterateSpoolCount(interest);
-            if(spoolCount <= 0){
+            if(spoolCount <= 0 && interestName != "General"){
                 db.Interests.Remove(interest);
                 await db.SaveChangesAsync();
             }

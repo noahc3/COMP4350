@@ -41,6 +41,11 @@ namespace ThreaditAPI.Repositories
             if (dbSpool == null)
                 throw new Exception("Spool does not exist");
 
+            string[] interests = dbSpool.Interests.ToArray();
+            foreach(string inter in interests)
+            {
+                await this.RemoveUserInterestAsync(userId, inter);
+            }
             resultSettings.SpoolsJoined.Remove(dbSpool!.Id);
             await db.SaveChangesAsync();
 
@@ -62,6 +67,11 @@ namespace ThreaditAPI.Repositories
 
             if (!resultSettings.SpoolsJoined.Contains(dbSpool!.Id))
             {
+                string[] interests = dbSpool.Interests.ToArray();
+                foreach(string inter in interests)
+                {
+                    await this.AddUserInterestAsync(userId, inter);
+                }
                 resultSettings.SpoolsJoined.Add(dbSpool!.Id);
                 await db.SaveChangesAsync();
             }

@@ -14,8 +14,8 @@ export const UserSettings = observer(() => {
     const[interests, setInterests] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        UserSettingsAPI.getUserInterests().then((interests) => {
-            setInterests(interests);
+        UserSettingsAPI.getUserInterests().then((interest) => {
+            setInterests(interest);
         });
     }, [profile, isAuthenticated]);
 
