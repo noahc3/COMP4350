@@ -7,8 +7,8 @@ const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");
 const joinSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/join/");
 const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
-const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/add/");
-const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests/remove/");
+const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/addInterest/");
+const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/removeInterest/");
 
 export default class UserSettingsAPI {
 
@@ -67,9 +67,10 @@ export default class UserSettingsAPI {
     }
 
     static async removeUserInterest(interest: string): Promise<string[]> {
-        const response = await getWithAuth(addUserInterestsEndpoint + interest);
+        const response = await getWithAuth(removeUserInterestsEndpoint + interest);
+        
 
-        if (!response.ok) {
+        if (response.ok) {
             throw new Error(`Failed to remove interest from user: ${await response.text()}`);
         }
 

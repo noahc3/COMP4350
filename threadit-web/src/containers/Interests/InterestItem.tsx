@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-import { IUserSettings } from "../../models/UserSettings";
+import { IInterest } from "../../models/Interest";
 
-export const InterestItem = observer(({userSettings}: {userSettings: IUserSettings}) => {
+export const InterestItem = observer(({interest}: {interest: IInterest | any}) => {
     return (
         <>
-            <div>InterestItem</div>
+            
         </>
     );
 })

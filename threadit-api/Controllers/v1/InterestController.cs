@@ -25,7 +25,7 @@ namespace ThreaditAPI.Controllers.v1 {
                 return Unauthorized();
             }
 
-            Interest interest = await interestService.AddInterestAsync(interestName);
+            Interest[] interest = await interestService.AddInterestAsync(interestName);
             return Ok(interest);
         }
 
@@ -38,7 +38,7 @@ namespace ThreaditAPI.Controllers.v1 {
                 return Unauthorized();
             }
 
-            bool result = await interestService.RemoveInterestAsync(interestName);
+            Interest[] result = await interestService.RemoveInterestAsync(interestName);
             return Ok(result);
         }
     }

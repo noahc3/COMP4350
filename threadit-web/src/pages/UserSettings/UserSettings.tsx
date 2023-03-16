@@ -1,10 +1,43 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
-import { Box, Button, HStack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, useColorMode, VStack, Text, Avatar } from "@chakra-ui/react";
+import { Box, Button, HStack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, useColorMode, VStack, Text, Avatar, Tag, TagLeftIcon, TagLabel, TagCloseButton } from "@chakra-ui/react";
+import { InterestList } from "../../containers/Interests/InterestList";
+import InterestAPI from "../../api/InterestAPI";
+import { IInterest } from "../../models/Interest";
+import { userStore } from "../../stores/UserStore";
+import { authStore } from "../../stores/AuthStore";
+import UserSettingsAPI from "../../api/UserSettingsApi";
 
 export const UserSettings = observer(() => {
+    const profile = userStore.userProfile;
+    const isAuthenticated = authStore.isAuthenticated;
     const{colorMode, toggleColorMode} = useColorMode();
+    const[interests, setInterests] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        UserSettingsAPI.getUserInterests().then((interests) => {
+            setInterests(interests);
+        });
+    }, [profile, isAuthenticated]);
+
+    const removeInterest = async (interestMod: string) => {
+            UserSettingsAPI.removeUserInterest(interestMod).then(
+                (interests) => { setInterests(interests) }
+            );
+    }
+
+
+    const interested = interests?.map(function (interest) {
+        return (
+            <HStack spacing={1} justifyContent={'center'} marginTop={50}>
+                <Tag size={"lg"} colorScheme={"purple"} variant={"solid"} >
+                    <TagLabel>{interest}</TagLabel>
+                    <TagCloseButton onClick={() => {removeInterest(interest)}}></TagCloseButton>
+                </Tag>
+            </HStack>
+        );
+    });
 
         return (
             <Box className="profilepanel"  rounded='lg' w='xxl' h='100%'> 
@@ -32,7 +65,10 @@ export const UserSettings = observer(() => {
                                 </HStack>
                             </TabPanel>
                             <TabPanel>
+                                <VStack spacing ={5} justifyContent={'center'}>
                                 <Text fontSize={'xl'}>Interests:</Text>
+                                    {interested}
+                                </VStack>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

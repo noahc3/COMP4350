@@ -101,7 +101,7 @@ namespace ThreaditAPI.Repositories
 
             if (!resultSettings.Interests.Contains(interest))
             {
-                resultSettings.Interests.Add(interest);
+                resultSettings.Interests.Add(interest!);
                 await db.SaveChangesAsync();
             }
 
@@ -117,7 +117,7 @@ namespace ThreaditAPI.Repositories
 
             if (resultSettings.Interests.Contains(interest))
             {
-                resultSettings.Interests.Remove(interest);
+                resultSettings.Interests.Remove(interest!);
                 await db.SaveChangesAsync();
             }
 

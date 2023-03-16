@@ -74,7 +74,7 @@ namespace ThreaditAPI.Controllers.v1
             }
         }
 
-        [HttpGet("add/{interestName}")]
+        [HttpGet("addInterest/{interestName}")]
         [AuthenticationRequired]
         public async Task<IActionResult> AddInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
         {
@@ -85,6 +85,20 @@ namespace ThreaditAPI.Controllers.v1
                 return Unauthorized();
             }
             string[] interests = await userSettingsService.AddUserInterestAsync(userDTO.Id, interestName);
+            return Ok(interests);
+        }
+
+        [HttpGet("removeInterest/{interestName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RemoveInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            string[] interests = await userSettingsService.RemoveUserInterestAsync(userDTO.Id, interestName);
             return Ok(interests);
         }
     }

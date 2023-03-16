@@ -29,13 +29,13 @@ export const Home = observer(() => {
         UserSettingsAPI.getUserInterests().then((userInterests) => {
             setUserInterests(userInterests);
         });
-    }, [userInterests]);
+    }, [isAuthenticated]);
 
     React.useEffect(() => {
         InterestAPI.getAllInterests().then((interests) => {
             setInterests(interests);
         });
-    }, [interests]);
+    }, [isAuthenticated]);
 
 
     const interestButtons = interests?.map(function (interest) {

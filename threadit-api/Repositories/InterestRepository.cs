@@ -12,7 +12,7 @@ namespace ThreaditAPI.Repositories {
             return interests;
         }
 
-        public async Task<Interest> AddInterestAsync(string interestName){
+        public async Task<Interest[]> AddInterestAsync(string interestName){
             //Adds to the interests table if it doesn't exist, iterates SpoolCount if it does
             if(!await db.Interests.AnyAsync(i => i.Name == interestName)){
                 Interest interest = new Interest{
@@ -21,7 +21,8 @@ namespace ThreaditAPI.Repositories {
                 };
             await db.Interests.AddAsync(interest);
             await db.SaveChangesAsync();
-            return interest;
+            Interest[] interestList = await db.Interests.ToArrayAsync();
+            return interestList;
             }
             else{
                 Interest? interest = await db.Interests.FirstOrDefaultAsync(i => i.Name == interestName);
@@ -29,7 +30,8 @@ namespace ThreaditAPI.Repositories {
                     throw new Exception("Interest does not exist");
                 interest.SpoolCount++;
                 await db.SaveChangesAsync();
-                return interest;
+                Interest[] interestList = await db.Interests.ToArrayAsync();
+                return interestList;
             }
         }
 
@@ -41,7 +43,7 @@ namespace ThreaditAPI.Repositories {
             return interest.SpoolCount;
         }
 
-        public async Task<bool> RemoveInterestAsync(string interestName){
+        public async Task<Interest[]> RemoveInterestAsync(string interestName){
             //Removes from the interests table if it has no more Spools referencing this interest, deiterates SpoolCount if it does
             Interest? interest = await db.Interests.FirstOrDefaultAsync(i => i.Name == interestName);
             if(interest == null)
@@ -51,7 +53,8 @@ namespace ThreaditAPI.Repositories {
                 db.Interests.Remove(interest);
                 await db.SaveChangesAsync();
             }
-            return true;
+            Interest[] interestList = await db.Interests.ToArrayAsync();
+            return interestList;
         }
     }
 }

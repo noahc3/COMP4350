@@ -14,14 +14,14 @@ namespace ThreaditAPI.Services{
             return interests;
         }
 
-        public async Task<Interest> AddInterestAsync(string interestName){
-            Interest interest = await this.interestRepository.AddInterestAsync(interestName);
+        public async Task<Interest[]> AddInterestAsync(string interestName){
+            Interest[] interest = await this.interestRepository.AddInterestAsync(interestName);
             return interest;
         }
 
-        public async Task<bool> RemoveInterestAsync(string interestName){
-            bool removed = await this.interestRepository.RemoveInterestAsync(interestName);
-            return removed;
+        public async Task<Interest[]> RemoveInterestAsync(string interestName){
+            Interest[] postRemoved = await this.interestRepository.RemoveInterestAsync(interestName);
+            return postRemoved;
         }
     }
 }
