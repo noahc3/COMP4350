@@ -26,7 +26,8 @@ export const ThreadSorter = observer(({ onThreadsSorted }: { onThreadsSorted: (t
                 onThreadsSorted(threads);
             });
         }
-    }, [id, sortType, searchString, onThreadsSorted])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, sortType, searchString])
 
     const sortThreads = (sortType: string) => {
         if(id){
