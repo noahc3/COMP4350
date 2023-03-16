@@ -17,7 +17,7 @@ public static class Endpoints {
     public const string V1_SPOOL_MODS = "/v1/spool/mods/{0}";
     public const string V1_SPOOL_ADD_MOD = "/v1/spool/mods/add/{0}/{1}";
     public const string V1_SPOOL_REMOVE_MOD = "/v1/spool/mods/remove/{0}/{1}";
-    public const string V1_SPOOL_CHANGE_OWNER = "/v1/spool/mods/change/{0}/{1}";
+    public const string V1_SPOOL_CHANGE_OWNER = "/v1/spool/change/{0}/{1}";
     public const string V1_SPOOL_SAVE_RULES = "/v1/spool/save/{0}";
 
     // UserSettings

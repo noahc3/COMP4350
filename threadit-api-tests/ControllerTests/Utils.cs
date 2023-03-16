@@ -139,9 +139,8 @@ public static class Utils {
 
     public static UserSettings JoinSpool(HttpClient authenticatedClient, string spoolName)
     {
-        var response = authenticatedClient.GetAsync(Endpoints.V1_USERSETTINGS_JOIN).Result;
+        var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_USERSETTINGS_JOIN, spoolName)).Result;
 
-        Console.WriteLine(response);
         var settings = ParseResponse<UserSettings>(response);
 
         if (settings == null)
