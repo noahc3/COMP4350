@@ -31,7 +31,7 @@ export const Sidebar = observer(() => {
                 <Button colorScheme={"purple"}>{spool.name}</Button>
             </NavLink>
         );
-    }); //code is wip for now, need to set up the right calls for this to work
+    });
 
     const joinedButtons = joinedSpools?.map(function (spool) {
         return (
@@ -75,7 +75,7 @@ export const Sidebar = observer(() => {
             <Box overflowX="auto" h="50%">
                 {profile && <>
                     <Spacer />
-                    <Text mb={"0.5rem"} fontWeight={"bold"}>Joined Spools</Text>
+                    <Text mb={"0.5rem"} fontWeight={"bold"}>Suggested Spools</Text>
                     <>{suggestedButtons}</>
                 </>}
                 <Spacer />
