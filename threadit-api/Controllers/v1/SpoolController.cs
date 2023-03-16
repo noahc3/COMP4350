@@ -81,8 +81,8 @@ namespace ThreaditAPI.Controllers.v1 {
         [AuthenticationRequired]
         public async Task<IActionResult> DeleteSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
         {
-            //TODO: make sure the requesting user is the spool owner
-            await spoolService.DeleteSpoolAsync(spoolId);
+            UserDTO user = Request.HttpContext.GetUser();
+            await spoolService.DeleteSpoolAsync(spoolId, user.Id);
             return Ok();
         }
 

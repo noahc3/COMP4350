@@ -10,4 +10,6 @@ export interface IThreadFull {
     dateCreated: string
     stitches: string[]
     rips: string[]
+    topLevelCommentCount: number
+    commentCount: number
 }
