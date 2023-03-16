@@ -1,8 +1,9 @@
 import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
 import { IThreadFull } from "../../models/ThreadFull";
+import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import Moment from 'react-moment';
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
@@ -15,6 +16,7 @@ import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
+    const [stateThread, setStateThread] = useState(thread);
     const [isEditing, setIsEditing] = React.useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -26,6 +28,10 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const isSpoolOwner = (isAuthenticated && thread) ? spool?.ownerId === userStore.userProfile?.id : false;
     const isModerator = (isAuthenticated && thread) ? spool?.moderators.includes(userStore.userProfile!.id) : false;
     const disableInputs = isSaving || isDeleting;
+    const profile = userStore.userProfile;
+    const [isStitched, setIsStitched] = useState(false);
+    const [isRipped, setIsRipped] = useState(false);
+
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>
@@ -62,6 +68,31 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
         }
     }
 
+    const stitchThread = async () => {
+        if (thread) {
+            const stitchedThread = await ThreadAPI.stitchThread(thread.id);
+            if(stitchedThread != null){
+                setStateThread(stitchedThread);
+            }
+          }
+    }
+
+    const ripThread = async () => {
+        if (thread) {
+            const rippedThread = await ThreadAPI.ripThread(thread.id);
+            if(rippedThread != null){
+                setStateThread(rippedThread);
+            }
+          }
+    }
+
+    React.useEffect(() => {
+        if(stateThread){
+            setIsStitched(stateThread.stitches.includes(profile ? profile.id : ""));
+            setIsRipped(stateThread.rips.includes(profile ? profile.id : ""));
+        }
+    }, [profile, stateThread])
+
     return (
         <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%" className="threadPost">
             {thread ? (
@@ -87,6 +118,13 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                                 )}
                         </>
                     }
+
+                    <HStack>
+                        <ButtonGroup size={'sm'} isAttached>
+                            <Button leftIcon={<ArrowUpIcon />} onClick={() => { stitchThread() }} colorScheme={isStitched ? "blue" : "gray"}>{stateThread.stitches.length}</Button>
+                            <Button leftIcon={<ArrowDownIcon />} onClick={() => { ripThread() }} colorScheme={isRipped ? "red" : "gray"}>{stateThread.rips.length}</Button>
+                        </ButtonGroup>
+                    </HStack>
 
                     {(isThreadOwner || isSpoolOwner || isModerator) &&
                         <HStack>

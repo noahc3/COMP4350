@@ -6,6 +6,8 @@ import { deleteWithAuth, get, postWithAuth } from "./Request";
 const threadEndpoint = ApiEndpoint('/v1/thread/');
 const postThreadEndpoint = ApiEndpoint('/v1/thread/create');
 const editThreadEndpoint = ApiEndpoint('/v1/thread/edit');
+const stitchThreadEndpoint = ApiEndpoint('/v1/thread/stitch');
+const ripThreadEndpoint = ApiEndpoint('/v1/thread/rip');
 const allThreadsEndpoint = ApiEndpoint('/v1/thread/all');
 
 export default class ThreadAPI {
@@ -34,8 +36,8 @@ export default class ThreadAPI {
         return await response.json();
     }
 
-    static async getAllThreads(): Promise<IThreadFull[]> {
-        const response = await get(allThreadsEndpoint);
+    static async getAllThreads(sortType: string, searchWord: string): Promise<IThreadFull[]> {
+        const response = await get(allThreadsEndpoint + (sortType === '' ? '' : '/' + sortType) + (searchWord === '' ? '' : '/?q=' + searchWord));
     
         if (!response.ok) {
             throw new Error(`Failed to get all threads: ${await response.text()}`);
@@ -58,5 +60,25 @@ export default class ThreadAPI {
         if (!response.ok) {
             throw new Error(`Failed to delete thread: ${await response.text()}`);
         }
+    }
+
+    static async stitchThread(threadId: string): Promise<void> {
+        const response = await postWithAuth(stitchThreadEndpoint, threadId);
+
+        if (!response.ok) {
+            throw new Error(`Failed to stitch thread: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async ripThread(threadId: string): Promise<void> {
+        const response = await postWithAuth(ripThreadEndpoint, threadId);
+
+        if (!response.ok) {
+            throw new Error(`Failed to rip thread: ${await response.text()}`);
+        }
+
+        return await response.json();
     }
 }
