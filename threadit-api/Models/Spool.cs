@@ -14,9 +14,5 @@
         {
 
         }
-        public Spool(string ownerId)
-        {
-            this.OwnerId = ownerId;
-        }
     }
 }

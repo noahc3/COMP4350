@@ -8,9 +8,5 @@
         {
 
         }
-
-        public User(string email, string username) : base(email, username)
-        {
-        }
     }
 }
