@@ -26,7 +26,7 @@ export const ThreadSorter = observer(({ onThreadsSorted }: { onThreadsSorted: (t
                 onThreadsSorted(threads);
             });
         }
-    }, [id, sortType, searchString])
+    }, [id, sortType, searchString, onThreadsSorted])
 
     const sortThreads = (sortType: string) => {
         if(id){

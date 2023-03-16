@@ -20,15 +20,21 @@ export const FeedPostItem = observer(({thread}: {thread: IThreadFull | any}) => 
     )
 
     const stitchThread = async () => {
-        ThreadAPI.stitchThread(stateThread.id).then((stitchedThread) => {
-            setStateThread(stitchedThread);
-        });
+        if (thread) {
+            const stitchedThread = await ThreadAPI.stitchThread(thread.id);
+            if(stitchedThread != null){
+                setStateThread(stitchedThread);
+            }
+          }
     }
 
     const ripThread = async () => {
-        ThreadAPI.ripThread(stateThread.id).then((rippedThread) => {
-            setStateThread(rippedThread);
-        });
+        if (thread) {
+            const rippedThread = await ThreadAPI.ripThread(thread.id);
+            if(rippedThread != null){
+                setStateThread(rippedThread);
+            }
+          }
     }
 
     React.useEffect(() => {
