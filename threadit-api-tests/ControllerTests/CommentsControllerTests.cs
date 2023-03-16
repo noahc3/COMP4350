@@ -18,8 +18,18 @@ public class CommentsControllerTests {
     [SetUp]
     public void Setup()
     {
-        (_client1, _user1, _) = Utils.CreateAndAuthenticateUser();
-        (_client2, _user2, _) = Utils.CreateAndAuthenticateUser();
+        UserDTO _user1Temp;
+        UserDTO _user2Temp;
+        HttpClient _client1Temp;
+        HttpClient _client2Temp;
+
+        (_client1Temp, _user1Temp, _) = Utils.CreateAndAuthenticateUser();
+        (_client2Temp, _user2Temp, _) = Utils.CreateAndAuthenticateUser();
+
+        _user1 = _user1Temp;
+        _user2 = _user2Temp;
+        _client1 = _client1Temp;
+        _client2 = _client2Temp;
 
         _spool = Utils.CreateSpool(_client1, _user1.Id);
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id);
@@ -182,7 +192,6 @@ public class CommentsControllerTests {
                 Assert.IsTrue(result.IsSuccessStatusCode);
                 var reply = Utils.ParseResponse<Comment>(result);
                 Assert.That(reply, Is.Not.Null);
-                Assert.That(replyText, Is.EqualTo(replyText));
 
                 comments.Add(reply);
 
@@ -193,7 +202,6 @@ public class CommentsControllerTests {
                     Assert.IsTrue(result.IsSuccessStatusCode);
                     var reply2 = Utils.ParseResponse<Comment>(result);
                     Assert.That(reply2, Is.Not.Null);
-                    Assert.That(replyText2, Is.EqualTo(replyText2));
 
                     comments.Add(reply2);
                 }
