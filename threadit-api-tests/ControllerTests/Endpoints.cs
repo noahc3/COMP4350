@@ -6,6 +6,7 @@ public static class Endpoints {
 
     // User
     public const string V1_USER_PROFILE = "/v1/user/profile";
+    public const string V1_USER_LOGOUT = "/v1/user/logout";
 
     // Spool
     public const string V1_SPOOL_GET = "/v1/spool/{0}";
@@ -22,6 +23,8 @@ public static class Endpoints {
 
     // UserSettings
     public const string V1_USERSETTINGS_JOIN = "/v1/userSettings/join/{0}";
+    public const string V1_USERSETTINGS_REMOVE = "/v1/userSettings/remove/{0}";
+    public const string V1_USERSETTINGS_CHECK = "/v1/userSettings/check/{0}";
 
     // Thread
     public const string V1_THREAD_GET = "/v1/thread/{0}";
