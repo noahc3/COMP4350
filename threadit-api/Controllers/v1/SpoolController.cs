@@ -75,7 +75,7 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
-        [HttpGet("suggested/{userID}")]
+        [HttpGet("suggested/{userId}")]
         public async Task<IActionResult> SuggestedSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
         {
             List<Spool> spools = await spoolService.GetSuggestedSpoolsAsync(userId);

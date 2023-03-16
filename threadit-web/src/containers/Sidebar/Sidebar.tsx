@@ -45,6 +45,10 @@ export const Sidebar = observer(() => {
         spoolStore.refreshJoinedSpools();
     }, [profile, isAuthenticated])
 
+    React.useEffect(() => {
+        spoolStore.refreshSuggestedSpools();
+    }, [profile, isAuthenticated])
+
     const logout = async () => {
         authStore.logout();
     }
