@@ -36,7 +36,7 @@ namespace ThreaditAPI.Services
             return spool.OwnerId == userId || spool.Moderators.Contains(userId);
         }
 
-        public async Task<Models.Thread?> GetThreadAsync(string threadId)
+        public async Task<Models.Thread> GetThreadAsync(string threadId)
         {
             Models.Thread? returnedThread = await this.threadRepository.GetThreadAsync(threadId);
             if (returnedThread != null)

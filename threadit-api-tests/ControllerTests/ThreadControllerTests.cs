@@ -13,7 +13,9 @@ public class ThreadControllerTests
     private Spool _spool;
     private ThreaditAPI.Models.Thread _thread;
     private UserDTO _user1;
+    private UserDTO _user2;
     private HttpClient _client1;
+    private HttpClient _client2;
 
     [SetUp]
     public void Setup()
@@ -28,6 +30,8 @@ public class ThreadControllerTests
 
         _user1 = _user1Temp;
         _client1 = _client1Temp;
+        _user2 = _user1Temp;
+        _client2 = _client1Temp;
 
         _spool = Utils.CreateSpool(_client1, _user1.Id);
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString());
@@ -48,6 +52,15 @@ public class ThreadControllerTests
         Assert.IsTrue(thread1.SpoolId.Equals(_spool.Id));
         Assert.IsTrue(thread1.Content.Equals(_thread.Content));
         Assert.IsTrue(thread1.Title.Equals(_thread.Title));
+
+        //get the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_GET, _thread.Id);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.That(thread1.Id.Equals(_thread.Id));
+
 
         //update the thread
         var content2 = Utils.GetCleanUUIDString();
@@ -89,5 +102,92 @@ public class ThreadControllerTests
         Assert.That(thread.SpoolId.Equals(_thread.SpoolId));
         Assert.That(thread.Title.Equals(_thread.Title));
         Assert.That(thread.Topic.Equals(_thread.Topic));
+    }
+
+    [Test]
+    public void DeleteThreadsInvalidTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _thread.Id);
+        try
+        {
+            var result = _client2.DeleteAsync(endpoint).Result;
+            Assert.Fail();
+        }
+        catch
+        {
+            Assert.Pass();
+        }
+
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, "");
+        try
+        {
+            var result = _client2.DeleteAsync(endpoint).Result;
+            Assert.Fail();
+        }
+        catch
+        {
+            Assert.Pass();
+        }
+    }
+
+    [Test]
+    public void EditBadThreadTests()
+    {
+        var endpoint = String.Format(Endpoints.V1_THREAD_EDIT);
+        ThreaditAPI.Models.Thread editedThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "",
+            OwnerId = _thread.OwnerId,
+            SpoolId = _spool.Id
+        };
+
+        try
+        {
+            var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+            Assert.Fail();
+        }
+        catch
+        {
+            Assert.Pass();
+        }
+
+        editedThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = Guid.NewGuid().ToString(),
+            OwnerId = _thread.OwnerId,
+            SpoolId = _spool.Id
+        };
+
+        var failedResult = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+        Assert.IsFalse(failedResult.IsSuccessStatusCode);
+
+        editedThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = _thread.Id,
+            OwnerId = _thread.OwnerId,
+            SpoolId = _spool.Id
+        };
+
+        try
+        {
+            var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+            Assert.Fail();
+        }
+        catch
+        {
+            Assert.Pass();
+        }
+
+        //edit while not the owner
+        editedThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = _thread.Id,
+            OwnerId = _user1.Id,
+            SpoolId = _spool.Id,
+            Content = "new content"
+        };
+
+        var nonExceptionResult = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+        Assert.IsFalse(nonExceptionResult.IsSuccessStatusCode);
     }
 }

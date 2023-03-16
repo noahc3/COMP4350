@@ -22,10 +22,6 @@ namespace ThreaditAPI.Controllers.v1 {
         [AuthenticationRequired]
         public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService) {            
             UserDTO? userDTO = Request.HttpContext.GetUser();
-
-            if (userDTO == null) {
-                return Unauthorized();
-            }
             
             Models.Thread thread = new Models.Thread{
                 Title = request.Title,
@@ -35,12 +31,8 @@ namespace ThreaditAPI.Controllers.v1 {
                 SpoolId = request.SpoolId
             };
 
-            try {
-                thread = await threadService.InsertThreadAsync(thread);
-                return Ok(thread);
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }   
+            thread = await threadService.InsertThreadAsync(thread);
+            return Ok(thread);
         }
 
         [HttpGet("all")]
@@ -70,26 +62,16 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest("Thread data is invalid.");
             }
 
-            UserDTO? profile = Request.HttpContext.GetUser();
-            if (profile == null) {
-                return Unauthorized();
-            }
+            UserDTO profile = Request.HttpContext.GetUser();
 
-            Models.Thread? threadFromDb = await threadService.GetThreadAsync(thread.Id);
-            if (threadFromDb == null) {
-                return BadRequest("Thread does not exist.");
-            }
+            Models.Thread threadFromDb = await threadService.GetThreadAsync(thread.Id);
 
             if (threadFromDb.OwnerId != profile.Id) {
                 return Unauthorized();
             }
 
-            try {
-                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(thread);
-                return Ok(updatedThread);
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }
+            Models.Thread? updatedThread = await threadService.UpdateThreadAsync(thread);
+            return Ok(updatedThread);
         }
 
         [HttpDelete("{threadId}")]
@@ -101,12 +83,8 @@ namespace ThreaditAPI.Controllers.v1 {
 
             UserDTO profile = Request.HttpContext.GetUser();
 
-            try {
-                await threadService.DeleteThreadAsync(threadId, profile.Id);
-                return Ok();
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }
+            await threadService.DeleteThreadAsync(threadId, profile.Id);
+            return Ok();
         }
 
         [HttpPost("stitch")]
