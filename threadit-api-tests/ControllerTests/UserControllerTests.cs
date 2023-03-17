@@ -59,7 +59,7 @@ public class UserControllerTests
         Assert.IsTrue(loggedInUser!.Id.Equals(_user1.Id));
 
         //logout
-        endpoint = String.Format(Endpoints.V1_USER_LOGOUT);
+        endpoint = String.Format(Endpoints.V1_AUTH_LOGOUT);
 
         result = _client1.GetAsync(endpoint).Result;
 

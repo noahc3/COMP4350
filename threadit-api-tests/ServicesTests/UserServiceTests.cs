@@ -31,22 +31,23 @@ public class UserServiceTests
         }
         catch (Exception)
         {
+            
+        }
+
+        //also check with giving it a user entity which has not been added
+        try
+        {
+            UserDTO initialUser = new User()
+            {
+                Username = "doesNotExistUser",
+                Email = "doesNotExistUser@test.com"
+            };
+            UserDTO? returnedUser2 = await _userService.GetUserAsync(initialUser);
+            Assert.Fail();
+        }
+        catch(Exception)
+        {
             Assert.Pass();
-            //also check with giving it a user entity which has not been added
-            try
-            {
-                UserDTO initialUser = new User()
-                {
-                    Username = "doesNotExistUser",
-                    Email = "doesNotExistUser@test.com"
-                };
-                UserDTO? returnedUser2 = await _userService.GetUserAsync(initialUser);
-                Assert.Fail();
-            }
-            catch(Exception)
-            {
-                Assert.Fail();
-            }
         }
     }
 

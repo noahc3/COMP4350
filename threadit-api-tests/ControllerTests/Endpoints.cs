@@ -3,10 +3,10 @@ public static class Endpoints {
     public const string V1_AUTH_REGISTER = "/v1/auth/register";
     public const string V1_AUTH_LOGIN = "/v1/auth/login";
     public const string V1_AUTH_CHECKSESSION = "/v1/auth/checksession";
+    public const string V1_AUTH_LOGOUT = "/v1/auth/logout";
 
     // User
     public const string V1_USER_PROFILE = "/v1/user/profile";
-    public const string V1_USER_LOGOUT = "/v1/user/logout";
 
     // Spool
     public const string V1_SPOOL_GET = "/v1/spool/{0}";
