@@ -10,7 +10,6 @@ import { PostFeed } from "../../containers/Posts/PostFeed";
 import { IThreadFull } from "../../models/ThreadFull";
 import { IInterest } from "../../models/Interest";
 import { authStore } from "../../stores/AuthStore";
-import { useParams } from "react-router";
 import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
 import { spoolStore } from "../../stores/SpoolStore";
 import { navStore } from "../../stores/NavStore";
