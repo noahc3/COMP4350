@@ -173,7 +173,7 @@ namespace ThreaditAPI.Repositories
                 foreach (Spool dbspool in allSpools)
                 {
                     //we add things to the suggested feed if they are in the users interests and they are not already joined.
-                    if (dbspool.Interests.Intersect(interests).Any() && !setting.SpoolsJoined.Contains(dbspool.Name))
+                    if (dbspool.Interests.Intersect(interests).Any() && !setting.SpoolsJoined.Contains(dbspool.Id))
                     {
                         spools.Add(dbspool);
                     }
