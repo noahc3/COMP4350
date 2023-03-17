@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack, useClipboard } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
@@ -7,7 +7,7 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import Moment from 'react-moment';
 import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
-import { IoCreateOutline } from "react-icons/io5";
+import { IoCreateOutline, IoArrowRedo } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineDelete } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
 import { navStore } from "../../stores/NavStore";
@@ -30,7 +30,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const profile = userStore.userProfile;
     const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
     const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
-
+    const { onCopy, hasCopied } = useClipboard(window.location.href);
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>
@@ -125,6 +125,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                             <Button leftIcon={<ArrowUpIcon />} onClick={() => { stitchThread() }} colorScheme={isStitched ? "blue" : "gray"}>{thread.stitches.length}</Button>
                             <Button leftIcon={<ArrowDownIcon />} onClick={() => { ripThread() }} colorScheme={isRipped ? "red" : "gray"}>{thread.rips.length}</Button>
                         </ButtonGroup>
+                        <Button size={'sm'} leftIcon={<IoArrowRedo />} onClick={onCopy}>{hasCopied ? "Copied Link!" : "Share"}</Button>
                     </HStack>
 
                     {(isThreadOwner || isSpoolOwner || isModerator) &&
