@@ -11,9 +11,12 @@ import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
 import { CommentBox } from "./CommentBox";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const CommentItem = observer(
     ({ spool, commentId, commentTree }: { spool: ISpool, commentId: string, commentTree: CommentTree }) => {
+        const colorMode = useColorMode();
         const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
         const [isReplying, setIsReplying] = useState<boolean>(false);
         const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
@@ -143,7 +146,7 @@ export const CommentItem = observer(
                     <Flex alignItems={'start'} paddingStart={"15px"} flexDir={"column"} w="100%">
                         <HStack>
                             <Text>{comment?.ownerName}</Text>
-                            <Text color={"blackAlpha.600"}> • {dateString}</Text>
+                            <Text color={mode("blackAlpha.600", "gray.300")(colorMode)}> • {dateString}</Text>
                         </HStack>
                         {!isEditing ? (
                             <>
@@ -165,7 +168,7 @@ export const CommentItem = observer(
                                     </ButtonGroup>) : (
                                         <>
                                             <HStack >
-                                                <Text color="red">Are you sure you want to delete?</Text>
+                                                <Text color={mode('red', 'red.300')(colorMode)}>Are you sure you want to delete?</Text>
                                                 <ButtonGroup size={'sm'} isAttached>
                                                     <Button disabled={disableInputs} isLoading={isDeleting} loadingText="Deleting..." leftIcon={<MdOutlineDelete />} colorScheme="red" onClick={() => { submitDelete() }}>Delete</Button>
                                                     <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsConfirmingDelete(false) }}>Cancel</Button>

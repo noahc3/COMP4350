@@ -14,9 +14,12 @@ import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
 import { spoolStore } from "../../stores/SpoolStore";
 import { navStore } from "../../stores/NavStore";
 import {Select, SingleValue, ActionMeta } from "chakra-react-select"
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const Home = observer(() => {
     const isAuthenticated = authStore.isAuthenticated;
+    const { colorMode } = useColorMode()
     const [threads, setThreads] = useState<IThreadFull[]>([]);
     const [interests, setInterests] = useState<IInterest[]>([]);
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -53,6 +56,7 @@ export const Home = observer(() => {
 
     const addInterest = async (interestMod: IInterest) => {
         await UserSettingsAPI.addUserInterest(interestMod.name);
+        await spoolStore.refreshSuggestedSpools();
     }
 
     const interestButtons = interests?.map(function (interest) {
@@ -75,7 +79,7 @@ export const Home = observer(() => {
             <Container centerContent={false} maxW={"container.md"}>
                 <HStack>
                     <VStack w="100%">
-                        <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                        <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")({colorMode})} w="100%" h="50%" p="0.5rem">
                             <Select
                                 options={options}
                                 onChange={onSpoolSelected}

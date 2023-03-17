@@ -1,10 +1,13 @@
 import { Spacer, Text, Button, ButtonGroup, Textarea, VStack, Flex } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import React from "react";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const CommentBox = observer(
   ({submitCallback, cancelCallback}: {submitCallback: Function, cancelCallback?: Function | undefined}) => {
 
+    const colorMode = useColorMode();
     const [content, setContent] = React.useState<string>('');
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
@@ -26,7 +29,7 @@ export const CommentBox = observer(
         <VStack w='100%' alignItems={'end'}>
             <Textarea disabled={disableInputs} placeholder="What are your thoughts?" maxH={'30rem'} w='100%' value={content} onChange={(e) => {setContent(e.target.value)}}></Textarea>
             <Flex direction={'row'} w='100%' alignItems={'center'}>
-                <Text color={'blackAlpha.600'}>You should familiarize yourself with the spool's rules before commenting.</Text>
+                <Text color={mode('blackAlpha.600', 'gray.300')(colorMode)}>You should familiarize yourself with the spool's rules before commenting.</Text>
                 <Spacer/>
                 <ButtonGroup size={'sm'}>
                     {cancelCallback && <Button onClick={() => {cancelCallback()}} disabled={disableInputs}>Cancel</Button>}
