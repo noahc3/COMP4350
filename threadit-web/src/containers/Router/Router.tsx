@@ -18,11 +18,13 @@ export const Router: React.FC = observer(() => {
         <HistoryRouter history={history}>
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/:sortType" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/s/:spoolName/createthread" element={<PostThread />} />
                 <Route path="/createSpool" element={<PostSpool />} />
                 <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
                 <Route path="/s/:id" element={<Spool />} />
+                <Route path="/s/:id/:sortType" element={<Spool />}/>
                 <Route path="/s/:name/manage" element={<ManageSpool />} />
                 <Route path="/profile" element={<UserSettings />} />
             </Routes>

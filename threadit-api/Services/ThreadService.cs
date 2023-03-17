@@ -7,9 +7,33 @@ namespace ThreaditAPI.Services
     public class ThreadService
     {
         private readonly ThreadRepository threadRepository;
+        private readonly CommentRepository commentRepository;
+        private readonly SpoolRepository spoolRepository;
         public ThreadService(PostgresDbContext context)
         {
             this.threadRepository = new ThreadRepository(context);
+            this.commentRepository = new CommentRepository(context);
+            this.spoolRepository = new SpoolRepository(context);
+        }
+
+        private async Task<bool> IsDeleteAuthorized(string threadId, string userId) {
+            Models.Thread? thread = await this.threadRepository.GetThreadAsync(threadId);
+
+            if (thread == null) {
+                return false;
+            }
+
+            if (userId == thread.OwnerId) {
+                return true;
+            }
+
+            Spool? spool = await this.spoolRepository.GetSpoolAsync(thread.SpoolId);
+
+            if (spool == null) {
+                return false;
+            }
+
+            return spool.OwnerId == userId || spool.Moderators.Contains(userId);
         }
 
         public async Task<Models.Thread?> GetThreadAsync(string threadId)
@@ -63,7 +87,9 @@ namespace ThreaditAPI.Services
                     OwnerId = returnedThread.OwnerId,
                     DateCreated = returnedThread.DateCreated,
                     AuthorName = user.Username,
-                    SpoolName = spool.Name
+                    SpoolName = spool.Name,
+                    CommentCount = await commentRepository.TotalThreadCommentCount(returnedThread.Id),
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(returnedThread.Id)
                 };
                 return fullThread;
             }          
@@ -100,6 +126,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
+                    Stitches = threads[i].Stitches,
+                    Rips = threads[i].Rips,
                     AuthorName = user.Username,
                     SpoolName = spool.Name
                 };
@@ -136,6 +164,8 @@ namespace ThreaditAPI.Services
                     SpoolId = threads[i].SpoolId,
                     OwnerId = threads[i].OwnerId,
                     DateCreated = threads[i].DateCreated,
+                    Stitches = threads[i].Stitches,
+                    Rips = threads[i].Rips,
                     AuthorName = user.Username,
                     SpoolName = spool.Name
                 };
@@ -157,8 +187,13 @@ namespace ThreaditAPI.Services
             return thread;
         }
 
-        public async Task DeleteThreadAsync(string threadId)
+        public async Task DeleteThreadAsync(string threadId, string userId)
         {
+            if (!await IsDeleteAuthorized(threadId, userId)) {
+                throw new Exception("User does not have permission to delete comment.");
+            }
+
+            await this.commentRepository.HardDeleteAllThreadCommentsAsync(threadId);
             await this.threadRepository.DeleteThreadAsync(threadId);
         }
     }

@@ -81,7 +81,8 @@ namespace ThreaditAPI.Database {
                     OwnerId = "3257a727-3e9c-4734-808e-42ff9725c779",
                     SpoolId = "40cf2fd7-4c7b-422e-a9e7-3ee689e4d68c",
                     Content = "This needs at least some content lol",
-                    DateCreated = DateTime.Parse("2023-02-15T10:16:39+00:00").ToUniversalTime()
+                    DateCreated = DateTime.Parse("2023-02-15T10:16:39+00:00").ToUniversalTime(),
+                    Stitches = new List<string> { "3257a727-3e9c-4734-808e-42ff9725c779" }
                 },
                 new Models.Thread { 
                     Id = "6649b329-44d8-49ed-be89-a9ce56d35d04",

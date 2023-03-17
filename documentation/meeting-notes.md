@@ -94,3 +94,20 @@
 - Cody: create front end test suite and implement joining spools
 - Nathan: implement stitch/rip system and filtering feeds
 - Noah: implement comments and subscribing to threads
+
+## Meeting 6
+
+| Date| Time | Length
+| --- | --- | --- |
+| 16 Mar, 2023 | 10:30-11:15pm | 0.75 hours |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Look over sprint 3 requirements, delegate final tasks
+
+**Assigned Tasks:**
+- Anthony: finish tasks, write controller tests
+- Cody: write controller tests
+- Nathan: fix display issues, write controller tests
+- Noah: small fixes, auth controller tests

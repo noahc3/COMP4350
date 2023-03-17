@@ -270,7 +270,7 @@ public class ThreadServiceTests
         Assert.IsTrue(returnedThread.SpoolId.Equals(testThread.SpoolId));
 
         //delete thread
-        await _threadService.DeleteThreadAsync(testThread.Id);
+        await _threadService.DeleteThreadAsync(testThread.Id, "d94ddc51-9031-4e9b-b712-6df32cd75641");
 
         //get the thread again
         Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(testThread));
