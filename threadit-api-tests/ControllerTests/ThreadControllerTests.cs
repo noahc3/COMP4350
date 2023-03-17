@@ -14,8 +14,11 @@ public class ThreadControllerTests
     private ThreaditAPI.Models.Thread _thread;
     private UserDTO _user1;
     private UserDTO _user2;
+    private UserDTO _user3;
     private HttpClient _client1;
     private HttpClient _client2;
+    private HttpClient _client3;
+
     private String _sortType;
 
     [SetUp]
@@ -23,18 +26,23 @@ public class ThreadControllerTests
     {
         UserDTO _user1Temp;
         UserDTO _user2Temp;
+        UserDTO _user3Temp;
         HttpClient _client1Temp;
         HttpClient _client2Temp;
+        HttpClient _client3Temp;
 
         (_client1Temp, _user1Temp, _) = Utils.CreateAndAuthenticateUser();
         (_client2Temp, _user2Temp, _) = Utils.CreateAndAuthenticateUser();
+        (_client3Temp, _user3Temp, _) = Utils.CreateAndAuthenticateUser();
 
         _user1 = _user1Temp;
         _client1 = _client1Temp;
         _user2 = _user2Temp;
         _client2 = _client2Temp;
+        _user3 = _user3Temp;
+        _client3 = _client3Temp;
 
-        _spool = Utils.CreateSpool(_client1, _user1.Id);
+        _spool = Utils.CreateSpool(_client1, _user1.Id, null, new List<string> { _user3.Id });
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString());
         _sortType = "new";
     }
@@ -90,6 +98,27 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void GetThreadTest() {
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET, _thread.Id);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var thread = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread, Is.Not.Null);
+        Assert.That(thread.Id.Equals(_thread.Id));
+        Assert.That(thread.OwnerId.Equals(_thread.OwnerId));
+        Assert.That(thread.SpoolId.Equals(_thread.SpoolId));
+        Assert.That(thread.Title.Equals(_thread.Title));
+        Assert.That(thread.Content.Equals(_thread.Content));
+    }
+
+    [Test]
+    public void GetThreadInvalidTest() {
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET, "invalid");
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
     public void GetAllThreadsTest()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL);
@@ -109,7 +138,23 @@ public class ThreadControllerTests
     [Test]
     public void GetAllThreadsFilteredTest()
     {
-        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED, _spool.Name, _sortType);
+        foreach (string sortType in new string[] { "hot", "top", "controversial", "comments", "new" }) {
+            var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED, sortType);
+
+            var result = _client1.GetAsync(endpoint).Result;
+
+            Assert.IsTrue(result.IsSuccessStatusCode);
+            var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+            Assert.IsFalse(threads.IsNullOrEmpty());
+
+            Assert.IsTrue(threads!.Any((x) => x.Id.Equals(_thread.Id)));
+        }
+    }
+
+    [Test]
+    public void GetAllThreadsFilteredWithQueryTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED + "?q=" + _thread.Title, _sortType);
 
         var result = _client1.GetAsync(endpoint).Result;
 
@@ -121,17 +166,18 @@ public class ThreadControllerTests
     }
 
     [Test]
-    public void GetAllThreadsFilteredWithQueryTest()
+    public void SpoolOwnerAndModDeleteTest()
     {
-        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED + "?q=" + _thread.Title, _spool.Name, _sortType);
+        var t1 = Utils.CreateThread(_client2, _user2.Id, _spool.Id);
+        var t2 = Utils.CreateThread(_client2, _user2.Id, _spool.Id);
 
-        var result = _client1.GetAsync(endpoint).Result;
-
+        var endpoint = String.Format(Endpoints.V1_THREAD_DELETE, t1.Id);
+        var result = _client1.DeleteAsync(endpoint).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
-        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
-        Assert.IsFalse(threads.IsNullOrEmpty());
 
-        Assert.IsTrue(threads![0].Id.Equals(_thread.Id));
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, t2.Id);
+        result = _client3.DeleteAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
     }
 
     [Test]
@@ -144,7 +190,7 @@ public class ThreadControllerTests
         var result = _client3.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
 
-        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, "%20");
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, Utils.GetCleanUUIDString());
         result = _client3.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
     }

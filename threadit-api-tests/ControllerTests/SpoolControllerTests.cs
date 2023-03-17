@@ -66,6 +66,16 @@ public class SpoolControllerTests
     }
 
     [Test]
+    public void GetSpoolThreads_SpoolNotExists_ShouldFail()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS, Utils.GetCleanUUIDString());
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
     public void GetSpoolThreadsWithQueryTest()
     {
         var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS + "?q=" + _thread1.Title, _spool1.Name);
@@ -257,6 +267,11 @@ public class SpoolControllerTests
             Assert.Fail();
         }
 
+        //add user2 as a mod again (should fail)
+        endpoint = String.Format(Endpoints.V1_SPOOL_ADD_MOD, _spool1.Id, _user2.Username);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+
         //remove user2 as mod
         endpoint = String.Format(Endpoints.V1_SPOOL_REMOVE_MOD, _spool1.Id, _user2.Id);
         result = _client1.GetAsync(endpoint).Result;
@@ -267,6 +282,20 @@ public class SpoolControllerTests
         result = _client1.GetAsync(endpoint).Result;
         mods = Utils.ParseResponse<UserDTO[]>(result);
         Assert.IsTrue(mods.IsNullOrEmpty());
+
+        //add owner as a mod (should fail)
+        endpoint = String.Format(Endpoints.V1_SPOOL_ADD_MOD, _spool1.Id, _user1.Username);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void AddModerator_SpoolMissing_ShouldFail()
+    {
+        //add user2 as a mod
+        var endpoint = String.Format(Endpoints.V1_SPOOL_ADD_MOD, Utils.GetCleanUUIDString(), _user2.Username);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
     }
 
     [Test]
@@ -280,6 +309,38 @@ public class SpoolControllerTests
 
         Assert.IsTrue(_user2.Id == spool!.OwnerId);
         Assert.IsTrue(_spool1.Id == spool!.Id);
+    }
+
+    [Test]
+    public void ChangeSpoolOwner_SpoolNotExists_ShouldFail()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_CHANGE_OWNER, Utils.GetCleanUUIDString(), _user2.Username);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void ChangeSpoolOwner_AlreadyOwner_ShouldFail()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_CHANGE_OWNER, _spool1.Id, _user1.Username);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void DeleteSpool_SpoolNotExists_ShouldFail()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_DELETE, Utils.GetCleanUUIDString());
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void DeleteSpool_NotOwner_ShouldFail()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_DELETE, _spool1.Id);
+        var result = _client2.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
     }
 
     [Test]

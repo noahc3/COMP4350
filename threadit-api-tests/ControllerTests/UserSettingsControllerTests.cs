@@ -195,4 +195,9 @@ public class UserSettingsControllerTests
         belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
         Assert.IsFalse(belong);
     }
+
+    [Test]
+    public void GetInvalidUserSettingsTest() {
+        
+    }
 }

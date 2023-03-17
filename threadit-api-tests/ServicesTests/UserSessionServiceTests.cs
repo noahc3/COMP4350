@@ -75,6 +75,23 @@ public class UserSessionServiceTests
     }
 
     [Test]
+    public async Task RetrieveUserBySessionId_Expired_ShouldFail() {
+        // Create UserSession
+        UserSession testUserSession = new UserSession() {
+            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+            UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            DateExpires = DateTime.UtcNow.AddDays(-5)
+        };
+        await _dbContext.UserSessions.AddAsync(testUserSession);
+        await _dbContext.SaveChangesAsync();
+
+        // Retrieve UserSession
+        UserDTO? returnedUserSession = await _userSessionService.GetUserFromSession(testUserSession.Id);
+
+        Assert.That(returnedUserSession, Is.Null);
+    }
+
+    [Test]
     public async Task DeleteUserSession_Exists_ShouldPass() {
         // Create UserSession
         UserSession testUserSession = new UserSession() {

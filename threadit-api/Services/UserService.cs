@@ -21,18 +21,6 @@ namespace ThreaditAPI.Services {
             }
         }
 
-        public async Task<UserDTO?> GetUserAsync(UserDTO user) {
-            UserDTO? returnedUser = await this.userRepository.GetUserAsync(user);
-            if (returnedUser != null)
-            {
-                return returnedUser;
-            }
-            else
-            {
-                throw new Exception("User does not exist.");
-            }
-        }
-
         public async Task<User?> GetUserAsync(string username, string password) {
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null) {
