@@ -11,10 +11,13 @@ import { userStore } from "../../stores/UserStore";
 import { DeleteIcon, AddIcon, StarIcon } from '@chakra-ui/icons';
 import { navStore } from "../../stores/NavStore";
 import { NavLink } from "react-router-dom";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const ManageSpool = observer(() => {
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
+    const colorMode = useColorMode();
     const { name: spoolName } = useParams();
     const [spool, setSpool] = useState<ISpool>();
     const [rules, setRules] = useState(spool?.rules || "");
@@ -120,7 +123,7 @@ export const ManageSpool = observer(() => {
             <Container centerContent={false} maxW={"container.md"}>
                     <VStack>
                         {(spool && isAuthenticated) &&
-                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
+                            <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")(colorMode)} w="100%" p="0.5rem">
                                 <FormControl>
                                     <FormLabel>Rules and Description:</FormLabel>
                                 <InputGroup size='md'>
