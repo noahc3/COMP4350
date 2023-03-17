@@ -176,6 +176,30 @@ namespace ThreaditAPI.Repositories
             return spools;
         }
 
+        public async Task<List<Spool>> GetSuggestedSpoolsAsync(string userId)
+        {
+            Spool[] allSpools = await db.Spools.OrderBy(u => u.Name).ToArrayAsync();
+            UserSettings? setting = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == userId);
+            List<string>? interests = setting?.Interests;
+
+
+            List<Spool> spools = new List<Spool>();
+            if (interests != null && setting != null)
+            {
+                
+                foreach (Spool dbspool in allSpools)
+                {
+                    //we add things to the suggested feed if they are in the users interests and they are not already joined.
+                    if (dbspool.Interests.Intersect(interests).Any() && !setting.SpoolsJoined.Contains(dbspool.Id))
+                    {
+                        spools.Add(dbspool);
+                    }
+                    
+                }
+            }
+            return spools;
+        }
+
         public async Task DeleteSpoolAsync(string spoolId)
         {
             Spool? dbSpool = await GetSpoolAsync(spoolId);
