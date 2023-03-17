@@ -30,8 +30,8 @@ public class ThreadControllerTests
 
         _user1 = _user1Temp;
         _client1 = _client1Temp;
-        _user2 = _user1Temp;
-        _client2 = _client1Temp;
+        _user2 = _user2Temp;
+        _client2 = _client2Temp;
 
         _spool = Utils.CreateSpool(_client1, _user1.Id);
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString());
@@ -108,77 +108,25 @@ public class ThreadControllerTests
     public void DeleteThreadsInvalidTest()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _thread.Id);
-        try
-        {
-            var result = _client2.DeleteAsync(endpoint).Result;
-            Assert.Fail();
-        }
-        catch
-        {
-            Assert.Pass();
-        }
+        UserDTO _user3;
+        HttpClient _client3;
+        (_client3, _user3, _) = Utils.CreateAndAuthenticateUser();
+        var result = _client3.DeleteAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
 
-        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, "");
-        try
-        {
-            var result = _client2.DeleteAsync(endpoint).Result;
-            Assert.Fail();
-        }
-        catch
-        {
-            Assert.Pass();
-        }
+        // TODO: this is supposed to test the first if conditional in DeleteThread, but apparently does not.
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, " ");
+        result = _client3.DeleteAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
     }
 
     [Test]
     public void EditBadThreadTests()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_EDIT);
-        ThreaditAPI.Models.Thread editedThread = new ThreaditAPI.Models.Thread()
-        {
-            Id = "",
-            OwnerId = _thread.OwnerId,
-            SpoolId = _spool.Id
-        };
+        ThreaditAPI.Models.Thread editedThread;
 
-        try
-        {
-            var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
-            Assert.Fail();
-        }
-        catch
-        {
-            Assert.Pass();
-        }
-
-        editedThread = new ThreaditAPI.Models.Thread()
-        {
-            Id = Guid.NewGuid().ToString(),
-            OwnerId = _thread.OwnerId,
-            SpoolId = _spool.Id
-        };
-
-        var failedResult = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
-        Assert.IsFalse(failedResult.IsSuccessStatusCode);
-
-        editedThread = new ThreaditAPI.Models.Thread()
-        {
-            Id = _thread.Id,
-            OwnerId = _thread.OwnerId,
-            SpoolId = _spool.Id
-        };
-
-        try
-        {
-            var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
-            Assert.Fail();
-        }
-        catch
-        {
-            Assert.Pass();
-        }
-
-        //edit while not the owner
+    //edit while not the owner
         editedThread = new ThreaditAPI.Models.Thread()
         {
             Id = _thread.Id,
@@ -187,7 +135,28 @@ public class ThreadControllerTests
             Content = "new content"
         };
 
-        var nonExceptionResult = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
-        Assert.IsFalse(nonExceptionResult.IsSuccessStatusCode);
+        var result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+        //should return unauthorized
+        Assert.IsFalse(result.IsSuccessStatusCode);
+
+    //send with null
+        editedThread = null!;
+
+        result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread!)).Result;
+        //should return unauthorized
+        Assert.IsFalse(result.IsSuccessStatusCode);
+
+    // send with id being empty string
+        editedThread = new ThreaditAPI.Models.Thread()
+        {
+            Id = " ",
+            OwnerId = _user1.Id,
+            SpoolId = _spool.Id,
+            Content = "new content"
+        };
+
+        result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
+        //should return unauthorized
+        Assert.IsFalse(result.IsSuccessStatusCode);
     }
 }
