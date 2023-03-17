@@ -66,6 +66,20 @@ public class SpoolControllerTests
     }
 
     [Test]
+    public void GetSpoolThreadsWithQueryTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS + "?q=" + _thread1.Title, _spool1.Name);
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+        Assert.IsFalse(threads.IsNullOrEmpty());
+
+        Assert.IsTrue(threads![0].Id.Equals(_thread1.Id));
+    }
+
+    [Test]
     public void GetSpoolThreadsFilteredTest()
     {
         var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS_FILTERED, _spool1.Name, _sortType);
@@ -78,6 +92,20 @@ public class SpoolControllerTests
 
         Assert.IsTrue(threads![1].Id.Equals(_thread1.Id));
         Assert.IsTrue(threads![0].Id.Equals(_thread2.Id));
+    }
+
+    [Test]
+    public void GetSpoolThreadsFilteredWithQueryTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS_FILTERED + "?q=" + _thread1.Title, _spool1.Name, _sortType);
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+        Assert.IsFalse(threads.IsNullOrEmpty());
+
+        Assert.IsTrue(threads![0].Id.Equals(_thread1.Id));
     }
 
     [Test]
@@ -252,5 +280,22 @@ public class SpoolControllerTests
 
         Assert.IsTrue(_user2.Id == spool!.OwnerId);
         Assert.IsTrue(_spool1.Id == spool!.Id);
+    }
+
+    [Test]
+    public void SuggestedSpoolsTest() {
+        string interest = Utils.GetCleanUUIDString();
+        var spool = Utils.CreateSpool(_client2, _user2.Id, new List<string> {interest});
+        var endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest);
+        var result = _client1.GetAsync(endpoint).Result;
+
+        endpoint = String.Format(Endpoints.V1_SPOOL_SUGGESTED, _user1.Id);
+        result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var spools = Utils.ParseResponse<Spool[]>(result);
+
+        Assert.IsFalse(spools.IsNullOrEmpty());
+        Assert.That(spools!.Any((x) => x.Id == spool.Id));
     }
 }

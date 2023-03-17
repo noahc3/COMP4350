@@ -21,11 +21,17 @@ public static class Endpoints {
     public const string V1_SPOOL_REMOVE_MOD = "/v1/spool/mods/remove/{0}/{1}";
     public const string V1_SPOOL_CHANGE_OWNER = "/v1/spool/change/{0}/{1}";
     public const string V1_SPOOL_SAVE_RULES = "/v1/spool/save/{0}";
+    public const string V1_SPOOL_SUGGESTED = "/v1/spool/suggested/{0}";
 
     // UserSettings
     public const string V1_USERSETTINGS_JOIN = "/v1/userSettings/join/{0}";
     public const string V1_USERSETTINGS_REMOVE = "/v1/userSettings/remove/{0}";
     public const string V1_USERSETTINGS_CHECK = "/v1/userSettings/check/{0}";
+    public const string V1_USERSETTINGS_INTERESTS = "/v1/userSettings/interests";
+    public const string V1_USERSETTINGS_ADD_INTEREST = "/v1/userSettings/addInterest/{0}";
+    public const string V1_USERSETTINGS_REMOVE_INTEREST = "/v1/userSettings/removeInterest/{0}";
+    public const string V1_USERSETTINGS_BELONG_INTEREST = "/v1/userSettings/belong/{0}";
+
 
     // Thread
     public const string V1_THREAD_GET = "/v1/thread/{0}";
