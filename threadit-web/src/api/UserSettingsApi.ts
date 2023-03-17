@@ -6,6 +6,10 @@ import { spoolStore } from "../stores/SpoolStore";
 const removeSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/remove/");
 const joinSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/join/");
 const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
+const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
+const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/addInterest/");
+const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/removeInterest/");
+const belongUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/belong/")
 
 export default class UserSettingsAPI {
 
@@ -38,6 +42,46 @@ export default class UserSettingsAPI {
 
         if (!response.ok) {
             throw new Error(`Failed to check if the user is in the spool: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async getUserInterests(): Promise<string[]> {
+        const response = await getWithAuth(getUserInterestsEndpoint);
+
+        if (!response.ok) {
+            throw new Error(`Failed to get user interests: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async addUserInterest(interest: string): Promise<string[]> {
+        const response = await getWithAuth(addUserInterestsEndpoint + interest);
+
+        if (!response.ok) {
+            throw new Error(`Failed to add new interest to user: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async removeUserInterest(interest: string): Promise<string[]> {
+        const response = await getWithAuth(removeUserInterestsEndpoint + interest);
+
+        if (!response.ok) {
+            throw new Error(`Failed to remove interest from user: ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    static async belongUserInterest(interest: string): Promise<boolean> {
+        const response = await getWithAuth(belongUserInterestsEndpoint + interest);
+
+        if(!response.ok) {
+            throw new Error(`Failed to check if user is interested in this interest: ${await response.text()}`)
         }
 
         return await response.json();
