@@ -63,10 +63,12 @@ export const Sidebar = observer(() => {
                 <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
             </>}
             <Divider />
-            <Box overflowX="auto" h="50%">
-                <Text mb={"0.5rem"} fontWeight={"bold"}>All Spools</Text>
-                <>{allButtons}</>
-            </Box>
+            {!profile && <>
+                <Box overflowX="auto" h="50%">
+                    <Text mb={"0.5rem"} fontWeight={"bold"}>All Spools</Text>
+                    <>{allButtons}</>
+                </Box>
+            </>}
 
             <Box overflowX="auto" h="50%">
                 {profile && <>
