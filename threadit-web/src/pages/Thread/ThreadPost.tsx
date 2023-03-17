@@ -30,7 +30,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const profile = userStore.userProfile;
     const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
     const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
-    const { onCopy, value, hasCopied } = useClipboard(window.location.href);
+    const { onCopy, hasCopied } = useClipboard(window.location.href);
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>
