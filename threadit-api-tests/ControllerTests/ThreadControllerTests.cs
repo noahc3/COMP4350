@@ -16,6 +16,7 @@ public class ThreadControllerTests
     private UserDTO _user2;
     private HttpClient _client1;
     private HttpClient _client2;
+    private String _sortType;
 
     [SetUp]
     public void Setup()
@@ -35,6 +36,7 @@ public class ThreadControllerTests
 
         _spool = Utils.CreateSpool(_client1, _user1.Id);
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString());
+        _sortType = "new";
     }
 
     [Test]
@@ -105,6 +107,20 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void GetAllThreadsFilteredTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED, _spool.Name, _sortType);
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+        Assert.IsFalse(threads.IsNullOrEmpty());
+
+        Assert.IsTrue(threads![0].Id.Equals(_thread.Id));
+    }
+
+    [Test]
     public void DeleteThreadsInvalidTest()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _thread.Id);
@@ -121,12 +137,58 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void StitchAndRipThreadTest()
+    {
+        // get thread
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET, _thread.Id);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        ThreaditAPI.Models.Thread thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.That(thread1.Id.Equals(_thread.Id));
+        Assert.AreEqual(thread1.Stitches.Count, 0);
+
+        // stitch thread
+        endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Stitches.Count, 1);
+        Assert.IsTrue(thread1.Stitches.Contains(_user1.Id));
+
+        // stitch thread again to remove stitch
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Stitches.Count, 0);
+        Assert.IsFalse(thread1.Stitches.Contains(_user1.Id));
+
+        // rip thread
+        endpoint = String.Format(Endpoints.V1_THREAD_RIP);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Rips.Count, 1);
+        Assert.IsTrue(thread1.Rips.Contains(_user1.Id));
+
+        // stitch thread (also removes rip)
+        endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Rips.Count, 0);
+        Assert.AreEqual(thread1.Stitches.Count, 1);
+        Assert.IsFalse(thread1.Rips.Contains(_user1.Id));
+        Assert.IsTrue(thread1.Stitches.Contains(_user1.Id));
+    } 
+
+    [Test]
     public void EditBadThreadTests()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_EDIT);
         ThreaditAPI.Models.Thread editedThread;
 
-    //edit while not the owner
+        //edit while not the owner
         editedThread = new ThreaditAPI.Models.Thread()
         {
             Id = _thread.Id,
@@ -139,7 +201,7 @@ public class ThreadControllerTests
         //should return unauthorized
         Assert.IsFalse(result.IsSuccessStatusCode);
 
-    //send with null
+        //send with null
         editedThread = null!;
 
         result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread!)).Result;

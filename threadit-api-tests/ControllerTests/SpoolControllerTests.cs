@@ -6,6 +6,7 @@ using ThreaditAPI.Models;
 using System.Text.Json;
 using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Models.Requests;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 
 namespace ThreaditTests.Controllers;
 public class SpoolControllerTests
@@ -20,6 +21,7 @@ public class SpoolControllerTests
     private HttpClient _client2;
     private UserSettings _userSettings1;
     private UserSettings _userSettings2;
+    private String _sortType;
 
     [SetUp]
     public void Setup()
@@ -39,17 +41,34 @@ public class SpoolControllerTests
         _spool1 = Utils.CreateSpool(_client1, _user1.Id);
         _spool2 = Utils.CreateSpool(_client2, _user2.Id);
         _thread1 = Utils.CreateThread(_client1, _user1.Id, _spool1.Id);
+        _thread2 = Utils.CreateThread(_client2, _user2.Id, _spool1.Id);
 
         _userSettings2 = Utils.JoinSpool(_client2, _spool1.Name);
         _userSettings1 = Utils.JoinSpool(_client1, _spool2.Name);
 
-        _thread2 = Utils.CreateThread(_client2, _user2.Id, _spool1.Id);
+        _sortType = "new";
+
     }
 
     [Test]
     public void GetSpoolThreadsTest()
     {
         var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS, _spool1.Name);
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+        Assert.IsFalse(threads.IsNullOrEmpty());
+
+        Assert.IsTrue(threads![1].Id.Equals(_thread1.Id));
+        Assert.IsTrue(threads![0].Id.Equals(_thread2.Id));
+    }
+
+    [Test]
+    public void GetSpoolThreadsFilteredTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS_FILTERED, _spool1.Name, _sortType);
 
         var result = _client1.GetAsync(endpoint).Result;
 

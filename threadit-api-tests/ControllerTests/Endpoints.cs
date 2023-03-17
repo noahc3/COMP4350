@@ -11,6 +11,7 @@ public static class Endpoints {
     // Spool
     public const string V1_SPOOL_GET = "/v1/spool/{0}";
     public const string V1_SPOOL_GET_THREADS = "/v1/spool/threads/{0}";
+    public const string V1_SPOOL_GET_THREADS_FILTERED = "/v1/spool/threads/{0}/{1}";
     public const string V1_SPOOL_GET_ALL = "/v1/spool/all";
     public const string V1_SPOOL_CREATE = "/v1/spool/create";
     public const string V1_SPOOL_DELETE = "/v1/spool/delete/{0}";
@@ -29,8 +30,11 @@ public static class Endpoints {
     // Thread
     public const string V1_THREAD_GET = "/v1/thread/{0}";
     public const string V1_THREAD_GET_ALL = "/v1/thread/all";
+    public const string V1_THREAD_GET_ALL_FILTERED = "/v1/thread/all/{0}";
     public const string V1_THREAD_CREATE = "/v1/thread/create";
     public const string V1_THREAD_EDIT = "/v1/thread/edit";
+    public const string V1_THREAD_STITCH = "/v1/thread/stitch";
+    public const string V1_THREAD_RIP = "/v1/thread/rip";
     public const string V1_THREAD_DELETE = "/v1/thread/{0}";
 
     // Comment
