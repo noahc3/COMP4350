@@ -16,7 +16,6 @@ import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
-    const [stateThread, setStateThread] = useState(thread);
     const [isEditing, setIsEditing] = React.useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -29,8 +28,8 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const isModerator = (isAuthenticated && thread) ? spool?.moderators.includes(userStore.userProfile!.id) : false;
     const disableInputs = isSaving || isDeleting;
     const profile = userStore.userProfile;
-    const [isStitched, setIsStitched] = useState(false);
-    const [isRipped, setIsRipped] = useState(false);
+    const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
+    const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
 
 
     const dateString = (
@@ -71,8 +70,8 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const stitchThread = async () => {
         if (thread) {
             const stitchedThread = await ThreadAPI.stitchThread(thread.id);
-            if(stitchedThread != null){
-                setStateThread(stitchedThread);
+            if(stitchedThread){
+                updateStitchesAndRips(stitchedThread.stitches, stitchedThread.rips);                   
             }
           }
     }
@@ -80,18 +79,20 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const ripThread = async () => {
         if (thread) {
             const rippedThread = await ThreadAPI.ripThread(thread.id);
-            if(rippedThread != null){
-                setStateThread(rippedThread);
+            if(rippedThread){
+                updateStitchesAndRips(rippedThread.stitches, rippedThread.rips);         
             }
           }
     }
 
-    React.useEffect(() => {
-        if(stateThread){
-            setIsStitched(stateThread.stitches.includes(profile ? profile.id : ""));
-            setIsRipped(stateThread.rips.includes(profile ? profile.id : ""));
+    const updateStitchesAndRips = (newStitches: string[], newRips: string[]) => {
+        if (thread) {
+          thread.stitches = newStitches;
+          thread.rips = newRips;
+          setIsStitched(thread.stitches.includes(profile ? profile.id : ""));
+          setIsRipped(thread.rips.includes(profile ? profile.id : ""));
         }
-    }, [profile, stateThread])
+    }
 
     return (
         <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%" className="threadPost">
@@ -121,8 +122,8 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
 
                     <HStack>
                         <ButtonGroup size={'sm'} isAttached>
-                            <Button leftIcon={<ArrowUpIcon />} onClick={() => { stitchThread() }} colorScheme={isStitched ? "blue" : "gray"}>{stateThread.stitches.length}</Button>
-                            <Button leftIcon={<ArrowDownIcon />} onClick={() => { ripThread() }} colorScheme={isRipped ? "red" : "gray"}>{stateThread.rips.length}</Button>
+                            <Button leftIcon={<ArrowUpIcon />} onClick={() => { stitchThread() }} colorScheme={isStitched ? "blue" : "gray"}>{thread.stitches.length}</Button>
+                            <Button leftIcon={<ArrowDownIcon />} onClick={() => { ripThread() }} colorScheme={isRipped ? "red" : "gray"}>{thread.rips.length}</Button>
                         </ButtonGroup>
                     </HStack>
 
