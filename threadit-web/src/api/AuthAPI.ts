@@ -26,13 +26,13 @@ export default class AuthAPI {
         const response = await post(registerEndpoint, {
             email,
             username,
-            password
+            password,
         });
     
         if (!response.ok) {
             throw new Error(`Failed to register: ${await response.text()}`);
         }
-
+    
         return true;
     }
 
