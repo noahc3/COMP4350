@@ -104,7 +104,9 @@ namespace ThreaditAPI.Services
                     Stitches = threads[i].Stitches,
                     Rips = threads[i].Rips,
                     AuthorName = user.Username,
-                    SpoolName = spool.Name
+                    SpoolName = spool.Name,
+                    CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
                 };
                 fullThreads.Add(fullThread);
             }
@@ -132,7 +134,9 @@ namespace ThreaditAPI.Services
                     Stitches = threads[i].Stitches,
                     Rips = threads[i].Rips,
                     AuthorName = user.Username,
-                    SpoolName = spool.Name
+                    SpoolName = spool.Name,
+                    CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
                 };
                 fullThreads[i] = fullThread;
             }
