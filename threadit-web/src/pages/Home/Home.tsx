@@ -1,5 +1,5 @@
 import { AddIcon, StarIcon} from "@chakra-ui/icons";
-import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack, Tag, TagLabel, TagRightIcon, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack} from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
