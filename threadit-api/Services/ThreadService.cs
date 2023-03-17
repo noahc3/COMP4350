@@ -86,6 +86,8 @@ namespace ThreaditAPI.Services
                     SpoolId = returnedThread.SpoolId,
                     OwnerId = returnedThread.OwnerId,
                     DateCreated = returnedThread.DateCreated,
+                    Stitches = returnedThread.Stitches,
+                    Rips = returnedThread.Rips,
                     AuthorName = user.Username,
                     SpoolName = spool.Name,
                     CommentCount = await commentRepository.TotalThreadCommentCount(returnedThread.Id),

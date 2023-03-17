@@ -135,6 +135,7 @@ export const Spool = observer(() => {
                                     value={[ {value: searchWord ? searchWord : "", label: searchWord ? searchWord : ""} ]}
                                     onChange={handleSearch}
                                     onInputChange={handleInputChange}
+                                    noOptionsMessage={() => null}
                                     placeholder="Search"
                                 />
                             </Box>
