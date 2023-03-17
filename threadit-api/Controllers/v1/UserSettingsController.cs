@@ -56,7 +56,6 @@ namespace ThreaditAPI.Controllers.v1
         public async Task<IActionResult> AddInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
         {
             UserDTO userDTO = Request.HttpContext.GetUser();
-
             string[] interests = await userSettingsService.AddUserInterestAsync(userDTO.Id, interestName);
             return Ok(interests);
         }
@@ -66,7 +65,6 @@ namespace ThreaditAPI.Controllers.v1
         public async Task<IActionResult> RemoveInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
         {
             UserDTO userDTO = Request.HttpContext.GetUser();
-
             string[] interests = await userSettingsService.RemoveUserInterestAsync(userDTO.Id, interestName);
             return Ok(interests);
         }
@@ -76,8 +74,7 @@ namespace ThreaditAPI.Controllers.v1
 
         public async Task<IActionResult> BelongInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
         {
-            UserDTO? userDTO = Request.HttpContext.GetUser();
-            
+            UserDTO userDTO = Request.HttpContext.GetUser();
             bool belong = await userSettingsService.BelongInterestAsync(userDTO.Id, interestName);
             return Ok(belong);
         }
