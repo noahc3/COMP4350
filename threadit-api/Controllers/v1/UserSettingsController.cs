@@ -52,6 +52,70 @@ namespace ThreaditAPI.Controllers.v1
             bool belongs = await userSettingsService.CheckSpoolUserAsync(userDTO.Id, spoolName);
             return Ok(belongs);
         }
+
+        [HttpGet("interests")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> GetInterests([FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            UserSettings? settings = await userSettingsService.GetUserSettingsAsync(userDTO.Id);
+            if(settings != null)
+            {
+                return Ok(settings.Interests.ToArray());
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("addInterest/{interestName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> AddInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            string[] interests = await userSettingsService.AddUserInterestAsync(userDTO.Id, interestName);
+            return Ok(interests);
+        }
+
+        [HttpGet("removeInterest/{interestName}")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RemoveInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            string[] interests = await userSettingsService.RemoveUserInterestAsync(userDTO.Id, interestName);
+            return Ok(interests);
+        }
+
+        [HttpGet("belong/{interestName}")]
+        [AuthenticationRequired]
+
+        public async Task<IActionResult> BelongInterest([FromRoute] string interestName, [FromServices] UserSettingsService userSettingsService)
+        {
+            UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            if (userDTO == null)
+            {
+                return Unauthorized();
+            }
+            bool belong = await userSettingsService.BelongInterestAsync(userDTO.Id, interestName);
+            return Ok(belong);
+        }
     }
 }
 

@@ -10,6 +10,7 @@ import { authStore } from "../../stores/AuthStore";
 import { spoolStore } from "../../stores/SpoolStore";
 import { AddIcon } from "@chakra-ui/icons";
 import React from "react";
+import { BiCog } from "react-icons/bi";
 
 export const Sidebar = observer(() => {
     const profile = userStore.userProfile;
@@ -91,6 +92,7 @@ export const Sidebar = observer(() => {
                     <HStack marginInlineStart={2}>
                         <Avatar size={'sm'} name='Dan Abrahmov' src='/img/avatar_placeholder.png' />
                         <Text>{profile.username}</Text>
+                        <NavLink to={"/profile"}><Button leftIcon={<Icon as={BiCog} />} colorScheme={"purple"}>Profile</Button></NavLink>
                     </HStack>
                 </Box>
             </>}

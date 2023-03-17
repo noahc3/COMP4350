@@ -12,8 +12,8 @@ const allThreadsEndpoint = ApiEndpoint('/v1/thread/all');
 
 export default class ThreadAPI {
     static async getThreadById(threadId: string): Promise<IThreadFull> {
-        const response = await get(threadEndpoint + threadId);
-    
+        const response = await get(threadEndpoint + threadId);    
+
         if (!response.ok) {
             throw new Error(`Failed to get thread: ${await response.text()}`);
         }
@@ -62,7 +62,7 @@ export default class ThreadAPI {
         }
     }
 
-    static async stitchThread(threadId: string): Promise<void> {
+    static async stitchThread(threadId: string): Promise<IThreadFull> {
         const response = await postWithAuth(stitchThreadEndpoint, threadId);
 
         if (!response.ok) {
@@ -72,7 +72,7 @@ export default class ThreadAPI {
         return await response.json();
     }
 
-    static async ripThread(threadId: string): Promise<void> {
+    static async ripThread(threadId: string): Promise<IThreadFull> {
         const response = await postWithAuth(ripThreadEndpoint, threadId);
 
         if (!response.ok) {

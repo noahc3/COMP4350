@@ -32,6 +32,9 @@ namespace ThreaditAPI.Repositories
 
         public async Task InsertSpoolAsync(Spool spool)
         {
+
+            InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
+            UserSettingsRepository userSettingsRepository = new UserSettingsRepository(new PostgresDbContext()); 
             //verify the mods exist
             List<string> moderatorIds = spool.Moderators;
             List<string> modsToRemove = new List<string>();
@@ -44,9 +47,13 @@ namespace ThreaditAPI.Repositories
                 }
                 else
                 {
-                    //add spool to users joined list for the mod
+                    //add spool to users joined list for the mod and adds the interests to the user's interests
                     UserSettings? modSettings = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == moderatorId);
                     modSettings?.SpoolsJoined.Add(spool.Id);
+                    foreach(string inter in spool.Interests)
+                    {
+                        await userSettingsRepository.AddUserInterestAsync(moderatorId, inter);
+                    }
                 }
             }
             
@@ -54,6 +61,12 @@ namespace ThreaditAPI.Repositories
             {
                 spool.Moderators.Remove(moderatorId);
             }
+
+            //Adds the interests to the interest table if it doesn't exist, iterates SpoolCount if it does
+            foreach(string interest in spool.Interests)
+                {
+                    await interestRepository.AddInterestAsync(interest);
+                }
 
             //add spool to spools table
             await db.Spools.AddAsync(spool);
@@ -66,6 +79,10 @@ namespace ThreaditAPI.Repositories
                 throw new Exception("User Does not have settings.");
             }
             setting.SpoolsJoined.Add(spool.Id);
+            foreach(string inter in spool.Interests)
+                {
+                    await userSettingsRepository.AddUserInterestAsync(spool.OwnerId, inter);
+                }
 
             await db.SaveChangesAsync();
         }
@@ -193,6 +210,14 @@ namespace ThreaditAPI.Repositories
                 {
                     db.Threads.Remove(dbThread);
                 }
+
+                //Removes the interests from the interest table if no more Spools carry that interest, deiterates SpoolCount if it still has references
+                InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
+                foreach(string interest in dbSpool.Interests)
+                {
+                    await interestRepository.RemoveInterestAsync(interest);
+                }
+                
                 UserDTO[] spoolUsers = await GetUsersForSpool(spoolId);
                 UserSettingsRepository userSettingsRepository = new UserSettingsRepository( new PostgresDbContext() );
                 foreach (var spoolUser in spoolUsers)

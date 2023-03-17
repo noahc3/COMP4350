@@ -41,6 +41,11 @@ namespace ThreaditAPI.Repositories
             if (dbSpool == null)
                 throw new Exception("Spool does not exist");
 
+            string[] interests = dbSpool.Interests.ToArray();
+            foreach(string inter in interests)
+            {
+                await this.RemoveUserInterestAsync(userId, inter);
+            }
             resultSettings.SpoolsJoined.Remove(dbSpool!.Id);
             await db.SaveChangesAsync();
 
@@ -62,6 +67,11 @@ namespace ThreaditAPI.Repositories
 
             if (!resultSettings.SpoolsJoined.Contains(dbSpool!.Id))
             {
+                string[] interests = dbSpool.Interests.ToArray();
+                foreach(string inter in interests)
+                {
+                    await this.AddUserInterestAsync(userId, inter);
+                }
                 resultSettings.SpoolsJoined.Add(dbSpool!.Id);
                 await db.SaveChangesAsync();
             }
@@ -81,6 +91,62 @@ namespace ThreaditAPI.Repositories
 
             bool belongs = resultSettings.SpoolsJoined.Contains(dbSpool.Id);
             return belongs;
+        }
+
+         public async Task<string[]> GetUserInterestsAsync(string userId)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            string[] interests = resultSettings.Interests.ToArray();
+            return interests;
+        }
+
+        public async Task<string[]> AddUserInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            if (!resultSettings.Interests.Contains(interest))
+            {
+                resultSettings.Interests.Add(interest);
+                await db.SaveChangesAsync();
+            }
+
+            string[] interests = resultSettings.Interests.ToArray();
+            return interests;
+        }
+
+        public async Task<string[]> RemoveUserInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            if (resultSettings == null)
+                throw new Exception("Settings do not exist.");
+
+            if (resultSettings.Interests.Contains(interest))
+            {
+                resultSettings.Interests.Remove(interest);
+                await db.SaveChangesAsync();
+            }
+
+            string[] interests = resultSettings.Interests.ToArray();
+            return interests;
+        }
+
+        public async Task<bool> BelongInterestAsync(string userId, string interest)
+        {
+            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+            bool result = false;
+            if(resultSettings == null)
+                throw new Exception("settings do not exist.");
+            
+            if(resultSettings.Interests.Contains(interest))
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }
