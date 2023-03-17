@@ -104,7 +104,7 @@ public class ThreadServiceTests
         // Ensure Thread is not in database
         foreach(var thread in threads)
         {
-            Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread));
+            Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread.Id));
         }
 
         // Ensure query by spool returns no items
@@ -211,7 +211,7 @@ public class ThreadServiceTests
         // Ensure Thread is not in database
         foreach(var thread in threads)
         {
-            Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread));
+            Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread.Id));
         }
 
         // Ensure query by spool returns no items
@@ -254,7 +254,7 @@ public class ThreadServiceTests
         };
 
         // Ensure Thread is not in database
-        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(testThread));
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(testThread.Id));
 
         // Add Thread to database
         await _threadService.InsertThreadAsync(testThread);
@@ -273,6 +273,6 @@ public class ThreadServiceTests
         await _threadService.DeleteThreadAsync(testThread.Id, "d94ddc51-9031-4e9b-b712-6df32cd75641");
 
         //get the thread again
-        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(testThread));
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(testThread.Id));
     }
 }

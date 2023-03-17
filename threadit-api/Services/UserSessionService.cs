@@ -34,7 +34,7 @@ namespace ThreaditAPI.Services {
             UserSession? session = await this.sessionRepository.GetUserSessionAsync(sessionId);
             if (session == null) {
                 return null;
-            } else if (session.DateExpires < DateTime.Now) {
+            } else if (session.DateExpires < DateTime.UtcNow) {
                 await this.sessionRepository.DeleteUserSessionAsync(sessionId);
                 return null;
             }

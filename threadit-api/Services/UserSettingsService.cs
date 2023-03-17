@@ -25,21 +25,11 @@ namespace ThreaditAPI.Services
             }
         }
 
-        public async Task<UserSettings?> GetUserSettingsAsync(UserSettings userSettings)
-        {
-            UserSettings? userSett = await this.userSettingsRepository.GetUserSettingsAsync(userSettings);
-            if (userSett == null)
-            {
-                throw new Exception("UserSettings does not exist.");
-            }
-            return userSett;
-        }
-
-        public async Task<UserSettings> InsertUserSettingsAsync(UserSettings userSettings)
-        {
-            await this.userSettingsRepository.InsertUserSettingsAsync(userSettings);
-            return userSettings;
-        }
+        // public async Task<UserSettings> InsertUserSettingsAsync(UserSettings userSettings)
+        // {
+        //     await this.userSettingsRepository.InsertUserSettingsAsync(userSettings);
+        //     return userSettings;
+        // }
 
         public async Task<UserSettings> RemoveUserSettingsAsync(string userId, string spoolName)
         {
@@ -58,10 +48,10 @@ namespace ThreaditAPI.Services
             return await this.userSettingsRepository.CheckSpoolUserAsync(userId, spoolName);
         }
 
-        public async Task<string[]> GetUserInterestsAsync(string userId)
-        {
-            return await this.userSettingsRepository.GetUserInterestsAsync(userId);
-        }
+        // public async Task<string[]> GetUserInterestsAsync(string userId)
+        // {
+        //     return await this.userSettingsRepository.GetUserInterestsAsync(userId);
+        // }
 
         public async Task<string[]> AddUserInterestAsync(string userId, string interestName)
         {

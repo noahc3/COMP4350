@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using ThreaditAPI.Models.Requests;
 using ThreaditAPI.Services;
 using ThreaditAPI.Models;
+using ThreaditAPI.Middleware;
+using Microsoft.Net.Http.Headers;
 
 namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
@@ -43,6 +45,15 @@ namespace ThreaditAPI.Controllers.v1 {
             } else {
                 return Unauthorized();
             }
+        }
+
+        [HttpGet("logout")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> Logout([FromServices] UserSessionService userSessionService) {
+            string sessionToken = Request.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            await userSessionService.DeleteUserSessionAsync(sessionToken);
+            
+            return Ok();
         }
     }
 }

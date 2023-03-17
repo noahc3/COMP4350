@@ -93,15 +93,15 @@ namespace ThreaditAPI.Repositories
             return belongs;
         }
 
-         public async Task<string[]> GetUserInterestsAsync(string userId)
-        {
-            UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
-            if (resultSettings == null)
-                throw new Exception("Settings do not exist.");
+        // public async Task<string[]> GetUserInterestsAsync(string userId)
+        // {
+        //     UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
+        //     if (resultSettings == null)
+        //         throw new Exception("Settings do not exist.");
 
-            string[] interests = resultSettings.Interests.ToArray();
-            return interests;
-        }
+        //     string[] interests = resultSettings.Interests.ToArray();
+        //     return interests;
+        // }
 
         public async Task<string[]> AddUserInterestAsync(string userId, string interest)
         {
