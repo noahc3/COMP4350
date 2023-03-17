@@ -191,7 +191,6 @@ namespace ThreaditAPI.Repositories
                 Models.Thread[] dbThreads = await db.Threads.Where(u => u.SpoolId == spoolId).ToArrayAsync();
                 foreach (var dbThread in dbThreads)
                 {
-                    //TODO once comments are implemented, in here you can delete all the comments for the thread.
                     db.Threads.Remove(dbThread);
                 }
                 UserDTO[] spoolUsers = await GetUsersForSpool(spoolId);

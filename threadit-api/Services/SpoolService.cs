@@ -8,9 +8,11 @@ namespace ThreaditAPI.Services
     public class SpoolService
     {
         private readonly SpoolRepository spoolRepository;
+        private readonly CommentRepository commentRepository;
         public SpoolService(PostgresDbContext context)
         {
             this.spoolRepository = new SpoolRepository(context);
+            this.commentRepository = new CommentRepository(context);
         }
 
         public async Task<Spool?> GetSpoolAsync(string spoolId)
@@ -164,8 +166,20 @@ namespace ThreaditAPI.Services
             return users;
         }
 
-        public async Task DeleteSpoolAsync(string spoolId)
+        public async Task DeleteSpoolAsync(string spoolId, string userId)
         {
+            Spool? spool = await this.spoolRepository.GetSpoolAsync(spoolId);
+            if (spool == null)
+            {
+                throw new Exception("Spool does not exist.");
+            }
+
+            if (spool.OwnerId != userId)
+            {
+                throw new Exception("User does not have permission to delete spool.");
+            }
+
+            await this.commentRepository.HardDeleteAllSpoolCommentsAsync(spoolId);
             await this.spoolRepository.DeleteSpoolAsync(spoolId);
         }
 

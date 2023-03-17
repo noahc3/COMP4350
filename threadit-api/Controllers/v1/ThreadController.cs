@@ -49,6 +49,20 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(threads);
         }
 
+        [HttpGet("all/{sortType}")]
+        public async Task<IActionResult> GetAllThreadsFiltered([FromRoute] string sortType, [FromServices] ThreadService threadService, [FromServices] FilterService filterService, [FromQuery(Name = "q")] string searchWord = "") {
+            Models.ThreadFull[] threads = await threadService.GetAllThreadsAsync();
+            if(searchWord != "")
+            {
+                threads = filterService.SearchThreads(threads.ToArray(), searchWord).ToArray();
+            }
+            if(sortType != "")
+            {
+                threads = filterService.SortThreads(threads.ToArray(), sortType).ToArray();
+            }
+            return Ok(threads);
+        }
+
         [HttpPost("edit")]
         [AuthenticationRequired]
         public async Task<IActionResult> EditThread([FromServices] ThreadService threadService, [FromBody] Models.Thread thread) {
@@ -85,6 +99,23 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest("Thread ID is invalid.");
             }
 
+            UserDTO profile = Request.HttpContext.GetUser();
+
+            try {
+                await threadService.DeleteThreadAsync(threadId, profile.Id);
+                return Ok();
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("stitch")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> StitchThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
+            if (String.IsNullOrWhiteSpace(threadId)) {
+                return BadRequest("Thread data is invalid.");
+            }
+
             UserDTO? profile = Request.HttpContext.GetUser();
             if (profile == null) {
                 return Unauthorized();
@@ -95,13 +126,62 @@ namespace ThreaditAPI.Controllers.v1 {
                 return BadRequest("Thread does not exist.");
             }
 
-            if (threadFromDb.OwnerId != profile.Id) {
-                return Unauthorized();
+            if(threadFromDb.Stitches.Contains(profile.Id))
+            {
+                threadFromDb.Stitches.Remove(profile.Id);
+            }
+            else
+            {
+                threadFromDb.Stitches.Add(profile.Id);
+            }
+
+            if(threadFromDb.Rips.Contains(profile.Id))
+            {
+                threadFromDb.Rips.Remove(profile.Id);
             }
 
             try {
-                await threadService.DeleteThreadAsync(threadId);
-                return Ok();
+                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
+                return Ok(updatedThread);
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("rip")]
+        [AuthenticationRequired]
+        public async Task<IActionResult> RipThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
+            if (String.IsNullOrWhiteSpace(threadId)) {
+                return BadRequest("Thread data is invalid.");
+            }
+
+            UserDTO? profile = Request.HttpContext.GetUser();
+            if (profile == null) {
+                return Unauthorized();
+            }
+
+            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
+            if (threadFromDb == null) {
+                return BadRequest("Thread does not exist.");
+            }
+
+            if(threadFromDb.Rips.Contains(profile.Id))
+            {
+                threadFromDb.Rips.Remove(profile.Id);
+            }
+            else
+            {
+                threadFromDb.Rips.Add(profile.Id);
+            }
+
+            if(threadFromDb.Stitches.Contains(profile.Id))
+            {
+                threadFromDb.Stitches.Remove(profile.Id);
+            }
+
+            try {
+                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
+                return Ok(updatedThread);
             } catch (Exception e) {
                 return BadRequest(e.Message);
             }

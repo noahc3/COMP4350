@@ -1,4 +1,4 @@
-import { Box, Button, Container, VStack, Spacer, HStack, Text, Center } from "@chakra-ui/react";
+import { Box, Button, Container, VStack, Spacer, HStack, Text, Center} from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useParams } from "react-router";
@@ -13,17 +13,46 @@ import { authStore } from "../../stores/AuthStore";
 import { spoolUsersStore } from "../../stores/SpoolUsersStore";
 import { userStore } from "../../stores/UserStore";
 import { spoolStore } from "../../stores/SpoolStore";
+import { navStore } from "../../stores/NavStore";
 import { DeleteIcon, CheckIcon, SettingsIcon } from '@chakra-ui/icons';
+import { OptionBase, Select, SingleValue, ActionMeta } from "chakra-react-select";
 import UserSettingsAPI from "../../api/UserSettingsApi";
+import { useSearchParams } from 'react-router-dom';
+import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
+
 
 export const Spool = observer(() => {
+    interface Option extends OptionBase {
+        label: string;
+        value: string;
+      }
+
     const profile = userStore.userProfile;
     const { id } = useParams();
     const [spool, setSpool] = useState<ISpool>();
     const [threads, setThreads] = useState<IThreadFull[]>([]);
     const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
     const [isLoadingBelongs, setIsLoadingBelongs] = useState<boolean>(true);
+    const { sortType } = useParams();
     const isAuthenticated = authStore.isAuthenticated;
+    const [selectOption, setSelectOption] = useState<Option[]>([]);
+    const [searchParams] = useSearchParams();
+    const searchWord = searchParams.get('q')
+
+
+    const handleInputChange = (newValue : string) => {
+        setSelectOption([ {value: newValue, label: `Search for "${newValue}" in s/${spool ? spool.name : ''}`}]);
+    }
+
+    const handleSearch = (selectedOption: SingleValue<{ value: string; label: string; }>, actionMeta: ActionMeta<{ value: string; label: string; }>) => {
+        if (spool && selectedOption){
+            navStore.navigateTo(`/s/${spool.name}${sortType ? '/' + sortType : ''}/?q=${selectedOption.value}`)
+        }
+    }
+
+    const setSortedThreads = (threads: IThreadFull[]) => {
+        setThreads(threads);
+      };
 
     React.useEffect(() => {
         if (id) {
@@ -33,7 +62,7 @@ export const Spool = observer(() => {
                 spoolStore.refreshSpool(spool);
             });
 
-            SpoolAPI.getSpoolThreads(id).then((threads) => {
+            SpoolAPI.getSpoolThreads(id, "", "").then((threads) => {
                 setThreads(threads);
             });
         }
@@ -63,7 +92,7 @@ export const Spool = observer(() => {
     }
 
     return (
-        <PageLayout title={spool ? spool.name + ": New Posts" : ""}>
+        <PageLayout title={spool ? "s/" + spool.name : ""}>
             {spool &&
                 (
                     <Container centerContent={false} maxW={"container.md"}>
@@ -99,6 +128,17 @@ export const Spool = observer(() => {
                                 </Center>
                                 <Text align="center" whiteSpace="pre-wrap">{spool.rules || ""}</Text>
                             </Box>
+
+                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                                <Select
+                                    options={selectOption}
+                                    value={[ {value: searchWord ? searchWord : "", label: searchWord ? searchWord : ""} ]}
+                                    onChange={handleSearch}
+                                    onInputChange={handleInputChange}
+                                    placeholder="Search"
+                                />
+                            </Box>
+                            <ThreadSorter onThreadsSorted={setSortedThreads}/>
                             <PostFeed threads={threads} />
                         </VStack>
                     </Container>
