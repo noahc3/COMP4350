@@ -84,4 +84,115 @@ public class UserSettingsControllerTests
         returnedValue = bool.Parse(result.Content.ReadAsStringAsync().Result);
         Assert.IsFalse(returnedValue);
     }
+
+    [Test]
+    public void InterestsTest()
+    {
+        string interest1 = "interest1";
+        string interest2 = "interest2";
+
+        // add interest1, ensure its in the result, ensure its in the usersettings interests list, 
+        // ensure belongs says user belongs to interest1
+        var endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest1);
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsTrue(interests.Contains(interest1));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_INTERESTS);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsTrue(interests.Contains(interest1));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest1);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsTrue(belong);
+
+        // add interest2, ensure its in the result, ensure its in the usersettings interests list, 
+        // ensure belongs says user belongs to interest1 and interest2
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest2);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsTrue(interests.Contains(interest1));
+        Assert.IsTrue(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_INTERESTS);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsTrue(interests.Contains(interest1));
+        Assert.IsTrue(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest1);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsTrue(belong);
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest2);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsTrue(belong);
+
+        // remove interest1, ensure its not in the result, ensure its not in the usersettings interests list, 
+        // ensure belongs says user does not belong to interest1 but does to interest2
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_REMOVE_INTEREST, interest1);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsFalse(interests.Contains(interest1));
+        Assert.IsTrue(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_INTERESTS);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsFalse(interests.Contains(interest1));
+        Assert.IsTrue(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest1);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsFalse(belong);
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest2);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsTrue(belong);
+
+        // remove interest2, ensure its not in the result, ensure its not in the usersettings interests list, 
+        // ensure belongs says user does not belong to interest1 or interest2
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_REMOVE_INTEREST, interest2);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsFalse(interests.Contains(interest1));
+        Assert.IsFalse(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_INTERESTS);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        interests = Utils.ParseResponse<string[]>(result);
+        Assert.IsFalse(interests.Contains(interest1));
+        Assert.IsFalse(interests.Contains(interest2));
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest1);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsFalse(belong);
+
+        endpoint = String.Format(Endpoints.V1_USERSETTINGS_BELONG_INTEREST, interest2);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
+        Assert.IsFalse(belong);
+    }
 }

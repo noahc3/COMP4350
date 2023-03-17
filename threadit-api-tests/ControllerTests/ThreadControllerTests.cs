@@ -121,6 +121,20 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void GetAllThreadsFilteredWithQueryTest()
+    {
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED + "?q=" + _thread.Title, _spool.Name, _sortType);
+
+        var result = _client1.GetAsync(endpoint).Result;
+
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+        Assert.IsFalse(threads.IsNullOrEmpty());
+
+        Assert.IsTrue(threads![0].Id.Equals(_thread.Id));
+    }
+
+    [Test]
     public void DeleteThreadsInvalidTest()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _thread.Id);
@@ -130,8 +144,7 @@ public class ThreadControllerTests
         var result = _client3.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
 
-        // TODO: this is supposed to test the first if conditional in DeleteThread, but apparently does not.
-        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, " ");
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, "%20");
         result = _client3.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
     }
@@ -180,7 +193,38 @@ public class ThreadControllerTests
         Assert.AreEqual(thread1.Stitches.Count, 1);
         Assert.IsFalse(thread1.Rips.Contains(_user1.Id));
         Assert.IsTrue(thread1.Stitches.Contains(_user1.Id));
-    } 
+
+        // rip thread (also removes stitch)
+        endpoint = String.Format(Endpoints.V1_THREAD_RIP);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Rips.Count, 1);
+        Assert.IsTrue(thread1.Rips.Contains(_user1.Id));
+        Assert.IsFalse(thread1.Stitches.Contains(_user1.Id));
+
+        // rip thread again to remove
+        endpoint = String.Format(Endpoints.V1_THREAD_RIP);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.AreEqual(thread1.Rips.Count, 0);
+        Assert.IsFalse(thread1.Rips.Contains(_user1.Id));
+    }
+
+    [Test]
+    public void StitchAndRipInvalidTest()
+    {
+        // stitch invalid thread id
+        var endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
+        var result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+
+        // rip invalid thread id
+        endpoint = String.Format(Endpoints.V1_THREAD_RIP);
+        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
 
     [Test]
     public void EditBadThreadTests()

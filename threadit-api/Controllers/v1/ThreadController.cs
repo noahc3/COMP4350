@@ -77,10 +77,6 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpDelete("{threadId}")]
         [AuthenticationRequired]
         public async Task<IActionResult> DeleteThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {
-            if (String.IsNullOrWhiteSpace(threadId)) {
-                return BadRequest("Thread ID is invalid.");
-            }
-
             UserDTO profile = Request.HttpContext.GetUser();
 
             await threadService.DeleteThreadAsync(threadId, profile.Id);
@@ -90,17 +86,12 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpPost("stitch")]
         [AuthenticationRequired]
         public async Task<IActionResult> StitchThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
-            if (String.IsNullOrWhiteSpace(threadId)) {
-                return BadRequest("Thread data is invalid.");
-            }
+            UserDTO profile = Request.HttpContext.GetUser();
 
-            UserDTO? profile = Request.HttpContext.GetUser();
-            if (profile == null) {
-                return Unauthorized();
-            }
-
-            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
-            if (threadFromDb == null) {
+            Models.Thread threadFromDb;
+            try {
+                threadFromDb = await threadService.GetThreadAsync(threadId);
+            } catch (Exception) {
                 return BadRequest("Thread does not exist.");
             }
 
@@ -118,28 +109,19 @@ namespace ThreaditAPI.Controllers.v1 {
                 threadFromDb.Rips.Remove(profile.Id);
             }
 
-            try {
-                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
-                return Ok(updatedThread);
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }
+            Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
+            return Ok(updatedThread);
         }
 
         [HttpPost("rip")]
         [AuthenticationRequired]
         public async Task<IActionResult> RipThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
-            if (String.IsNullOrWhiteSpace(threadId)) {
-                return BadRequest("Thread data is invalid.");
-            }
+            UserDTO profile = Request.HttpContext.GetUser();
 
-            UserDTO? profile = Request.HttpContext.GetUser();
-            if (profile == null) {
-                return Unauthorized();
-            }
-
-            Models.Thread? threadFromDb = await threadService.GetThreadAsync(threadId);
-            if (threadFromDb == null) {
+            Models.Thread threadFromDb;
+            try {
+                threadFromDb = await threadService.GetThreadAsync(threadId);
+            } catch (Exception) {
                 return BadRequest("Thread does not exist.");
             }
 
@@ -157,12 +139,8 @@ namespace ThreaditAPI.Controllers.v1 {
                 threadFromDb.Stitches.Remove(profile.Id);
             }
 
-            try {
-                Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
-                return Ok(updatedThread);
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }
+            Models.Thread? updatedThread = await threadService.UpdateThreadAsync(threadFromDb);
+            return Ok(updatedThread);
         }
     }
 }
