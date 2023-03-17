@@ -70,5 +70,8 @@ public class InterestControllerTests
         Assert.IsTrue(response.IsSuccessStatusCode);
         interests = Utils.ParseResponse<List<Interest>>(response)!;
         Assert.That(interests.Count, Is.EqualTo(defaultInterestCount));
+
+        response = _client.GetAsync(String.Format(Endpoints.V1_INTEREST_REMOVE, Utils.GetCleanUUIDString())).Result;
+        Assert.IsFalse(response.IsSuccessStatusCode);
     }
 }

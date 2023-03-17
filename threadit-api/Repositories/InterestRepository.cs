@@ -33,9 +33,7 @@ namespace ThreaditAPI.Repositories
             }
             else
             {
-                Interest? interest = await db.Interests.FirstOrDefaultAsync(i => i.Name == interestName);
-                if (interest == null)
-                    throw new Exception("Interest does not exist");
+                Interest interest = (await db.Interests.FirstOrDefaultAsync(i => i.Name == interestName))!;
                 interest.SpoolCount++;
                 await db.SaveChangesAsync();
                 Interest[] interestList = await db.Interests.ToArrayAsync();
