@@ -19,11 +19,7 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpGet("add/{interestName}")]
         [AuthenticationRequired]
         public async Task<IActionResult> AddInterest([FromRoute] string interestName, [FromServices] InterestService interestService) {
-            UserDTO? userDTO = Request.HttpContext.GetUser();
-
-            if (userDTO == null) {
-                return Unauthorized();
-            }
+            UserDTO userDTO = Request.HttpContext.GetUser();
 
             Interest[] interest = await interestService.AddInterestAsync(interestName);
             return Ok(interest);
@@ -32,11 +28,7 @@ namespace ThreaditAPI.Controllers.v1 {
         [HttpGet("remove/{interestName}")]
         [AuthenticationRequired]
         public async Task<IActionResult> RemoveInterest([FromRoute] string interestName, [FromServices] InterestService interestService) {
-            UserDTO? userDTO = Request.HttpContext.GetUser();
-
-            if (userDTO == null) {
-                return Unauthorized();
-            }
+            UserDTO userDTO = Request.HttpContext.GetUser();
 
             Interest[] result = await interestService.RemoveInterestAsync(interestName);
             return Ok(result);

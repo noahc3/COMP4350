@@ -597,4 +597,11 @@ public class UserSettingsRepositoryTests
             Assert.Pass();
         }
     }
+
+    [Test]
+    public void UserInterestInvalidTests() {
+        Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.AddUserInterestAsync("invalid", "invalid"); });
+        Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.RemoveUserInterestAsync("invalid", "invalid"); });
+        Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.BelongInterestAsync("invalid", "invalid"); });
+    }
 }
