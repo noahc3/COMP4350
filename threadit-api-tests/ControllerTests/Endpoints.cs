@@ -45,4 +45,9 @@ public static class Endpoints {
     public const string V1_COMMENT_NEWER = "/v1/comments/{0}/newer/{1}";
     public const string V1_COMMENT_EDIT = "/v1/comments/{0}/edit";
     public const string V1_COMMENT_DELETE = "/v1/comments/{0}/{1}";
+
+    // Interest
+    public const string V1_INTEREST_ALL = "/v1/interest/all";
+    public const string V1_INTEREST_ADD = "/v1/interest/add/{0}";
+    public const string V1_INTEREST_REMOVE = "/v1/interest/remove/{0}";
 }

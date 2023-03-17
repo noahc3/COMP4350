@@ -9,14 +9,6 @@ namespace ThreaditAPI.Models
         public Interest()
         {
 
-        }
-
-        public Interest(string id,string name, int spoolCount)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.SpoolCount = spoolCount;
-        }
-    
+        }    
     }
 }
