@@ -110,6 +110,14 @@ public static class Utils {
         return spool;
     }
 
+    public static void DeleteSpool(HttpClient authenticatedClient, string spoolId) {
+        var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_SPOOL_DELETE, spoolId)).Result;
+
+        if (response.StatusCode != System.Net.HttpStatusCode.OK) {
+            throw new Exception("Could not delete spool");
+        }
+    }
+
     public static ThreaditAPI.Models.Thread CreateThread(HttpClient authenticatedClient, string ownerId, string spoolId, string? title = null, string? content = null) {
         if (title == null) {
             title = GetCleanUUIDString();
@@ -135,6 +143,31 @@ public static class Utils {
         }
 
         return thread;
+    }
+
+    public static void DeleteThread(HttpClient authenticatedClient, string threadId) {
+        var response = authenticatedClient.DeleteAsync(String.Format(Endpoints.V1_THREAD_DELETE, threadId)).Result;
+
+        if (response.StatusCode != System.Net.HttpStatusCode.OK) {
+            throw new Exception("Could not delete thread");
+        }
+    }
+
+    public static Comment CreateComment(HttpClient authenticatedClient, string ownerId, string threadId, string? content = null) {
+        if (content == null) {
+            content = GetCleanUUIDString();
+        }
+
+        var endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, threadId, "");
+
+        var result = authenticatedClient.PostAsync(endpoint, Utils.WrapContent<string>(content)).Result;
+        var comment = Utils.ParseResponse<Comment>(result);
+
+        if (comment == null) {
+            throw new Exception("Could not create comment");
+        }
+
+        return comment;
     }
 
     public static UserSettings JoinSpool(HttpClient authenticatedClient, string spoolName)

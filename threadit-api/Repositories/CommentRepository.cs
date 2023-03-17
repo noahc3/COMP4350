@@ -120,7 +120,7 @@ namespace ThreaditAPI.Repositories
             }
         }
 
-        public async Task<Comment> DeleteCommentAsync(string commentId)
+        public async Task<Comment?> DeleteCommentAsync(string commentId)
         {
             Comment? comment = await GetCommentAsync(commentId);
             if (comment != null)
@@ -129,12 +129,9 @@ namespace ThreaditAPI.Repositories
                 comment.Content = UserConstants.COMMENT_DELETED_TEXT;
                 comment.IsDeleted = true;
                 await db.SaveChangesAsync();
-                return comment;
             }
-            else
-            {
-                throw new Exception("Comment does not exist.");
-            }
+
+            return comment;
         }
 
         public async Task HardDeleteAllSpoolCommentsAsync(string spoolId) {

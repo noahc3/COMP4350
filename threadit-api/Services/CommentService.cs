@@ -24,16 +24,8 @@ namespace ThreaditAPI.Services
                 return true;
             }
             
-            Models.Thread? thread = await this.threadRepository.GetThreadAsync(comment.ThreadId);
-            if (thread == null) {
-                return false;
-            }
-
-            Spool? spool = await this.spoolRepository.GetSpoolAsync(thread.SpoolId);
-
-            if (spool == null) {
-                return false;
-            }
+            Models.Thread thread = (await this.threadRepository.GetThreadAsync(comment.ThreadId))!;
+            Spool spool = (await this.spoolRepository.GetSpoolAsync(thread.SpoolId))!;
 
             return spool.OwnerId == userId || spool.Moderators.Contains(userId);
         }
@@ -55,12 +47,8 @@ namespace ThreaditAPI.Services
                 } else if (usernames.ContainsKey(c.OwnerId)) {
                     username = usernames[c.OwnerId];
                 } else {
-                    UserDTO? user = await this.userRepository.GetUserAsync(c.OwnerId);
-                    if (user == null) {
-                        username = UserConstants.USER_DELETED_TEXT;
-                    } else {
-                        username = user.Username;
-                    }
+                    UserDTO user = (await this.userRepository.GetUserAsync(c.OwnerId))!;
+                    username = user.Username;
                     usernames.Add(c.OwnerId, username);
                 }
 
@@ -80,19 +68,6 @@ namespace ThreaditAPI.Services
             }
 
             return results.ToArray();
-        }
-
-        public async Task<CommentFull> GetCommentAsync(string commentId)
-        {
-            Comment? returnedComment = await this.commentRepository.GetCommentAsync(commentId);
-            if (returnedComment != null)
-            {
-                return await ConvertToCommentFull(returnedComment);
-            }
-            else
-            {
-                throw new Exception("Comment does not exist.");
-            }
         }
 
         public async Task<CommentFull[]> GetBaseComments(string threadId) {
@@ -128,18 +103,11 @@ namespace ThreaditAPI.Services
         public async Task<Comment> UpdateCommentAsync(string userId, Comment comment)
         {
             Comment? returnedComment = await this.commentRepository.UpdateCommentAsync(comment);
-            if (returnedComment != null)
-            {
-                if (returnedComment.OwnerId != userId) {
-                    throw new Exception("User does not own comment.");
-                }
+            if (returnedComment.OwnerId != userId) {
+                throw new Exception("User does not own comment.");
+            }
 
-                return await ConvertToCommentFull(returnedComment);
-            }
-            else
-            {
-                throw new Exception("Comment does not exist.");
-            }
+            return await ConvertToCommentFull(returnedComment);
         }
 
         public async Task<Comment> DeleteCommentAsync(string userId, string commentId)
@@ -152,7 +120,7 @@ namespace ThreaditAPI.Services
                 }
 
                 returnedComment = await this.commentRepository.DeleteCommentAsync(returnedComment.Id);
-                return await ConvertToCommentFull(returnedComment);
+                return await ConvertToCommentFull(returnedComment!);
             }
             else
             {

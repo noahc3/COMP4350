@@ -4,6 +4,7 @@ using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ThreaditTests.Controllers;
 
@@ -12,26 +13,33 @@ public class CommentsControllerTests {
     private ThreaditAPI.Models.Thread _thread;
     private UserDTO _user1;
     private UserDTO _user2;
+    private UserDTO _user3;
     private HttpClient _client1;
     private HttpClient _client2;
+    private HttpClient _client3;
 
     [SetUp]
     public void Setup()
     {
         UserDTO _user1Temp;
         UserDTO _user2Temp;
+        UserDTO _user3Temp;
         HttpClient _client1Temp;
         HttpClient _client2Temp;
+        HttpClient _client3Temp;
 
         (_client1Temp, _user1Temp, _) = Utils.CreateAndAuthenticateUser();
         (_client2Temp, _user2Temp, _) = Utils.CreateAndAuthenticateUser();
+        (_client3Temp, _user3Temp, _) = Utils.CreateAndAuthenticateUser();
 
         _user1 = _user1Temp;
         _user2 = _user2Temp;
+        _user3 = _user3Temp;
         _client1 = _client1Temp;
         _client2 = _client2Temp;
+        _client3 = _client3Temp;
 
-        _spool = Utils.CreateSpool(_client1, _user1.Id);
+        _spool = Utils.CreateSpool(_client1, _user1.Id, null, new List<string> { _user3.Id });
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id);
     }
 
@@ -79,6 +87,28 @@ public class CommentsControllerTests {
         var comment2Deleted = Utils.ParseResponse<Comment>(result);
         Assert.That(comment2Deleted, Is.Not.Null);
         Assert.That(comment2Deleted.Id, Is.EqualTo(comment2.Id));
+        Assert.That(comment2Deleted.Content, Is.EqualTo("[deleted]"));
+    }
+
+    [Test]
+    public void ModeratorAndSpoolOwnerDelete() {
+        Comment c1 = Utils.CreateComment(_client2, _user1.Id, _thread.Id);
+        Comment c2 = Utils.CreateComment(_client2, _user2.Id, _thread.Id);
+
+        var endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, c1.Id);
+        var result = _client3.DeleteAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var comment1Deleted = Utils.ParseResponse<Comment>(result);
+        Assert.That(comment1Deleted, Is.Not.Null);
+        Assert.That(comment1Deleted.Id, Is.EqualTo(c1.Id));
+        Assert.That(comment1Deleted.Content, Is.EqualTo("[deleted]"));
+
+        endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, c2.Id);
+        result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var comment2Deleted = Utils.ParseResponse<Comment>(result);
+        Assert.That(comment2Deleted, Is.Not.Null);
+        Assert.That(comment2Deleted.Id, Is.EqualTo(c2.Id));
         Assert.That(comment2Deleted.Content, Is.EqualTo("[deleted]"));
     }
 
@@ -255,4 +285,60 @@ public class CommentsControllerTests {
             }
         }
     }
+
+    [Test]
+    public void DeleteComment_ThreadMissing_ShouldFail() {
+        Comment comment = Utils.CreateComment(_client1, _user1.Id, _thread.Id);
+        Assert.That(comment, Is.Not.Null);
+
+        Utils.DeleteThread(_client1, _thread.Id);
+
+        string endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, comment.Id);
+        var result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void DeleteComment_SpoolMissing_ShouldFail() {
+        Comment comment = Utils.CreateComment(_client1, _user1.Id, _thread.Id);
+        Assert.That(comment, Is.Not.Null);
+
+        Utils.DeleteSpool(_client1, _spool.Id);
+
+        string endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, comment.Id);
+        var result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void DeleteComment_NotExists_ShouldFail() {
+        string endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, Utils.GetCleanUUIDString());
+        var result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void UpdateComment_NotExists_ShouldFail() {
+        string endpoint = String.Format(Endpoints.V1_COMMENT_EDIT, _thread.Id);
+        var result = _client1.PatchAsync(endpoint, Utils.WrapContent<Comment>(new Comment() {
+            OwnerId = _user1.Id,
+            Id = Utils.GetCleanUUIDString(),
+            Content = Utils.GetCleanUUIDString(),
+            ParentCommentId = null,
+            ThreadId = _thread.Id
+        })).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void InvalidSiblingCommentTests() {
+        string endpoint = String.Format(Endpoints.V1_COMMENT_OLDER, _thread.Id, Utils.GetCleanUUIDString());
+        var result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+
+        endpoint = String.Format(Endpoints.V1_COMMENT_NEWER, _thread.Id, Utils.GetCleanUUIDString());
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
 }
