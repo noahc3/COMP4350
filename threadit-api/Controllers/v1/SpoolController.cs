@@ -89,6 +89,13 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(spools);
         }
 
+        [HttpGet("suggested/{userId}")]
+        public async Task<IActionResult> SuggestedSpools([FromRoute] string userId, [FromServices] SpoolService spoolService)
+        {
+            List<Spool> spools = await spoolService.GetSuggestedSpoolsAsync(userId);
+            return Ok(spools);
+        }
+
         [HttpGet("mods/{spoolId}")]
         public async Task<IActionResult> AllModsForSpool([FromRoute] string spoolId, [FromServices] SpoolService spoolService)
         {

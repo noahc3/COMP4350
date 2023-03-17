@@ -153,6 +153,12 @@ namespace ThreaditAPI.Services
             List<Spool> spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
             return spools;
         }
+        
+        public async Task<List<Spool>> GetSuggestedSpoolsAsync(string userId)
+        {
+            List<Spool> spools = await this.spoolRepository.GetSuggestedSpoolsAsync(userId);
+            return spools;
+        }
 
         public async Task<UserDTO[]?> GetAllModsForSpoolAsync(string spoolId)
         {
