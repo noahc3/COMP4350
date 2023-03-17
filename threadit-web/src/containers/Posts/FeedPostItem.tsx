@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, HStack, VStack, Text, Button, ButtonGroup, Heading } from "@chakra-ui/react"
+import { Box, HStack, VStack, Text, Button, ButtonGroup, Heading, useColorMode } from "@chakra-ui/react"
 import { observer } from "mobx-react"
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import { IThreadFull } from "../../models/ThreadFull";
@@ -8,10 +8,12 @@ import { Link } from "react-router-dom";
 import ThreadAPI from "../../api/ThreadAPI";
 import "./FeedPostItem.scss";
 import { userStore } from "../../stores/UserStore";
+import { mode } from '@chakra-ui/theme-tools'
 
 
 export const FeedPostItem = observer(({thread}: {thread: IThreadFull | any}) => {
     const profile = userStore.userProfile;
+    const { colorMode } = useColorMode()
     const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
     const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
     const dateString = (
@@ -47,11 +49,11 @@ export const FeedPostItem = observer(({thread}: {thread: IThreadFull | any}) => 
 
     return (
         <>
-            <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%" className="feedPostItem">
+            <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={mode("white", "gray.800")({colorMode})} w="100%" className="feedPostItem">
                 <VStack alignItems="start">
                     <HStack>
                         <Link to={"/s/" + thread.spoolName}><Text fontWeight={"bold"}>s/{thread ? thread.spoolName : ""}</Text></Link>
-                        <Text color={"blackAlpha.600"}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
+                        <Text color={mode("blackAlpha.600", "gray.400")({colorMode})}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
                     </HStack>
                     <HStack>
                         <VStack alignItems="start">

@@ -19,6 +19,8 @@ import { OptionBase, Select, SingleValue, ActionMeta } from "chakra-react-select
 import UserSettingsAPI from "../../api/UserSettingsApi";
 import { useSearchParams } from 'react-router-dom';
 import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 
 export const Spool = observer(() => {
@@ -29,6 +31,7 @@ export const Spool = observer(() => {
 
     const profile = userStore.userProfile;
     const { id } = useParams();
+    const colorMode = useColorMode();
     const [spool, setSpool] = useState<ISpool>();
     const [threads, setThreads] = useState<IThreadFull[]>([]);
     const [belongs, setBelongs] = useState<boolean | undefined>(undefined);
@@ -99,7 +102,7 @@ export const Spool = observer(() => {
                         <VStack>
                         {isAuthenticated &&
                             <VStack w='100%'>
-                                <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" p="0.5rem">
+                                <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")(colorMode)} w="100%" p="0.5rem">
                                     <HStack>
                                         <NavLink to={"/s/" + spool.name + "/createthread"}><Button leftIcon={<IoCreateOutline />} colorScheme='blue' >Create Post</Button></NavLink>
                                         {spool.ownerId !== profile?.id && <>
@@ -122,14 +125,14 @@ export const Spool = observer(() => {
                                 </Box>
                             </VStack>
                         }
-                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                            <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")(colorMode)} w="100%" h="50%" p="0.5rem">
                                 <Center>
                                     <Text as='b'><Text as='u' fontSize='lg' align='center'>RULES AND DESCRIPTION</Text></Text>
                                 </Center>
                                 <Text align="center" whiteSpace="pre-wrap">{spool.rules || ""}</Text>
                             </Box>
 
-                            <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+                            <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")(colorMode)} w="100%" h="50%" p="0.5rem">
                                 <Select
                                     options={selectOption}
                                     value={[ {value: searchWord ? searchWord : "", label: searchWord ? searchWord : ""} ]}

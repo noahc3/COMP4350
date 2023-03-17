@@ -7,11 +7,14 @@ import ThreadAPI from "../../api/ThreadAPI";
 import { IThreadFull } from "../../models/ThreadFull";
 import { useParams } from "react-router";
 import { useSearchParams } from 'react-router-dom';
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const ThreadSorter = observer(({ onThreadsSorted }: { onThreadsSorted: (threads: IThreadFull[]) => void }) => {
       
     const { id } = useParams();
     const { sortType } = useParams();
+    const { colorMode } = useColorMode();
     const [searchParams] = useSearchParams();
     const searchString = searchParams.get('q');
 
@@ -49,7 +52,7 @@ export const ThreadSorter = observer(({ onThreadsSorted }: { onThreadsSorted: (t
     }
 
     return(
-        <Box border="1px solid gray" borderRadius="3px" bgColor={"white"} w="100%" h="50%" p="0.5rem">
+        <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")({colorMode})} w="100%" h="50%" p="0.5rem">
         <Tabs index={getSelectedTabIndex()} variant='soft-rounded' colorScheme='purple'>
             <TabList>
                 <Tab onClick={() => { sortThreads("new") }}>New</Tab>

@@ -14,8 +14,11 @@ import { navStore } from "../../stores/NavStore";
 import { Link } from "react-router-dom";
 import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
+    const colorMode = useColorMode();
     const [isEditing, setIsEditing] = React.useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -95,12 +98,12 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     }
 
     return (
-        <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={"white"} w="100%" className="threadPost">
+        <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={mode("white", "gray.800")(colorMode)} w="100%" className="threadPost">
             {thread ? (
                 <VStack alignItems="start">
                     <HStack>
                         <Link to={"/s/" + thread.spoolName}><Text fontWeight={"bold"}>s/{thread ? thread.spoolName : ""}</Text></Link>
-                        <Text color={"blackAlpha.600"}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
+                        <Text color={mode("blackAlpha.600", "gray.300")(colorMode)}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
                     </HStack>
                     <Heading as='h3' size='md'>
                         {thread ? thread.title : ""}
@@ -147,7 +150,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                                     </ButtonGroup>
                                 ) : (
                                     <>
-                                        <Text color="red">Are you sure you want to delete?</Text>
+                                        <Text color={mode("red", "red.300")(colorMode)}>Are you sure you want to delete?</Text>
                                         <ButtonGroup size={'sm'} isAttached>
                                             <Button disabled={disableInputs} isLoading={isDeleting} loadingText="Deleting..." leftIcon={<MdOutlineDelete />} colorScheme="red" onClick={() => { deleteThread() }}>Delete</Button>
                                             <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsConfirmingDelete(false) }}>Cancel</Button>

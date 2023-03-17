@@ -11,8 +11,11 @@ import { spoolStore } from "../../stores/SpoolStore";
 import { AddIcon } from "@chakra-ui/icons";
 import React from "react";
 import { BiCog } from "react-icons/bi";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 
 export const Sidebar = observer(() => {
+    const colorMode = useColorMode();
     const profile = userStore.userProfile;
     const isAuthenticated = authStore.isAuthenticated;
     const allSpools = spoolStore.allSpools;
@@ -21,7 +24,7 @@ export const Sidebar = observer(() => {
     const allButtons = allSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
-                <Button colorScheme={"purple"}>{spool.name}</Button>
+                <Button textColor={"white"} colorScheme={mode("purple.500", "purple.900")(colorMode)}>{spool.name}</Button>
             </NavLink>
         );
     });
@@ -29,7 +32,7 @@ export const Sidebar = observer(() => {
     const suggestedButtons = suggestedSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
-                <Button colorScheme={"purple"}>{spool.name}</Button>
+                <Button textColor={"white"} colorScheme={mode("purple.500", "purple.900")(colorMode)}>{spool.name}</Button>
             </NavLink>
         );
     });
@@ -37,7 +40,7 @@ export const Sidebar = observer(() => {
     const joinedButtons = joinedSpools?.map(function (spool) {
         return (
             <NavLink to={"/s/" + spool.name} key={spool.id}>
-                <Button colorScheme={"purple"}>{spool.name}</Button>
+                <Button textColor={"white"} colorScheme={mode("purple.500", "purple.900")(colorMode)}>{spool.name}</Button>
             </NavLink>
         );
     });
@@ -55,12 +58,12 @@ export const Sidebar = observer(() => {
     }
 
     return (
-        <Flex direction={"column"} className="sidebar">
+        <Flex direction={"column"} className="sidebar" bgColor={mode("purple.500", "purple.900")(colorMode)}>
             <Image src="/logo.png" alt="Threadit" className="logo" />
             <Divider />
-            <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} colorScheme={"purple"}>Home</Button></NavLink>
+            <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Home</Button></NavLink>
             {profile && <>
-                <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} colorScheme={"purple"}>Create Spool</Button></NavLink>
+                <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Create Spool</Button></NavLink>
             </>}
             <Divider />
             {!profile && <>
@@ -91,23 +94,23 @@ export const Sidebar = observer(() => {
             {profile && <>
                 <Divider />
                 <Box >
-                    <HStack marginInlineStart={2}>
+                    <HStack marginLeft={"8.3px"} marginBottom={2}>
                         <Avatar size={'sm'} name='Dan Abrahmov' src='/img/avatar_placeholder.png' />
                         <Text>{profile.username}</Text>
-                        <NavLink to={"/profile"}><Button leftIcon={<Icon as={BiCog} />} colorScheme={"purple"}>Profile</Button></NavLink>
                     </HStack>
+                        <NavLink to={"/profile"}><Button textColor={"white"} colorScheme={mode("purple.500", "purple.900")(colorMode)} leftIcon={<Icon as={BiCog} />}>Profile</Button></NavLink>
                 </Box>
             </>}
             <Divider />
             {isAuthenticated && (
                 <>
-                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} colorScheme={"purple"} onClick={() => { logout() }}>Logout</Button>
+                    <Button leftIcon={<Icon transform={"scaleX(-1)"} as={MdOutlineExitToApp} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)} onClick={() => { logout() }}>Logout</Button>
                 </>
             )}
 
             {!isAuthenticated && (
                 <>
-                    <NavLink to={"/login"}><Button leftIcon={<Icon as={IoMdLogIn} />} colorScheme={"purple"}>Login</Button></NavLink>
+                    <NavLink to={"/login"}><Button leftIcon={<Icon as={IoMdLogIn} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Login</Button></NavLink>
                 </>
             )}
         </Flex>

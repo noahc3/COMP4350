@@ -8,8 +8,11 @@ import { IThreadFull } from "../../models/ThreadFull";
 import { CommentBox } from "./CommentBox";
 import { CommentItem } from "./CommentItem";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export const CommentFeed = observer(({spool, thread}: {spool: ISpool, thread: IThreadFull}) => {
+    const colorMode = useColorMode();
     const [commentTree, setCommentTree] = useState<CommentTree>(new CommentTree());
     const [isLoadingReplies, setIsLoadingReplies] = useState<boolean>(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -81,7 +84,7 @@ export const CommentFeed = observer(({spool, thread}: {spool: ISpool, thread: IT
 
     return (
         <>
-            <VStack marginBottom={'20rem'} alignItems={'start'} spacing={'30px'} p="2rem" w="100%" border="1px solid gray" borderRadius="3px" bgColor={"white"}>
+            <VStack marginBottom={'20rem'} alignItems={'start'} spacing={'30px'} p="2rem" w="100%" border="1px solid gray" borderRadius="3px" bgColor={mode('white', 'gray.800')(colorMode)}>
                 <CommentBox submitCallback={async (content: string) => {await submitComment(content)}}/>
                 {comments}
                 {(unloadedReplyCount > 0) && 
