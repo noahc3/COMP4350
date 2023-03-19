@@ -61,7 +61,7 @@ export const Sidebar = observer(() => {
         <Flex direction={"column"} className="sidebar" bgColor={mode("purple.500", "purple.900")(colorMode)}>
             <Image src="/logo.png" alt="Threadit" className="logo" />
             <Divider />
-            <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Home (DEMO)</Button></NavLink>
+            <NavLink to={"/"}><Button leftIcon={<Icon as={IoStatsChart} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Home</Button></NavLink>
             {profile && <>
                 <NavLink to={"/createSpool"}><Button leftIcon={<Icon as={AddIcon} />} textColor="white" colorScheme={mode("purple.500", "purple.900")(colorMode)}>Create Spool</Button></NavLink>
             </>}
