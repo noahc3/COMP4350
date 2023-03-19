@@ -4,5 +4,5 @@ LABEL org.opencontainers.image.source="https://github.com/noahc3/comp4350"
 WORKDIR /app
 COPY ./.docker/api/app-linux-musl-x64 ./
 RUN chmod +x ./ThreaditAPI
-ENTRYPOINT ["./ThreaditAPI"]
+CMD ["./ThreaditAPI"]
 EXPOSE 80
