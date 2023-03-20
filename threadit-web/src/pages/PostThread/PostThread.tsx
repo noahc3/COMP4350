@@ -35,7 +35,11 @@ export default function PostThread() {
                     setCreateError('Invalid spool name');
                     //need to re-render the page here without resetting all the fields
                 }
-            } finally {
+            }
+            catch (e) {
+                setCreateError('Invalid thread title or content.');
+            }
+            finally {
                 setLockInputs(false);
             }
         }

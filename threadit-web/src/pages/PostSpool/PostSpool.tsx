@@ -22,10 +22,12 @@ export default function PostSpool() {
                     navStore.navigateTo("/s/" + title + "/");
                 }
                 else {
-                    setCreateError('Invalid spool name');
-                    //need to re-render the page here without resetting all the fields
                 }
-            } finally {
+            }
+            catch (e){
+                setCreateError('Invalid spool name.');
+            }
+            finally {
                 setLockInputs(false);
             }
         }

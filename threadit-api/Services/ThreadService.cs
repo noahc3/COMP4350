@@ -158,6 +158,12 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length() + ". Please Shorten content.");
             }
+
+            Models.Thread dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
+            if(dbThread != null)
+            {
+                throw new Exception("Thread title already in use. Please pick a new title.");
+            }
             await this.threadRepository.InsertThreadAsync(thread);
             return thread;
         }
