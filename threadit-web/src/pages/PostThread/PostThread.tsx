@@ -37,7 +37,9 @@ export default function PostThread() {
                 }
             }
             catch (e) {
-                setCreateError('Invalid thread title or content.');
+                if (e instanceof Error) {
+                    setCreateError(e.message);
+                }
             }
             finally {
                 setLockInputs(false);
