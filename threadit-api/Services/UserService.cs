@@ -26,15 +26,15 @@ namespace ThreaditAPI.Services {
         {
             if (username.IsNullOrEmpty() && password.IsNullOrEmpty())
             {
-                throw new Exception("Please enter a valid username and password.")
+                throw new Exception("Please enter a valid username and password.");
             }
             if (username.IsNullOrEmpty())
             {
-                throw new Exception("Please enter a valid username.")
+                throw new Exception("Please enter a valid username.");
             }
             if (password.IsNullOrEmpty())
             {
-                throw new Exception("Please enter a valid password.")
+                throw new Exception("Please enter a valid password.");
             }
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null) {
@@ -51,7 +51,7 @@ namespace ThreaditAPI.Services {
             }
             if(username.IsNullOrEmpty() || email.IsNullOrEmpty())
             {
-                throw new Exception("Please enter a valid username and email.")
+                throw new Exception("Please enter a valid username and email.");
             }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
