@@ -24,8 +24,11 @@ export default function PostSpool() {
                 else {
                 }
             }
-            catch (e){
-                setCreateError('Invalid spool name.');
+            catch (e) {
+                if (e instanceof Error)
+                {
+                    setCreateError(e.message);
+                }
             }
             finally {
                 setLockInputs(false);

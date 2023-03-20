@@ -50,7 +50,7 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please enter a valid spool name.");
             }
-            if (!Regex.IsMatch(spool.Name, @"^[a-zA-Z0-9]+$"))
+            if (!Regex.IsMatch(spool.Name, @"^[a-zA-Z0-9 ]+$"))
             {
                 throw new Exception("Spool name can only contain letters and numbers.");
             }
