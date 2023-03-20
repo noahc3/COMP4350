@@ -1,4 +1,5 @@
-﻿using ThreaditAPI.Database;
+﻿using Microsoft.IdentityModel.Tokens;
+using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
@@ -21,7 +22,12 @@ namespace ThreaditAPI.Services {
             }
         }
 
-        public async Task<User?> GetUserAsync(string username, string password) {
+        public async Task<User?> GetUserAsync(string username, string password)
+        {
+            if (username.IsNullOrEmpty())
+            {
+                throw new Exception("Please enter a valid username and email.")
+            }
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null) {
                 throw new Exception("User does not exist.");
@@ -34,6 +40,10 @@ namespace ThreaditAPI.Services {
         public async Task<User> CreateUserAsync(string username, string email, string password) {
             if (await userRepository.GetUserByLoginIdentifierAsync(username) != null || await userRepository.GetUserByLoginIdentifierAsync(email) != null) {
                 throw new Exception("Username or email already exists.");
+            }
+            if(username.IsNullOrEmpty() || email.IsNullOrEmpty())
+            {
+                throw new Exception("Please enter a valid username and email.")
             }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
