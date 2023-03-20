@@ -1,5 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -20,14 +19,17 @@ namespace ThreaditAPI.Services
             this.userRepository = new UserRepository(context);
         }
 
-        private async Task<bool> IsDeleteAuthorized(string threadId, string userId) {
+        private async Task<bool> IsDeleteAuthorized(string threadId, string userId)
+        {
             Models.Thread? thread = await this.threadRepository.GetThreadAsync(threadId);
 
-            if (thread == null) {
+            if (thread == null)
+            {
                 return false;
             }
 
-            if (userId == thread.OwnerId) {
+            if (userId == thread.OwnerId)
+            {
                 return true;
             }
 
@@ -57,7 +59,8 @@ namespace ThreaditAPI.Services
                 Models.Spool spool = (await spoolRepository.GetSpoolAsync(returnedThread.SpoolId))!;
                 UserDTO user = (await userRepository.GetUserAsync(returnedThread.OwnerId))!;
 
-                Models.ThreadFull fullThread = new Models.ThreadFull() {
+                Models.ThreadFull fullThread = new Models.ThreadFull()
+                {
                     Id = returnedThread.Id,
                     Content = returnedThread.Content,
                     Topic = returnedThread.Topic,
@@ -73,7 +76,7 @@ namespace ThreaditAPI.Services
                     TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(returnedThread.Id)
                 };
                 return fullThread;
-            }          
+            }
             else
             {
                 throw new Exception("Thread does not exist.");
@@ -88,14 +91,15 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Spool does not exist.");
             }
-            
+
             Models.Thread[] threads = await this.threadRepository.GetThreadsBySpoolAsync(spool.Id);
             List<Models.ThreadFull> fullThreads = new List<Models.ThreadFull>();
             for (int i = 0; i < threads.Length; i++)
             {
                 UserDTO user = (await userRepository.GetUserAsync(threads[i].OwnerId))!;
 
-                Models.ThreadFull fullThread = new Models.ThreadFull() {
+                Models.ThreadFull fullThread = new Models.ThreadFull()
+                {
                     Id = threads[i].Id,
                     Content = threads[i].Content,
                     Topic = threads[i].Topic,
@@ -125,7 +129,8 @@ namespace ThreaditAPI.Services
                 UserDTO user = (await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId))!;
                 Spool spool = (await new SpoolService(new PostgresDbContext()).GetSpoolAsync(threads[i].SpoolId))!;
 
-                Models.ThreadFull fullThread = new Models.ThreadFull() {
+                Models.ThreadFull fullThread = new Models.ThreadFull()
+                {
                     Id = threads[i].Id,
                     Content = threads[i].Content,
                     Topic = threads[i].Topic,
@@ -149,7 +154,7 @@ namespace ThreaditAPI.Services
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
         {
             string threadTitle = thread.Title.Trim(' ');
-            if (thread.Title.IsNullOrEmpty() || threadTitle.IsNullOrEmpty() )
+            if (thread.Title.IsNullOrEmpty() || threadTitle.IsNullOrEmpty())
             {
                 throw new Exception("Please enter a valid thread title.");
             }
@@ -157,13 +162,13 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Thread title maximum is 256 characters. Please shorten title.");
             }
-            if(thread.Content.Length > 2048)
+            if (thread.Content.Length > 2048)
             {
                 throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length + ". Please Shorten content.");
             }
 
             Models.Thread? dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
-            if(dbThread != null)
+            if (dbThread != null)
             {
                 throw new Exception("Thread title already in use. Please pick a new title.");
             }
@@ -179,7 +184,8 @@ namespace ThreaditAPI.Services
 
         public async Task DeleteThreadAsync(string threadId, string userId)
         {
-            if (!await IsDeleteAuthorized(threadId, userId)) {
+            if (!await IsDeleteAuthorized(threadId, userId))
+            {
                 throw new Exception("User does not have permission to delete comment.");
             }
 

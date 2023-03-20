@@ -3,16 +3,20 @@ using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
-namespace ThreaditAPI.Services {
-    public class UserService {
+namespace ThreaditAPI.Services
+{
+    public class UserService
+    {
         private readonly UserRepository userRepository;
-        public UserService(PostgresDbContext context) {
+        public UserService(PostgresDbContext context)
+        {
             this.userRepository = new UserRepository(context);
         }
 
-        public async Task<UserDTO?> GetUserAsync(string userId) {
+        public async Task<UserDTO?> GetUserAsync(string userId)
+        {
             UserDTO? returnedUser = await this.userRepository.GetUserAsync(userId);
-            if(returnedUser != null)
+            if (returnedUser != null)
             {
                 return returnedUser;
             }
@@ -37,7 +41,8 @@ namespace ThreaditAPI.Services {
                 throw new Exception("Please enter a valid password.");
             }
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
-            if (user == null) {
+            if (user == null)
+            {
                 throw new Exception("User does not exist.");
             }
 
@@ -45,11 +50,13 @@ namespace ThreaditAPI.Services {
             return valid ? user : null;
         }
 
-        public async Task<User> CreateUserAsync(string username, string email, string password) {
-            if (await userRepository.GetUserByLoginIdentifierAsync(username) != null || await userRepository.GetUserByLoginIdentifierAsync(email) != null) {
+        public async Task<User> CreateUserAsync(string username, string email, string password)
+        {
+            if (await userRepository.GetUserByLoginIdentifierAsync(username) != null || await userRepository.GetUserByLoginIdentifierAsync(email) != null)
+            {
                 throw new Exception("Username or email already exists.");
             }
-            if(username.IsNullOrEmpty() || email.IsNullOrEmpty())
+            if (username.IsNullOrEmpty() || email.IsNullOrEmpty())
             {
                 throw new Exception("Please enter a valid username and email.");
             }
@@ -57,11 +64,12 @@ namespace ThreaditAPI.Services {
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
             string hash = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
-            User user = new User() {
-                Username = username, 
+            User user = new User()
+            {
+                Username = username,
                 Email = email,
                 PasswordHash = hash
-            }; 
+            };
 
             await this.userRepository.InsertUserAsync(user);
             return user;
