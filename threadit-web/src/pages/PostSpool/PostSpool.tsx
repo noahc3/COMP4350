@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useCallback } from "react";
-import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack } from "@chakra-ui/react";
 import ChakraTagInput from "../../containers/ChakraTagInput";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
@@ -11,13 +11,19 @@ export default function PostSpool() {
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
     const [tags, setTags] = React.useState(["General"]);
+    const [createError, setCreateError] = React.useState('');
 
     const postSpool = async () => {
         if (profile) {
             setLockInputs(true);
             try {
-                await SpoolAPI.createSpool(title, profile.id, tags, []);
-                navStore.navigateTo("/s/" + title + "/");
+                const success = await SpoolAPI.createSpool(title, profile.id, tags, []);
+                if (success) {
+                    navStore.navigateTo("/s/" + title + "/");
+                }
+                else {
+                    setCreateError('Invalid spool name')
+                }
             } finally {
                 setLockInputs(false);
             }
@@ -38,6 +44,12 @@ export default function PostSpool() {
                     <Card>
                         <CardBody>
                             <Stack spacing='3'>
+                                {createError.length > 0 && (
+                                    <Alert status='error'>
+                                        <AlertIcon />
+                                        {createError}
+                                    </Alert>
+                                )}
                                 <FormControl>
                                     <FormLabel>Spool Title</FormLabel>
                                     <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
