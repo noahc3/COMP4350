@@ -1,4 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
+using System.Threading;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -47,6 +49,10 @@ namespace ThreaditAPI.Services
             if (spool.Name.IsNullOrEmpty() || spoolName.IsNullOrEmpty() )
             {
                 throw new Exception("Please enter a valid spool name.");
+            }
+            if (!Regex.IsMatch(spool.Name, @"^[a-zA-Z0-9]+$"))
+            {
+                throw new Exception("Spool name can only contain letters and numbers.");
             }
             Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
             if (returnedSpool != null)

@@ -41,7 +41,7 @@ export default function PostSpool() {
     }, [])
 
     return (
-        <PageLayout title="Post a Spool">
+        <PageLayout title="Create a Spool">
             <Flex direction={"column"} className="thread" margin="20px" bgColor="white" border="1px solid grey" borderRadius={"3px"}>
                 <Stack spacing='3'>
                     <Card>
@@ -54,7 +54,7 @@ export default function PostSpool() {
                                     </Alert>
                                 )}
                                 <FormControl>
-                                    <FormLabel>Spool Title</FormLabel>
+                                    <FormLabel>Spool Name</FormLabel>
                                     <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
                                 </FormControl>
                                 <FormControl>
