@@ -50,6 +50,14 @@ namespace ThreaditAPI.Services
             }
             else
             {
+                if (spool.Name.IsNullOrEmpty())
+                {
+                    throw new Exception("Please enter a valid spool name.");
+                }
+                if(spool.Name.Length > 25)
+                {
+                    throw new Exception("Spool name maximum is 25 characters. Please shorten name.");
+                }
                 await this.spoolRepository.InsertSpoolAsync(spool);
                 return spool!;
             }
