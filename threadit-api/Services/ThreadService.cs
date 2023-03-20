@@ -146,7 +146,7 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
         {
-            if (thread.Title.IsNullOrEmpty())
+            if (thread.Title.IsNullOrEmpty() || thread.Title.IsNullOrEmpty(thread.Title.Trim()))
             {
                 throw new Exception("Please enter a valid thread title.");
             }
