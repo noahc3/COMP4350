@@ -43,7 +43,8 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
-            if (spool.Name.IsNullOrEmpty() || spool.Name.IsNullOrEmpty(spool.Name.Trim()))
+            string spoolName = spool.Name.Trim(' ');
+            if (spool.Name.IsNullOrEmpty() || spoolName.IsNullOrEmpty() )
             {
                 throw new Exception("Please enter a valid spool name.");
             }

@@ -1,4 +1,5 @@
-﻿using ThreaditAPI.Database;
+﻿using Microsoft.IdentityModel.Tokens;
+using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
 
@@ -146,7 +147,8 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
         {
-            if (thread.Title.IsNullOrEmpty() || thread.Title.IsNullOrEmpty(thread.Title.Trim()))
+            string threadTitle = thread.Title.Trim(' ');
+            if (thread.Title.IsNullOrEmpty() || threadTitle.IsNullOrEmpty() )
             {
                 throw new Exception("Please enter a valid thread title.");
             }
