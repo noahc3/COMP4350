@@ -33,7 +33,6 @@ export default function PostThread() {
                 }
                 else {
                     setCreateError('Invalid spool name');
-                    //need to re-render the page here without resetting all the fields
                 }
             }
             catch (e) {
