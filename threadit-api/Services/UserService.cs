@@ -24,9 +24,17 @@ namespace ThreaditAPI.Services {
 
         public async Task<User?> GetUserAsync(string username, string password)
         {
+            if (username.IsNullOrEmpty() && password.IsNullOrEmpty())
+            {
+                throw new Exception("Please enter a valid username and password.")
+            }
             if (username.IsNullOrEmpty())
             {
-                throw new Exception("Please enter a valid username and email.")
+                throw new Exception("Please enter a valid username.")
+            }
+            if (password.IsNullOrEmpty())
+            {
+                throw new Exception("Please enter a valid password.")
             }
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null) {
