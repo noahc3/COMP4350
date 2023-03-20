@@ -13,6 +13,7 @@ export default function PostThread() {
     const [lockInputs, setLockInputs] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
+    const [createError, setCreateError] = React.useState('');
 
     React.useEffect(() => {
         if (spoolName) {
@@ -26,8 +27,14 @@ export default function PostThread() {
         if (spool) {
             setLockInputs(true);
             try {
-                await ThreadAPI.postThread(title, content, "topic-placeholder", spool.id);
-                navStore.navigateTo("/s/" + spool.name + "/");
+                const success = await ThreadAPI.postThread(title, content, "topic-placeholder", spool.id);
+                if (success) {
+                    navStore.navigateTo("/s/" + spool.name + "/");
+                }
+                else {
+                    setCreateError('Invalid spool name');
+                    //need to re-render the page here without resetting all the fields
+                }
             } finally {
                 setLockInputs(false);
             }
@@ -41,6 +48,12 @@ export default function PostThread() {
                     <Stack spacing='3'>
                         <Card>
                             <CardBody>
+                                {createError.length > 0 && (
+                                    <Alert status='error'>
+                                        <AlertIcon />
+                                        {createError}
+                                    </Alert>
+                                )}
                                 <Stack spacing='3'>
                                     <FormControl>
                                         <FormLabel>Spool</FormLabel>

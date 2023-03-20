@@ -146,6 +146,18 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
         {
+            if (thread.Title.IsNullOrEmpty())
+            {
+                throw new Exception("Please enter a valid thread title.");
+            }
+            if (spool.Title.Length > 256)
+            {
+                throw new Exception("Thread title maximum is 256 characters. Please shorten title.");
+            }
+            if(thread.Content.Length > 2048)
+            {
+                throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length() + ". Please Shorten content.");
+            }
             await this.threadRepository.InsertThreadAsync(thread);
             return thread;
         }
