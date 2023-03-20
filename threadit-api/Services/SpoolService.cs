@@ -61,7 +61,7 @@ namespace ThreaditAPI.Services
             }
             else
             {
-                if(spool.Name.Length > 25)
+                if(spool.Name.Length > 32)
                 {
                     throw new Exception("Spool name maximum is 25 characters. Please shorten name.");
                 }
