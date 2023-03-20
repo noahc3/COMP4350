@@ -150,16 +150,16 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please enter a valid thread title.");
             }
-            if (spool.Title.Length > 256)
+            if (thread.Title.Length > 256)
             {
                 throw new Exception("Thread title maximum is 256 characters. Please shorten title.");
             }
             if(thread.Content.Length > 2048)
             {
-                throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length() + ". Please Shorten content.");
+                throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length + ". Please Shorten content.");
             }
 
-            Models.Thread dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
+            Models.Thread? dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
             if(dbThread != null)
             {
                 throw new Exception("Thread title already in use. Please pick a new title.");
