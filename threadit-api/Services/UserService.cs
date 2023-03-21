@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -40,7 +41,7 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please enter a valid password.");
             }
-            if (Regex.Match(username, '\s').Count > 0)
+            if (Regex.IsMatch(username, "\\s"))
             {
                 throw new Exception("Please remove spaces.");
             }
@@ -64,11 +65,11 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please enter a valid username and email.");
             }
-            if (Regex.Match(username, '\s').Count > 0)
+            if (Regex.IsMatch(username, "\\s"))
             {
                 throw new Exception("Please remove spaces from username.");
             }
-            if (Regex.Match(email, '\s').Count > 0)
+            if (Regex.IsMatch(email, "\\s"))
             {
                 throw new Exception("Please remove spaces from email.");
             }

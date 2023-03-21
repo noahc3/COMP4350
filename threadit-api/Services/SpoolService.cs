@@ -52,7 +52,7 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Spool name can only contain letters and numbers.");
             }
-            if (Regex.Match(spool.Name, '\s').Count > 0)
+            if (Regex.IsMatch(spool.Name, "\\s"))
             {
                 throw new Exception("Please remove spaces from spool name.");
             }
