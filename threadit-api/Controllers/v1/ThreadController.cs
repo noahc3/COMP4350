@@ -31,7 +31,11 @@ namespace ThreaditAPI.Controllers.v1 {
                 SpoolId = request.SpoolId
             };
 
-            thread = await threadService.InsertThreadAsync(thread);
+            try {
+                thread = await threadService.InsertThreadAsync(thread);
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
             return Ok(thread);
         }
 
