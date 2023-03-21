@@ -40,6 +40,10 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please enter a valid password.");
             }
+            if (Regex.Match(username, '\s').Count > 0)
+            {
+                throw new Exception("Please remove spaces.");
+            }
             User? user = await this.userRepository.GetUserByLoginIdentifierAsync(username);
             if (user == null)
             {
@@ -59,6 +63,14 @@ namespace ThreaditAPI.Services
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email))
             {
                 throw new Exception("Please enter a valid username and email.");
+            }
+            if (Regex.Match(username, '\s').Count > 0)
+            {
+                throw new Exception("Please remove spaces from username.");
+            }
+            if (Regex.Match(email, '\s').Count > 0)
+            {
+                throw new Exception("Please remove spaces from email.");
             }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);

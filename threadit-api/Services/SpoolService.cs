@@ -52,6 +52,10 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Spool name can only contain letters and numbers.");
             }
+            if (Regex.Match(spool.Name, '\s').Count > 0)
+            {
+                throw new Exception("Please remove spaces from spool name.");
+            }
             Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
             if (returnedSpool != null)
             {
