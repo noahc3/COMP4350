@@ -44,8 +44,7 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
-            string spoolName = spool.Name.Trim(' ');
-            if (spool.Name.IsNullOrEmpty() || spoolName.IsNullOrEmpty() )
+            if (string.IsNullOrWhiteSpace(spool.Name) )
             {
                 throw new Exception("Please enter a valid spool name.");
             }
@@ -62,7 +61,7 @@ namespace ThreaditAPI.Services
             {
                 if(spool.Name.Length > 32)
                 {
-                    throw new Exception("Spool name maximum is 25 characters. Please shorten name.");
+                    throw new Exception("Spool name maximum is 32 characters. Please shorten name.");
                 }
                 await this.spoolRepository.InsertSpoolAsync(spool);
                 return spool!;

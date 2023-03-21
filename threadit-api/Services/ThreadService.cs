@@ -153,8 +153,7 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)
         {
-            string threadTitle = thread.Title.Trim(' ');
-            if (thread.Title.IsNullOrEmpty() || threadTitle.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(thread.Title))
             {
                 throw new Exception("Please enter a valid thread title.");
             }
@@ -170,8 +169,9 @@ namespace ThreaditAPI.Services
             Models.Thread? dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
             if (dbThread != null)
             {
-                throw new Exception("Thread title already in use. Please pick a new title.");
+                throw new Exception("Thread id already in use. Please pick a new id.");
             }
+
             await this.threadRepository.InsertThreadAsync(thread);
             return thread;
         }
