@@ -1,6 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ThreaditAPI.Repositories
 {

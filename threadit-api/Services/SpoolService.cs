@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -43,6 +44,14 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
+            if (string.IsNullOrWhiteSpace(spool.Name) )
+            {
+                throw new Exception("Please enter a valid spool name.");
+            }
+            if (!Regex.IsMatch(spool.Name, @"^[a-zA-Z0-9 ]+$"))
+            {
+                throw new Exception("Spool name can only contain letters and numbers.");
+            }
             Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
             if (returnedSpool != null)
             {
@@ -50,6 +59,10 @@ namespace ThreaditAPI.Services
             }
             else
             {
+                if(spool.Name.Length > 32)
+                {
+                    throw new Exception("Spool name maximum is 32 characters. Please shorten name.");
+                }
                 await this.spoolRepository.InsertSpoolAsync(spool);
                 return spool!;
             }

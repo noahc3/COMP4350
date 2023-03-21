@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useCallback } from "react";
-import { Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, Card, CardBody, Flex, FormControl, FormLabel, Input, Stack } from "@chakra-ui/react";
 import ChakraTagInput from "../../containers/ChakraTagInput";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
@@ -11,14 +11,26 @@ export default function PostSpool() {
     const [title, setTitle] = React.useState('');
     const [lockInputs, setLockInputs] = React.useState(false);
     const [tags, setTags] = React.useState(["General"]);
+    const [createError, setCreateError] = React.useState('');
 
     const postSpool = async () => {
         if (profile) {
             setLockInputs(true);
             try {
-                await SpoolAPI.createSpool(title, profile.id, tags, []);
-                navStore.navigateTo("/s/" + title + "/");
-            } finally {
+                const success = await SpoolAPI.createSpool(title, profile.id, tags, []);
+                if (success) {
+                    navStore.navigateTo("/s/" + title + "/");
+                }
+                else {
+                }
+            }
+            catch (e) {
+                if (e instanceof Error)
+                {
+                    setCreateError(e.message);
+                }
+            }
+            finally {
                 setLockInputs(false);
             }
         }
@@ -32,14 +44,20 @@ export default function PostSpool() {
     }, [])
 
     return (
-        <PageLayout title="Post a Spool">
+        <PageLayout title="Create a Spool">
             <Flex direction={"column"} className="thread" margin="20px" bgColor="white" border="1px solid grey" borderRadius={"3px"}>
                 <Stack spacing='3'>
                     <Card>
                         <CardBody>
                             <Stack spacing='3'>
+                                {createError.length > 0 && (
+                                    <Alert status='error'>
+                                        <AlertIcon />
+                                        {createError}
+                                    </Alert>
+                                )}
                                 <FormControl>
-                                    <FormLabel>Spool Title</FormLabel>
+                                    <FormLabel>Spool Name</FormLabel>
                                     <Input disabled={lockInputs} size='md' value={title} onChange={(e) => setTitle(e.target.value)} />
                                 </FormControl>
                                 <FormControl>
