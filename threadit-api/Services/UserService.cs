@@ -28,15 +28,15 @@ namespace ThreaditAPI.Services
 
         public async Task<User?> GetUserAsync(string username, string password)
         {
-            if (username.IsNullOrEmpty() && password.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
             {
                 throw new Exception("Please enter a valid username and password.");
             }
-            if (username.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(username))
             {
                 throw new Exception("Please enter a valid username.");
             }
-            if (password.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(password))
             {
                 throw new Exception("Please enter a valid password.");
             }
@@ -56,7 +56,7 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Username or email already exists.");
             }
-            if (username.IsNullOrEmpty() || email.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email))
             {
                 throw new Exception("Please enter a valid username and email.");
             }
