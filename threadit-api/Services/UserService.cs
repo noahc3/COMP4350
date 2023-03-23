@@ -73,6 +73,14 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please remove spaces from email.");
             }
+            if (username.Length > 32)
+            {
+                throw new Exception("Username maximum is 32 characters. Please shorten name.");
+            }
+            if (email.Length > 41)
+            {
+                throw new Exception("Email maximum is 41 characters. Please shorten name.");
+            }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
             string hash = BCrypt.Net.BCrypt.HashPassword(password, salt);
