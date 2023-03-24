@@ -96,12 +96,20 @@ namespace ThreaditAPI.Services
 
         public async Task<Comment> InsertCommentAsync(Comment comment)
         {
+            if (comment.Content.Length > 2048)
+            {
+                throw new Exception("Comment content maximum is 2048 characters. Current content length is: " + comment.Content.Length + ". Please Shorten content.");
+            }
             await this.commentRepository.InsertCommentAsync(comment);
             return await ConvertToCommentFull(comment);
         }
 
         public async Task<Comment> UpdateCommentAsync(string userId, Comment comment)
         {
+            if (comment.Content.Length > 2048)
+            {
+                throw new Exception("Comment content maximum is 2048 characters. Current content length is: " + comment.Content.Length + ". Please Shorten content.");
+            }
             Comment? returnedComment = await this.commentRepository.UpdateCommentAsync(comment);
             if (returnedComment.OwnerId != userId) {
                 throw new Exception("User does not own comment.");
