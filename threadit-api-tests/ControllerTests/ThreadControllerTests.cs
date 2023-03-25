@@ -138,7 +138,7 @@ public class ThreadControllerTests
     [Test]
     public void GetAllThreadsFilteredTest()
     {
-        foreach (string sortType in new string[] { "hot", "top", "controversial", "comments", "new" }) {
+        foreach (string sortType in new string[] { "hot", "top", "controversial", "new" }) {
             var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED, sortType);
 
             var result = _client1.GetAsync(endpoint).Result;

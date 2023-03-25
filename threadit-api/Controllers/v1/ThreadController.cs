@@ -39,24 +39,9 @@ namespace ThreaditAPI.Controllers.v1 {
             return Ok(thread);
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllThreads([FromServices] ThreadService threadService) {
-            Models.ThreadFull[] threads = await threadService.GetAllThreadsAsync();
-            return Ok(threads);
-        }
-
-        [HttpGet("all/{sortType}")]
-        public async Task<IActionResult> GetAllThreadsFiltered([FromRoute] string sortType, [FromServices] ThreadService threadService, [FromServices] FilterService filterService, [FromQuery(Name = "q")] string searchWord = "") {
-            Models.ThreadFull[] threads = await threadService.GetAllThreadsAsync();
-            if(searchWord != "")
-            {
-                threads = filterService.SearchThreads(threads.ToArray(), searchWord).ToArray();
-            }
-            if(sortType != "")
-            {
-                threads = filterService.SortThreads(threads.ToArray(), sortType).ToArray();
-            }
-            return Ok(threads);
+        [HttpGet("threads/{sortType?}")]
+        public async Task<IActionResult> GetThreads([FromServices] ThreadService threadService, [FromRoute] string? sortType = null, [FromQuery(Name = "q")] string? searchWord = null, [FromQuery(Name = "skip")] int? skip = null, [FromQuery(Name = "spoolId")] string? spoolId = null) {
+            return Ok(await threadService.GetThreadsAsync(sortType, searchWord, skip, spoolId));
         }
 
         [HttpPost("edit")]

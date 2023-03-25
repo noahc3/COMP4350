@@ -35,8 +35,8 @@ public static class Endpoints {
 
     // Thread
     public const string V1_THREAD_GET = "/v1/thread/{0}";
-    public const string V1_THREAD_GET_ALL = "/v1/thread/all";
-    public const string V1_THREAD_GET_ALL_FILTERED = "/v1/thread/all/{0}/";
+    public const string V1_THREAD_GET_ALL = "/v1/thread/threads";
+    public const string V1_THREAD_GET_ALL_FILTERED = "/v1/thread/threads/{0}/";
     public const string V1_THREAD_CREATE = "/v1/thread/create";
     public const string V1_THREAD_EDIT = "/v1/thread/edit";
     public const string V1_THREAD_STITCH = "/v1/thread/stitch";

@@ -9,57 +9,27 @@ import { useParams } from "react-router";
 import { useSearchParams } from 'react-router-dom';
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
+import { SortTypes } from "../../constants/SortTypes";
 
-export const ThreadSorter = observer(({ onThreadsSorted }: { onThreadsSorted: (threads: IThreadFull[]) => void }) => {
-      
-    const { id } = useParams();
-    const { sortType } = useParams();
+export const ThreadSorter = observer(({ sortType, onSortChanged }: { sortType: string, onSortChanged: (sortType: SortTypes) => void }) => {
     const { colorMode } = useColorMode();
-    const [searchParams] = useSearchParams();
-    const searchString = searchParams.get('q');
 
-    React.useEffect(() => {
-        if (id){
-            SpoolAPI.getSpoolThreads(id, sortType ? sortType : "", searchString ? searchString : "").then((threads) => {
-                onThreadsSorted(threads);
-            });
-        }
-        else{
-            ThreadAPI.getAllThreads(sortType ? sortType : "", searchString ? searchString : "").then((threads) => {
-                onThreadsSorted(threads);
-            });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, sortType, searchString])
-
-    const sortThreads = (sortType: string) => {
-        if(id){
-            if(searchString){
-                navStore.navigateTo(`/s/${id}/${sortType}/?q=${searchString}`);
-            }
-            else{
-                navStore.navigateTo(`/s/${id}/${sortType}`);
-            }
-        }
-        else{
-            navStore.navigateTo(`/${sortType}`);
-        }
-
+    const sortThreads = (sortType: SortTypes) => {
+        onSortChanged(sortType)
     }
 
     const getSelectedTabIndex = () => {
-        return sortType === "hot" ? 1 : sortType === "top" ? 2 : sortType === "controversial" ? 3 : sortType === "comments" ? 4 : 0;
+        return sortType === "hot" ? 1 : sortType === "top" ? 2 : sortType === "controversial" ? 3 : 0;
     }
 
     return(
         <Box border="1px solid gray" borderRadius="3px" bgColor={mode("white", "gray.800")({colorMode})} w="100%" h="50%" p="0.5rem">
         <Tabs index={getSelectedTabIndex()} variant='soft-rounded' colorScheme='purple'>
             <TabList>
-                <Tab onClick={() => { sortThreads("new") }}>New</Tab>
-                <Tab onClick={() => { sortThreads("hot")  }}>Hot</Tab>
-                <Tab onClick={() => { sortThreads("top")  }}>Top</Tab>
-                <Tab onClick={() => { sortThreads("controversial")  }}>Controversial</Tab>
-                <Tab onClick={() => { sortThreads("comments")  }}>Comments</Tab>
+                <Tab onClick={() => { sortThreads(SortTypes.SORT_NEW) }}>New</Tab>
+                <Tab onClick={() => { sortThreads(SortTypes.SORT_HOT)  }}>Hot</Tab>
+                <Tab onClick={() => { sortThreads(SortTypes.SORT_TOP)  }}>Top</Tab>
+                <Tab onClick={() => { sortThreads(SortTypes.SORT_CONTROVERSIAL)  }}>Controversial</Tab>
             </TabList>
         </Tabs>
         </Box>

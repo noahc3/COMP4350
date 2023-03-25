@@ -41,7 +41,6 @@ namespace ThreaditAPI
             builder.Services.AddScoped<SpoolService>();
             builder.Services.AddScoped<CommentService>();
             builder.Services.AddScoped<InterestService>();
-            builder.Services.AddScoped<FilterService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

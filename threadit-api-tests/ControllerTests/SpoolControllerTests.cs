@@ -53,7 +53,7 @@ public class SpoolControllerTests
     [Test]
     public void GetSpoolThreadsTest()
     {
-        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS, _spool1.Name);
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL + "?spoolId=" + _spool1.Id);
 
         var result = _client1.GetAsync(endpoint).Result;
 
@@ -66,19 +66,23 @@ public class SpoolControllerTests
     }
 
     [Test]
-    public void GetSpoolThreads_SpoolNotExists_ShouldFail()
+    public void GetSpoolThreads_SpoolNotExists_ShouldReturnNone()
     {
-        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS, Utils.GetCleanUUIDString());
+        var endpoint = Endpoints.V1_THREAD_GET_ALL + "?spoolId=" + Utils.GetCleanUUIDString();
 
         var result = _client1.GetAsync(endpoint).Result;
 
-        Assert.IsFalse(result.IsSuccessStatusCode);
+        Assert.IsTrue(result.IsSuccessStatusCode);
+
+        var threads = Utils.ParseResponse<List<ThreadFull>>(result);
+
+        Assert.That(threads.Count, Is.EqualTo(0));
     }
 
     [Test]
     public void GetSpoolThreadsWithQueryTest()
     {
-        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS + "?q=" + _thread1.Title, _spool1.Name);
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL + "?q=" + _thread1.Title + "&spoolId=" + _spool1.Id);
 
         var result = _client1.GetAsync(endpoint).Result;
 
@@ -92,7 +96,7 @@ public class SpoolControllerTests
     [Test]
     public void GetSpoolThreadsFilteredTest()
     {
-        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS_FILTERED, _spool1.Name, _sortType);
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED + "?spoolId=" + _spool1.Id, _sortType);
 
         var result = _client1.GetAsync(endpoint).Result;
 
@@ -107,7 +111,7 @@ public class SpoolControllerTests
     [Test]
     public void GetSpoolThreadsFilteredWithQueryTest()
     {
-        var endpoint = String.Format(Endpoints.V1_SPOOL_GET_THREADS_FILTERED + "?q=" + _thread1.Title, _spool1.Name, _sortType);
+        var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED + "?q=" + _thread1.Title + "&spoolId=" + _spool1.Id, _sortType);
 
         var result = _client1.GetAsync(endpoint).Result;
 
