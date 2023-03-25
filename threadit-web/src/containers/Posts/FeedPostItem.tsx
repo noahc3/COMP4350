@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Box, HStack, VStack, Text, Button, ButtonGroup, Heading, useColorMode } from "@chakra-ui/react"
+import { useRef, useState } from 'react';
+import { Box, HStack, VStack, Text, Button, ButtonGroup, Heading, useColorMode, Image } from "@chakra-ui/react"
 import { observer } from "mobx-react"
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import { IThreadFull } from "../../models/ThreadFull";
@@ -12,6 +12,9 @@ import { mode } from '@chakra-ui/theme-tools'
 import { ThreadTypes } from '../../constants/ThreadTypes';
 import { BiLinkExternal } from 'react-icons/bi';
 import { FaCommentDots } from 'react-icons/fa';
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
+import ReactMarkdown from 'react-markdown';
+import React from 'react';
 
 
 export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any }) => {
@@ -19,6 +22,8 @@ export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any })
     const { colorMode } = useColorMode()
     const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
     const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
+    const renderedMd = useRef<any>();
+    const [renderedHeight, setRenderedHeight] = useState(0);
     const dateString = (
         <Moment fromNow>{thread.dateCreated}</Moment>
     )
@@ -50,6 +55,10 @@ export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any })
         }
     }
 
+    React.useLayoutEffect(() => {
+        setRenderedHeight(renderedMd.current?.clientHeight ?? 0);
+    }, [renderedMd])
+
     const threadUrl = "/s/" + thread.spoolName + "/post/" + thread.id;
     let threadHeader;
     let threadContent;
@@ -62,7 +71,18 @@ export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any })
                 </Heading>
             </Link>
         )
-        threadContent = (<Text>{thread.content}</Text>)
+        threadContent = (
+            <VStack alignItems={'start'} spacing={0}>
+                <Box ref={renderedMd} maxHeight={'320px'} overflow={'hidden'} className={renderedHeight >= 320 ? 'fade-bottom' : ''}>
+                    <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={thread.content} skipHtml/>
+                </Box>
+                {renderedHeight >= 320 && (
+                    <Link to={threadUrl}>
+                        <Button variant='link'>Read more</Button>
+                    </Link>
+                )}
+            </VStack>
+        )
     } else if (thread.threadType === ThreadTypes.IMAGE) {
         threadHeader = (
             <Link to={threadUrl}>
@@ -71,7 +91,7 @@ export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any })
                 </Heading>
             </Link>
         )
-        threadContent = (<img alt={thread.content} loading='lazy' src={thread.content} />)
+        threadContent = (<Image maxHeight={'20rem'} alt={thread.content} loading='lazy' src={thread.content} />)
     } else if (thread.threadType === ThreadTypes.LINK) {
         const domain = new URL(thread.content).hostname
         threadHeader = (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, AlertIcon, Button, Card, CardBody, Flex, FormControl, FormLabel, HStack, Input, Radio, RadioGroup, Stack, Textarea } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Card, CardBody, Flex, FormControl, FormLabel, HStack, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea } from "@chakra-ui/react";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { navStore } from "../../stores/NavStore";
 import { useParams } from "react-router";
@@ -7,14 +7,19 @@ import SpoolAPI from "../../api/SpoolAPI";
 import { ISpool } from "../../models/Spool";
 import ThreadAPI from "../../api/ThreadAPI";
 import { ThreadTypes } from "../../constants/ThreadTypes";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import ChakraUIRenderer from "chakra-ui-markdown-renderer";
+import { useColorMode } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
 
 export default function PostThread() {
+    const colorMode = useColorMode();
     const { spoolName } = useParams();
     const [spool, setSpool] = React.useState<ISpool>();
     const [lockInputs, setLockInputs] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [threadType, setThreadType] = React.useState(ThreadTypes.TEXT);
-    const [contextText, setContentText] = React.useState('');
+    const [contentText, setContentText] = React.useState('');
     const [contentUrl, setContentUrl] = React.useState('');
     const [createError, setCreateError] = React.useState('');
 
@@ -30,7 +35,7 @@ export default function PostThread() {
         if (spool) {
             setLockInputs(true);
             try {
-                const success = await ThreadAPI.postThread(title, threadType === ThreadTypes.TEXT ? contextText : contentUrl, "topic-placeholder", spool.id, threadType);
+                const success = await ThreadAPI.postThread(title, threadType === ThreadTypes.TEXT ? contentText : contentUrl, "topic-placeholder", spool.id, threadType);
                 if (success) {
                     navStore.navigateTo("/s/" + spool.name + "/");
                 }
@@ -68,7 +73,7 @@ export default function PostThread() {
             {spool ? (
                 <Flex direction={"column"} className="thread" margin="20px" border="1px solid grey" borderRadius={"3px"}>
                     <Stack spacing='3'>
-                        <Card>
+                        <Card bgColor={mode("white", "gray.800")(colorMode)}>
                             <CardBody>
                                 {createError.length > 0 && (
                                     <Alert status='error'>
@@ -98,7 +103,24 @@ export default function PostThread() {
                                     <FormControl>
                                         <FormLabel>{contentLabel}</FormLabel>
                                         {threadType === ThreadTypes.TEXT ? (
-                                            <Textarea disabled={lockInputs} size='md' height='200px' value={contextText} onChange={(e) => setContentText(e.target.value)} />
+                                            <>
+                                                <Tabs>
+                                                    <TabList>
+                                                        <Tab>Edit</Tab>
+                                                        <Tab isDisabled={contentText.length === 0}>Preview</Tab>
+                                                    </TabList>
+                                                    <TabPanels>
+                                                        <TabPanel>
+                                                            <Textarea disabled={lockInputs} size='md' height='200px' value={contentText} onChange={(e) => setContentText(e.target.value)} />
+                                                        </TabPanel>
+                                                        <TabPanel>
+                                                            <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
+                                                                <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={contentText} skipHtml/>
+                                                            </Box>
+                                                        </TabPanel>
+                                                    </TabPanels>
+                                                </Tabs>
+                                            </>
                                         ) : (
                                             <Input disabled={lockInputs} size='md' value={contentUrl} onChange={(e) => setContentUrl(e.target.value)} />
                                         )}

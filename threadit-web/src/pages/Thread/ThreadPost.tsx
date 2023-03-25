@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack, useClipboard } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Heading, HStack, Spinner, Text, Textarea, VStack, useClipboard, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import ThreadAPI from "../../api/ThreadAPI";
@@ -17,6 +17,8 @@ import { ISpool } from "../../models/Spool";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
 import { ThreadTypes } from "../../constants/ThreadTypes";
+import ChakraUIRenderer from "chakra-ui-markdown-renderer";
+import ReactMarkdown from "react-markdown";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
     const colorMode = useColorMode();
@@ -111,7 +113,11 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                     {thread.title}
                 </Heading>
             )
-            threadContent = (<Text>{thread.content}</Text>)
+            threadContent = (
+                <Box>
+                    <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={thread.content} skipHtml/>
+                </Box>
+            )
         } else if (thread.threadType === ThreadTypes.IMAGE) {
             threadHeader = (
                 <Heading as='h3' size='md'>
@@ -137,7 +143,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     return (
         <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={mode("white", "gray.800")(colorMode)} w="100%" className="threadPost">
             {thread ? (
-                <VStack alignItems="start" spacing={'3'}>
+                <VStack alignItems="start" spacing={'3'} w='100%'>
                     <HStack>
                         <Link to={"/s/" + thread.spoolName}><Text fontWeight={"bold"}>s/{thread ? thread.spoolName : ""}</Text></Link>
                         <Text color={mode("blackAlpha.600", "gray.300")(colorMode)}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
@@ -150,7 +156,22 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                                     <>{threadContent}</>
                                 ) : (
                                     <>
-                                        <Textarea disabled={disableInputs} value={editedText} onChange={(e) => { setEditedText(e.target.value) }} />
+                                        <Tabs w='100%'>
+                                            <TabList>
+                                                <Tab>Edit</Tab>
+                                                <Tab>Preview</Tab>
+                                            </TabList>
+                                            <TabPanels>
+                                                <TabPanel>
+                                                    <Textarea minHeight={'320px'} disabled={disableInputs} value={editedText} onChange={(e) => { setEditedText(e.target.value) }} />
+                                                </TabPanel>
+                                                <TabPanel>
+                                                    <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
+                                                        <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={editedText} skipHtml/>
+                                                    </Box>
+                                                </TabPanel>
+                                            </TabPanels>
+                                        </Tabs>
                                     </>
                                 )}
                         </>
