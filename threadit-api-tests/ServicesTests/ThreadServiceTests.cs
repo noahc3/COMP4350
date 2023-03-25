@@ -77,7 +77,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -87,7 +88,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "adadada-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 01:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 01:00:00").ToUniversalTime(),
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -97,7 +99,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 02:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 02:00:00").ToUniversalTime(),
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             }
         };
 
@@ -184,7 +187,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -194,7 +198,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "adadada-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 01:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 01:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -204,7 +209,8 @@ public class ThreadServiceTests
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
                 SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
-                DateCreated = DateTime.Parse("2021-01-01 02:00:00").ToUniversalTime()
+                DateCreated = DateTime.Parse("2021-01-01 02:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             }
         };
 
@@ -250,7 +256,8 @@ public class ThreadServiceTests
             Title = "Test Thread Title",
             Content = "Test Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         // Ensure Thread is not in database

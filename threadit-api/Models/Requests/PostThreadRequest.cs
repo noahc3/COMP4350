@@ -7,5 +7,6 @@ namespace ThreaditAPI.Models.Requests
         public string Topic { get; set; } = "";
         public string OwnerId { get; set; } = "";
         public string SpoolId { get; set; } = "";
+        public string ThreadType { get; set; } = "";
     }
 }

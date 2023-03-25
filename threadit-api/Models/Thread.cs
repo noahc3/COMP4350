@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using ThreaditAPI.Constants;
 
 namespace ThreaditAPI.Models
 {
@@ -14,6 +15,7 @@ namespace ThreaditAPI.Models
         public List<string> Stitches { get; set; } = new List<string>();
         public required string OwnerId { get; set; }
         public required string SpoolId { get; set; }
+        public required string ThreadType { get; set; } = ThreadTypes.TEXT;
 
 
         public Thread()

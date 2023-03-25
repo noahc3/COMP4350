@@ -5,6 +5,7 @@ using ThreaditAPI.Models.Requests;
 using System.Text.Json;
 using System.Text;
 using ThreaditAPI.Database;
+using ThreaditAPI.Constants;
 
 public static class Utils {
     private static WebApplicationFactory<Program>? _factory;
@@ -118,7 +119,7 @@ public static class Utils {
         }
     }
 
-    public static ThreaditAPI.Models.Thread CreateThread(HttpClient authenticatedClient, string ownerId, string spoolId, string? title = null, string? content = null) {
+    public static ThreaditAPI.Models.Thread CreateThread(HttpClient authenticatedClient, string ownerId, string spoolId, string? title = null, string? content = null, string? type = null) {
         if (title == null) {
             title = GetCleanUUIDString();
         }
@@ -127,11 +128,16 @@ public static class Utils {
             content = GetCleanUUIDString();
         }
 
+        if (type == null) {
+            type = ThreadTypes.TEXT;
+        }
+
         PostThreadRequest req = new PostThreadRequest() {
             Title = title,
             Content = content,
             OwnerId = ownerId,
-            SpoolId = spoolId
+            SpoolId = spoolId,
+            ThreadType = type
         };
 
         var response = authenticatedClient.PostAsync(Endpoints.V1_THREAD_CREATE, WrapContent(req)).Result;

@@ -284,7 +284,8 @@ public class ThreadControllerTests
             Id = _thread.Id,
             OwnerId = _user1.Id,
             SpoolId = _spool.Id,
-            Content = "new content"
+            Content = "new content",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         var result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;
@@ -304,7 +305,8 @@ public class ThreadControllerTests
             Id = " ",
             OwnerId = _user1.Id,
             SpoolId = _spool.Id,
-            Content = "new content"
+            Content = "new content",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         result = _client2.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(editedThread)).Result;

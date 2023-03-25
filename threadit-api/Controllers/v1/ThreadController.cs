@@ -6,11 +6,58 @@ using ThreaditAPI.Models;
 using ThreaditAPI.Models.Requests;
 using ThreaditAPI.Services;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Net;
+using ThreaditAPI.Constants;
 
 namespace ThreaditAPI.Controllers.v1 {
     [ApiController]
     [Route("v1/thread")]
     public class ThreadController : ControllerBase {
+
+        private async Task ValidateImageUrl(string url) {
+            using (HttpClient client = new HttpClient()) {
+                HttpResponseMessage res;
+
+                try {
+                    client.Timeout = TimeSpan.FromSeconds(10);
+                    HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Head, url);
+                    res = await client.SendAsync(msg);
+                } catch (Exception) {
+                    throw new Exception("Could not find an image at the specified URL. Please make sure the URL is a direct link to an image.");
+                }
+
+                if (!res.IsSuccessStatusCode) {
+                    throw new Exception("Website is offline or does not allow embedding this image. Consider using a link post to share this image.");
+                } else if (!(res.Content.Headers.ContentType?.MediaType?.StartsWith("image/") ?? false)) {
+                    throw new Exception("Could not find an image at the specified URL. Please make sure the URL is a direct link to an image.");
+                } else {
+                    int length;
+                    if (res.Content.Headers.ContentLength.HasValue) {
+                        length = (int)res.Content.Headers.ContentLength.Value;
+                    } else {
+                        length = 0;
+                    }
+
+                    if (length > 5000000) {
+                        throw new Exception("For a smooth user experience, images cannot be larger than 5MB. Use a link post to share larger images.");
+                    } else if (length == 0) {
+                        throw new Exception("Website does not allow embedding this image. Consider using a link post to share this image.");
+                    }
+                }
+            }
+        }
+
+        private bool IsValidUrl(string url) {
+            try {
+                Uri? uriResult;
+                return Uri.TryCreate(url, UriKind.Absolute, out uriResult) 
+                        && uriResult != null 
+                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+            } catch {
+                return false;
+            }
+        }
         
         [HttpGet("{threadId}")]
         public async Task<IActionResult> GetThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {            
@@ -22,13 +69,24 @@ namespace ThreaditAPI.Controllers.v1 {
         [AuthenticationRequired]
         public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService) {            
             UserDTO? userDTO = Request.HttpContext.GetUser();
+
+            try {
+                if (request.ThreadType == ThreadTypes.IMAGE) {
+                    await ValidateImageUrl(request.Content);
+                } else if (request.ThreadType == ThreadTypes.LINK && !IsValidUrl(request.Content)) {
+                    return BadRequest("Could not find a page at the specified URL. Please make sure the URL is online and working.");
+                }
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
             
             Models.Thread thread = new Models.Thread{
                 Title = request.Title,
                 Content = request.Content,
                 Topic = request.Topic,
                 OwnerId = userDTO.Id, 
-                SpoolId = request.SpoolId
+                SpoolId = request.SpoolId,
+                ThreadType = request.ThreadType
             };
 
             try {
@@ -49,6 +107,10 @@ namespace ThreaditAPI.Controllers.v1 {
         public async Task<IActionResult> EditThread([FromServices] ThreadService threadService, [FromBody] Models.Thread thread) {
             if (thread == null || String.IsNullOrWhiteSpace(thread.Id)) {
                 return BadRequest("Thread data is invalid.");
+            }
+
+            if (thread.ThreadType != ThreadTypes.TEXT) {
+                return BadRequest("Only text posts can be edited.");
             }
 
             UserDTO profile = Request.HttpContext.GetUser();

@@ -9,13 +9,14 @@ import { authStore } from "../../stores/AuthStore";
 import { userStore } from "../../stores/UserStore";
 import { IoCreateOutline, IoArrowRedo } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineDelete } from "react-icons/md";
-import { BiSave } from "react-icons/bi";
+import { BiLinkExternal, BiSave } from "react-icons/bi";
 import { navStore } from "../../stores/NavStore";
 import { Link } from "react-router-dom";
 import "./ThreadPost.scss";
 import { ISpool } from "../../models/Spool";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
+import { ThreadTypes } from "../../constants/ThreadTypes";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
     const colorMode = useColorMode();
@@ -29,11 +30,14 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const isThreadOwner = (isAuthenticated && thread) ? thread.ownerId === userStore.userProfile?.id : false;
     const isSpoolOwner = (isAuthenticated && thread) ? spool?.ownerId === userStore.userProfile?.id : false;
     const isModerator = (isAuthenticated && thread) ? spool?.moderators.includes(userStore.userProfile!.id) : false;
+    const canEdit = thread && thread.threadType === ThreadTypes.TEXT && (isThreadOwner || isSpoolOwner || isModerator)
+    const canDelete = thread && (isThreadOwner || isSpoolOwner || isModerator)
     const disableInputs = isSaving || isDeleting;
     const profile = userStore.userProfile;
     const [isStitched, setIsStitched] = useState(thread.stitches.includes(profile ? profile.id : ""));
     const [isRipped, setIsRipped] = useState(thread.rips.includes(profile ? profile.id : ""));
     const { onCopy, hasCopied } = useClipboard(window.location.href);
+
 
     const dateString = (
         <Moment fromNow>{thread ? thread.dateCreated : ""}</Moment>
@@ -73,48 +77,77 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
     const stitchThread = async () => {
         if (thread) {
             const stitchedThread = await ThreadAPI.stitchThread(thread.id);
-            if(stitchedThread){
-                updateStitchesAndRips(stitchedThread.stitches, stitchedThread.rips);                   
+            if (stitchedThread) {
+                updateStitchesAndRips(stitchedThread.stitches, stitchedThread.rips);
             }
-          }
+        }
     }
 
     const ripThread = async () => {
         if (thread) {
             const rippedThread = await ThreadAPI.ripThread(thread.id);
-            if(rippedThread){
-                updateStitchesAndRips(rippedThread.stitches, rippedThread.rips);         
+            if (rippedThread) {
+                updateStitchesAndRips(rippedThread.stitches, rippedThread.rips);
             }
-          }
+        }
     }
 
     const updateStitchesAndRips = (newStitches: string[], newRips: string[]) => {
         if (thread) {
-          thread.stitches = newStitches;
-          thread.rips = newRips;
-          setIsStitched(thread.stitches.includes(profile ? profile.id : ""));
-          setIsRipped(thread.rips.includes(profile ? profile.id : ""));
+            thread.stitches = newStitches;
+            thread.rips = newRips;
+            setIsStitched(thread.stitches.includes(profile ? profile.id : ""));
+            setIsRipped(thread.rips.includes(profile ? profile.id : ""));
+        }
+    }
+
+    let threadHeader = (<></>);
+    let threadContent = (<></>);
+
+    if (thread) {
+        if (thread.threadType === ThreadTypes.TEXT) {
+            threadHeader = (
+                <Heading as='h3' size='md'>
+                    {thread.title}
+                </Heading>
+            )
+            threadContent = (<Text>{thread.content}</Text>)
+        } else if (thread.threadType === ThreadTypes.IMAGE) {
+            threadHeader = (
+                <Heading as='h3' size='md'>
+                    {thread.title}
+                </Heading>
+            )
+            threadContent = (<img alt={thread.content} loading='lazy' src={thread.content} />)
+        } else if (thread.threadType === ThreadTypes.LINK) {
+            const domain = new URL(thread.content).hostname
+            threadHeader = (
+                <a href={thread.content} target='_blank' rel="noreferrer">
+                    <VStack alignItems={'start'}>
+                        <Heading as='h3' size='md'>
+                            {thread.title}
+                        </Heading>
+                        <Button colorScheme={'blue'} variant={'link'} rightIcon={<BiLinkExternal />}>{domain}</Button>
+                    </VStack>
+                </a>
+            )
         }
     }
 
     return (
         <Box border="1px solid gray" borderRadius="3px" p="2rem" bgColor={mode("white", "gray.800")(colorMode)} w="100%" className="threadPost">
             {thread ? (
-                <VStack alignItems="start">
+                <VStack alignItems="start" spacing={'3'}>
                     <HStack>
                         <Link to={"/s/" + thread.spoolName}><Text fontWeight={"bold"}>s/{thread ? thread.spoolName : ""}</Text></Link>
                         <Text color={mode("blackAlpha.600", "gray.300")(colorMode)}> • Posted by u/{thread ? thread.authorName : ""} • {dateString}</Text>
                     </HStack>
-                    <Heading as='h3' size='md'>
-                        {thread ? thread.title : ""}
-                    </Heading>
-                    {(thread && thread.content) &&
+                    {threadHeader}
+                    {(thread && threadContent) &&
                         <>
                             {!isEditing ?
                                 (
-                                    <Text>
-                                        {thread.content}
-                                    </Text>
+                                    <>{threadContent}</>
                                 ) : (
                                     <>
                                         <Textarea disabled={disableInputs} value={editedText} onChange={(e) => { setEditedText(e.target.value) }} />
@@ -129,36 +162,37 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                             <Button leftIcon={<ArrowDownIcon />} onClick={() => { ripThread() }} colorScheme={isRipped ? "red" : "gray"}>{thread.rips.length}</Button>
                         </ButtonGroup>
                         <Button size={'sm'} leftIcon={<IoArrowRedo />} onClick={onCopy}>{hasCopied ? "Copied Link!" : "Share"}</Button>
-                    </HStack>
-
-                    {(isThreadOwner || isSpoolOwner || isModerator) &&
-                        <HStack>
-                            {!isConfirmingDelete ?
-                                (
-                                    <ButtonGroup size={'sm'} isAttached>
-                                        {!isEditing ? (
-                                            <>
-                                                <Button leftIcon={<IoCreateOutline />} onClick={() => { startEdit() }}>Edit</Button>
-                                                <Button leftIcon={<MdOutlineDelete />} onClick={() => { setIsConfirmingDelete(true) }}>Delete</Button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Button isLoading={isSaving} loadingText='Saving...' disabled={disableInputs} leftIcon={<BiSave />} onClick={() => { saveEdit() }}>Save</Button>
-                                                <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsEditing(false) }}>Cancel</Button>
-                                            </>
-                                        )}
-                                    </ButtonGroup>
-                                ) : (
-                                    <>
-                                        <Text color={mode("red", "red.300")(colorMode)}>Are you sure you want to delete?</Text>
+                        {(canEdit || canDelete) &&
+                        (
+                            <>
+                                {!isConfirmingDelete ?
+                                    (
                                         <ButtonGroup size={'sm'} isAttached>
-                                            <Button disabled={disableInputs} isLoading={isDeleting} loadingText="Deleting..." leftIcon={<MdOutlineDelete />} colorScheme="red" onClick={() => { deleteThread() }}>Delete</Button>
-                                            <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsConfirmingDelete(false) }}>Cancel</Button>
+                                            {!isEditing ? (
+                                                <>
+                                                    {canEdit && <Button leftIcon={<IoCreateOutline />} onClick={() => { startEdit() }}>Edit</Button>}
+                                                    {canDelete && <Button leftIcon={<MdOutlineDelete />} onClick={() => { setIsConfirmingDelete(true) }}>Delete</Button>}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Button isLoading={isSaving} loadingText='Saving...' disabled={disableInputs} leftIcon={<BiSave />} onClick={() => { saveEdit() }}>Save</Button>
+                                                    <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsEditing(false) }}>Cancel</Button>
+                                                </>
+                                            )}
                                         </ButtonGroup>
-                                    </>
-                                )}
-                        </HStack>
+                                    ) : (
+                                        <>
+                                            <Text color={mode("red", "red.300")(colorMode)}>Are you sure you want to delete?</Text>
+                                            <ButtonGroup size={'sm'} isAttached>
+                                                <Button disabled={disableInputs} isLoading={isDeleting} loadingText="Deleting..." leftIcon={<MdOutlineDelete />} colorScheme="red" onClick={() => { deleteThread() }}>Delete</Button>
+                                                <Button disabled={disableInputs} leftIcon={<MdOutlineCancel />} onClick={() => { setIsConfirmingDelete(false) }}>Cancel</Button>
+                                            </ButtonGroup>
+                                        </>
+                                    )}
+                            </>
+                        )
                     }
+                    </HStack>
                 </VStack>
             ) : (
                 <Box textAlign='center' width='100%'>
