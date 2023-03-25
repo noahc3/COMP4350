@@ -1,12 +1,5 @@
 import { observer } from "mobx-react"
 import { Box, Tab, Tabs, TabList} from "@chakra-ui/react";
-import React from "react";
-import { navStore } from "../../stores/NavStore";
-import SpoolAPI from "../../api/SpoolAPI";
-import ThreadAPI from "../../api/ThreadAPI";
-import { IThreadFull } from "../../models/ThreadFull";
-import { useParams } from "react-router";
-import { useSearchParams } from 'react-router-dom';
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
 import { SortTypes } from "../../constants/SortTypes";

@@ -6,7 +6,6 @@ import SpoolAPI from "../../api/SpoolAPI";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { PostFeed } from "../../containers/Posts/PostFeed";
 import { ISpool } from "../../models/Spool";
-import { IThreadFull } from "../../models/ThreadFull";
 import { IoCreateOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { authStore } from "../../stores/AuthStore";
@@ -18,7 +17,6 @@ import { DeleteIcon, CheckIcon, SettingsIcon } from '@chakra-ui/icons';
 import { OptionBase, Select, SingleValue, ActionMeta } from "chakra-react-select";
 import UserSettingsAPI from "../../api/UserSettingsApi";
 import { useSearchParams } from 'react-router-dom';
-import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
 
