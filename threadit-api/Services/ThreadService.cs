@@ -178,6 +178,10 @@ namespace ThreaditAPI.Services
 
         public async Task<Models.Thread> UpdateThreadAsync(Models.Thread thread)
         {
+            if (thread.Content.Length > 2048)
+            {
+                throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length + ". Please Shorten content.");
+            }
             await this.threadRepository.UpdateThreadAsync(thread);
             return thread;
         }

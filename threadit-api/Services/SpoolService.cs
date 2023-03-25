@@ -56,6 +56,10 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Please remove spaces from spool name.");
             }
+            if (spool.Rules.Length > 2048)
+            {
+                throw new Exception("Spool rules maximum is 2048 characters.");
+            }
             Spool? returnedSpool = await this.spoolRepository.GetSpoolByNameAsync(spool.Name);
             if (returnedSpool != null)
             {
@@ -162,6 +166,10 @@ namespace ThreaditAPI.Services
 
         public async Task SaveRulesAsync(string spoolId, string rules)
         {
+            if (rules.Length > 2048)
+            {
+                throw new Exception("Spool rules maximum is 2048 characters.");
+            }
             await this.spoolRepository.SaveRulesAsync(spoolId, rules);
         }
     }
