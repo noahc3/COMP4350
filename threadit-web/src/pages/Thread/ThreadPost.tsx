@@ -17,8 +17,7 @@ import { ISpool } from "../../models/Spool";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
 import { ThreadTypes } from "../../constants/ThreadTypes";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
-import ReactMarkdown from "react-markdown";
+import { ThreaditMarkdown } from "../../containers/Markdown/ThreaditMarkdown";
 
 export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: IThreadFull }) => {
     const colorMode = useColorMode();
@@ -115,7 +114,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
             )
             threadContent = (
                 <Box>
-                    <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={thread.content} skipHtml/>
+                    <ThreaditMarkdown text={thread.content}/>
                 </Box>
             )
         } else if (thread.threadType === ThreadTypes.IMAGE) {
@@ -167,7 +166,7 @@ export const ThreadPost = observer(({ spool, thread }: { spool: ISpool, thread: 
                                                 </TabPanel>
                                                 <TabPanel>
                                                     <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
-                                                        <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={editedText} skipHtml/>
+                                                    <ThreaditMarkdown text={editedText}/>
                                                     </Box>
                                                 </TabPanel>
                                             </TabPanels>

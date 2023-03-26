@@ -12,9 +12,8 @@ import { mode } from '@chakra-ui/theme-tools'
 import { ThreadTypes } from '../../constants/ThreadTypes';
 import { BiLinkExternal } from 'react-icons/bi';
 import { FaCommentDots } from 'react-icons/fa';
-import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
-import ReactMarkdown from 'react-markdown';
 import React from 'react';
+import { ThreaditMarkdown } from '../Markdown/ThreaditMarkdown';
 
 
 export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any }) => {
@@ -74,7 +73,7 @@ export const FeedPostItem = observer(({ thread }: { thread: IThreadFull | any })
         threadContent = (
             <VStack alignItems={'start'} spacing={0}>
                 <Box ref={renderedMd} maxHeight={'320px'} overflow={'hidden'} className={renderedHeight >= 320 ? 'fade-bottom' : ''}>
-                    <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={thread.content} skipHtml/>
+                    <ThreaditMarkdown text={thread.content}/>
                 </Box>
                 {renderedHeight >= 320 && (
                     <Link to={threadUrl}>

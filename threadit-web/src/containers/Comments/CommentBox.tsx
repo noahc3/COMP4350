@@ -3,8 +3,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
-import ReactMarkdown from "react-markdown";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
+import { ThreaditMarkdown } from "../Markdown/ThreaditMarkdown";
 
 export const CommentBox = observer(
   ({submitCallback, cancelCallback}: {submitCallback: Function, cancelCallback?: Function | undefined}) => {
@@ -44,7 +43,7 @@ export const CommentBox = observer(
                     </TabPanel>
                     <TabPanel>
                         <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
-                            <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={content} skipHtml/>
+                            <ThreaditMarkdown text={content}/>
                         </Box>
                     </TabPanel>
                 </TabPanels>

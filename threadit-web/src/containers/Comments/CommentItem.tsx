@@ -13,8 +13,7 @@ import { CommentBox } from "./CommentBox";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
-import ReactMarkdown from "react-markdown";
+import { ThreaditMarkdown } from "../Markdown/ThreaditMarkdown";
 
 export const CommentItem = observer(
     ({ spool, commentId, commentTree }: { spool: ISpool, commentId: string, commentTree: CommentTree }) => {
@@ -152,8 +151,8 @@ export const CommentItem = observer(
                         </HStack>
                         {!isEditing ? (
                             <>
-                                <Text marginTop={"14px"} whiteSpace='pre-wrap'>
-                                    <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={comment?.content ?? ""} skipHtml/>
+                                <Text marginTop={"14px"}>
+                                    <ThreaditMarkdown text={comment?.content ?? ""}/>
                                 </Text>
 
                                 <HStack alignItems={'center'} marginTop={"14px"}>
@@ -193,7 +192,7 @@ export const CommentItem = observer(
                                         </TabPanel>
                                         <TabPanel>
                                             <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
-                                                <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={editText} skipHtml/>
+                                                <ThreaditMarkdown text={editText}/>
                                             </Box>
                                         </TabPanel>
                                     </TabPanels>

@@ -7,10 +7,9 @@ import SpoolAPI from "../../api/SpoolAPI";
 import { ISpool } from "../../models/Spool";
 import ThreadAPI from "../../api/ThreadAPI";
 import { ThreadTypes } from "../../constants/ThreadTypes";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
+import { ThreaditMarkdown } from "../../containers/Markdown/ThreaditMarkdown";
 
 export default function PostThread() {
     const colorMode = useColorMode();
@@ -115,7 +114,7 @@ export default function PostThread() {
                                                         </TabPanel>
                                                         <TabPanel>
                                                             <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
-                                                                <ReactMarkdown components={ChakraUIRenderer()} disallowedElements={['h1', 'h2', 'h3', 'img']} children={contentText} skipHtml/>
+                                                                <ThreaditMarkdown text={contentText}/>
                                                             </Box>
                                                         </TabPanel>
                                                     </TabPanels>
