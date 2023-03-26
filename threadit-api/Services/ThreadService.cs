@@ -19,6 +19,55 @@ namespace ThreaditAPI.Services
             this.userRepository = new UserRepository(context);
         }
 
+        private async Task<ThreadFull> ConvertToThreadFull(Models.Thread thread) {
+            return (await ConvertToThreadFull(new Models.Thread[] { thread }))[0];
+        }
+
+        private async Task<ThreadFull[]> ConvertToThreadFull(Models.Thread[] threads) {
+            Dictionary<string, Spool> spools = new Dictionary<string, Spool>();
+            Dictionary<string, UserDTO> users = new Dictionary<string, UserDTO>();
+            List<Models.ThreadFull> fullThreads = new List<Models.ThreadFull>();
+            for (int i = 0; i < threads.Count(); i++)
+            {
+                UserDTO user;
+                Spool spool;
+
+                if (users.ContainsKey(threads[i].OwnerId)) {
+                    user = users[threads[i].OwnerId];
+                } else {
+                    user = (await userRepository.GetUserAsync(threads[i].OwnerId))!;
+                    users[threads[i].OwnerId] = user;
+                }
+
+                if (spools.ContainsKey(threads[i].SpoolId)) {
+                    spool = spools[threads[i].SpoolId];
+                } else {
+                    spool = (await spoolRepository.GetSpoolAsync(threads[i].SpoolId))!;
+                    spools[threads[i].SpoolId] = spool;
+                }
+
+                Models.ThreadFull fullThread = new Models.ThreadFull()
+                {
+                    Id = threads[i].Id,
+                    Content = threads[i].Content,
+                    Topic = threads[i].Topic,
+                    Title = threads[i].Title,
+                    SpoolId = threads[i].SpoolId,
+                    OwnerId = threads[i].OwnerId,
+                    DateCreated = threads[i].DateCreated,
+                    Stitches = threads[i].Stitches,
+                    Rips = threads[i].Rips,
+                    AuthorName = user.Username,
+                    SpoolName = spool.Name,
+                    CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
+                };
+                fullThreads.Add(fullThread);
+            }
+
+            return fullThreads.ToArray();
+        }
+
         private async Task<bool> IsDeleteAuthorized(string threadId, string userId)
         {
             Models.Thread? thread = await this.threadRepository.GetThreadAsync(threadId);
@@ -54,36 +103,16 @@ namespace ThreaditAPI.Services
         public async Task<Models.ThreadFull?> GetThreadFullAsync(string threadId)
         {
             Models.Thread? returnedThread = await this.threadRepository.GetThreadAsync(threadId);
-            if (returnedThread != null)
-            {
-                Models.Spool spool = (await spoolRepository.GetSpoolAsync(returnedThread.SpoolId))!;
-                UserDTO user = (await userRepository.GetUserAsync(returnedThread.OwnerId))!;
 
-                Models.ThreadFull fullThread = new Models.ThreadFull()
-                {
-                    Id = returnedThread.Id,
-                    Content = returnedThread.Content,
-                    Topic = returnedThread.Topic,
-                    Title = returnedThread.Title,
-                    SpoolId = returnedThread.SpoolId,
-                    OwnerId = returnedThread.OwnerId,
-                    DateCreated = returnedThread.DateCreated,
-                    Stitches = returnedThread.Stitches,
-                    Rips = returnedThread.Rips,
-                    AuthorName = user.Username,
-                    SpoolName = spool.Name,
-                    CommentCount = await commentRepository.TotalThreadCommentCount(returnedThread.Id),
-                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(returnedThread.Id)
-                };
-                return fullThread;
-            }
-            else
+            if (returnedThread == null)
             {
                 throw new Exception("Thread does not exist.");
             }
+
+            return await ConvertToThreadFull(returnedThread);
         }
 
-        public async Task<List<Models.ThreadFull>> GetThreadsBySpoolAsync(string spoolName)
+        public async Task<Models.ThreadFull[]> GetThreadsBySpoolAsync(string spoolName, string? sort = null, string? searchQuery = null, int? skip = null)
         {
             Models.Spool? spool = await spoolRepository.GetSpoolByNameAsync(spoolName);
 
@@ -91,64 +120,15 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Spool does not exist.");
             }
-
-            Models.Thread[] threads = await this.threadRepository.GetThreadsBySpoolAsync(spool.Id);
-            List<Models.ThreadFull> fullThreads = new List<Models.ThreadFull>();
-            for (int i = 0; i < threads.Length; i++)
-            {
-                UserDTO user = (await userRepository.GetUserAsync(threads[i].OwnerId))!;
-
-                Models.ThreadFull fullThread = new Models.ThreadFull()
-                {
-                    Id = threads[i].Id,
-                    Content = threads[i].Content,
-                    Topic = threads[i].Topic,
-                    Title = threads[i].Title,
-                    SpoolId = threads[i].SpoolId,
-                    OwnerId = threads[i].OwnerId,
-                    DateCreated = threads[i].DateCreated,
-                    Stitches = threads[i].Stitches,
-                    Rips = threads[i].Rips,
-                    AuthorName = user.Username,
-                    SpoolName = spool.Name,
-                    CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
-                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
-                };
-                fullThreads.Add(fullThread);
-            }
-
-            return fullThreads;
+            
+            Models.Thread[] threads = await this.threadRepository.GetThreadsAsync(sort, searchQuery, skip, spool.Id);
+            return await ConvertToThreadFull(threads);
         }
 
-        public async Task<Models.ThreadFull[]> GetAllThreadsAsync()
+        public async Task<Models.ThreadFull[]> GetThreadsAsync(string? sort = null, string? searchQuery = null, int? skip = null, string? spoolId = null)
         {
-            Models.Thread[] threads = await this.threadRepository.GetAllThreadsAsync();
-            Models.ThreadFull[] fullThreads = new Models.ThreadFull[threads.Length];
-            for (int i = 0; i < threads.Length; i++)
-            {
-                UserDTO user = (await new UserService(new PostgresDbContext()).GetUserAsync(threads[i].OwnerId))!;
-                Spool spool = (await new SpoolService(new PostgresDbContext()).GetSpoolAsync(threads[i].SpoolId))!;
-
-                Models.ThreadFull fullThread = new Models.ThreadFull()
-                {
-                    Id = threads[i].Id,
-                    Content = threads[i].Content,
-                    Topic = threads[i].Topic,
-                    Title = threads[i].Title,
-                    SpoolId = threads[i].SpoolId,
-                    OwnerId = threads[i].OwnerId,
-                    DateCreated = threads[i].DateCreated,
-                    Stitches = threads[i].Stitches,
-                    Rips = threads[i].Rips,
-                    AuthorName = user.Username,
-                    SpoolName = spool.Name,
-                    CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
-                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
-                };
-                fullThreads[i] = fullThread;
-            }
-
-            return fullThreads;
+            Models.Thread[] threads = await this.threadRepository.GetThreadsAsync(sort, searchQuery, skip, spoolId);
+            return await ConvertToThreadFull(threads);
         }
 
         public async Task<Models.Thread> InsertThreadAsync(Models.Thread thread)

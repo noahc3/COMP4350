@@ -2,15 +2,12 @@ import { AddIcon, StarIcon} from "@chakra-ui/icons";
 import { Box, Button, Container, HStack, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, VStack} from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import ThreadAPI from "../../api/ThreadAPI";
 import UserSettingsAPI from "../../api/UserSettingsApi";
 import InterestAPI from "../../api/InterestAPI";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { PostFeed } from "../../containers/Posts/PostFeed";
-import { IThreadFull } from "../../models/ThreadFull";
 import { IInterest } from "../../models/Interest";
 import { authStore } from "../../stores/AuthStore";
-import { ThreadSorter } from "../../containers/ThreadSorter/ThreadSorter";
 import { spoolStore } from "../../stores/SpoolStore";
 import { navStore } from "../../stores/NavStore";
 import {Select, SingleValue, ActionMeta } from "chakra-react-select"
@@ -20,7 +17,6 @@ import { mode } from '@chakra-ui/theme-tools'
 export const Home = observer(() => {
     const isAuthenticated = authStore.isAuthenticated;
     const { colorMode } = useColorMode()
-    const [threads, setThreads] = useState<IThreadFull[]>([]);
     const [interests, setInterests] = useState<IInterest[]>([]);
     const {isOpen, onOpen, onClose} = useDisclosure();
 
@@ -37,16 +33,6 @@ export const Home = observer(() => {
             navStore.navigateTo(`/s/${selectedOption.label}`)
         }
     }
-
-    const setSortedThreads = (threads: IThreadFull[]) => {
-        setThreads(threads);
-      };
-
-    React.useEffect(() => {
-        ThreadAPI.getAllThreads("", "").then((threads) => {
-            setThreads(threads);
-        });
-    }, []);
 
     React.useEffect(() => {
         InterestAPI.getAllInterests().then((interests) => {
@@ -86,8 +72,7 @@ export const Home = observer(() => {
                                 placeholder="Search"
                             />
                         </Box>
-                        <ThreadSorter onThreadsSorted={setSortedThreads}></ThreadSorter>
-                        <PostFeed threads={threads}/>
+                        <PostFeed />
                     </VStack>
                 </HStack>
             </Container>

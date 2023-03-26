@@ -1032,11 +1032,11 @@ public class SpoolRepositoryTests
             SpoolId = testSpool.Id
         };
         // Ensure Thread is not in database
-        ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
         Assert.That(returnedThread, Is.Null);
         // Add Thread to database
         await _threadRepository.InsertThreadAsync(testThread);
-        returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
         Assert.That(returnedThread, Is.Not.Null);
 
         //delete spool
@@ -1045,7 +1045,7 @@ public class SpoolRepositoryTests
         Assert.That(returnedSpool, Is.Null);
 
         //retrieve thread
-        returnedThread = await _threadRepository.GetThreadAsync(testThread);
+        returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
         Assert.That(returnedThread, Is.Null);
     }
 

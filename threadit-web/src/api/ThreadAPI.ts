@@ -1,4 +1,5 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
+import { SortTypes } from "../constants/SortTypes";
 import { IThread } from "../models/Thread";
 import { IThreadFull } from "../models/ThreadFull";
 import { deleteWithAuth, get, postWithAuth } from "./Request";
@@ -8,7 +9,7 @@ const postThreadEndpoint = ApiEndpoint('/v1/thread/create');
 const editThreadEndpoint = ApiEndpoint('/v1/thread/edit');
 const stitchThreadEndpoint = ApiEndpoint('/v1/thread/stitch');
 const ripThreadEndpoint = ApiEndpoint('/v1/thread/rip');
-const allThreadsEndpoint = ApiEndpoint('/v1/thread/all');
+const allThreadsEndpoint = ApiEndpoint('/v1/thread/threads/');
 
 export default class ThreadAPI {
     static async getThreadById(threadId: string): Promise<IThreadFull> {
@@ -36,8 +37,13 @@ export default class ThreadAPI {
         return await response.json();
     }
 
-    static async getAllThreads(sortType: string, searchWord: string): Promise<IThreadFull[]> {
-        const response = await get(allThreadsEndpoint + (sortType === '' ? '' : '/' + sortType) + (searchWord === '' ? '' : '/?q=' + searchWord));
+    static async getThreads(sortType: SortTypes, searchWord?: string | undefined, skip?: number | undefined, spoolId?: string | undefined): Promise<IThreadFull[]> {
+        const params = new URLSearchParams();
+        if (searchWord) params.append('q', searchWord);
+        if (skip) params.append('skip', skip.toString());
+        if (spoolId) params.append('spoolId', spoolId);
+
+        const response = await get(allThreadsEndpoint + sortType + '?' + params.toString());
     
         if (!response.ok) {
             throw new Error(`Failed to get all threads: ${await response.text()}`);

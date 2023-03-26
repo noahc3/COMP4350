@@ -132,7 +132,7 @@ public class ThreadServiceTests
     [Test]
     public async Task RetrieveAllThreads_NoneExists_ShouldFail()
     {
-        var threads = await _threadService.GetAllThreadsAsync();
+        var threads = await _threadService.GetThreadsAsync();
 
         Assert.That(threads, Is.Empty);
     }
@@ -215,7 +215,7 @@ public class ThreadServiceTests
         }
 
         // Ensure query by spool returns no items
-        var returnedThreads = await _threadService.GetAllThreadsAsync();
+        var returnedThreads = await _threadService.GetThreadsAsync();
         Assert.That(returnedThreads, Is.Empty);
 
         // Add Thread to database
@@ -225,7 +225,7 @@ public class ThreadServiceTests
         }
 
         // Ensure Thread is added correctly
-        returnedThreads = await _threadService.GetAllThreadsAsync();
+        returnedThreads = await _threadService.GetThreadsAsync();
         Assert.That(returnedThreads, Is.Not.Null);
         Assert.That(returnedThreads.Count, Is.EqualTo(3));
         Assert.That(returnedThreads[0].Title, Is.EqualTo("Thread Title 3"));
