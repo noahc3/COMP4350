@@ -6,6 +6,5 @@ namespace ThreaditAPI.Constants {
         public const string SORT_HOT = "hot";
         public const string SORT_TOP = "top";
         public const string SORT_CONTROVERSIAL = "controversial";
-        public const string SORT_COMMENTS = "comments";
     }
 }
