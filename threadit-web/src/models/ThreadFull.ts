@@ -1,3 +1,5 @@
+import { ThreadTypes } from "../constants/ThreadTypes"
+
 export interface IThreadFull {
     id: string
     topic: string
@@ -12,4 +14,5 @@ export interface IThreadFull {
     rips: string[]
     topLevelCommentCount: number
     commentCount: number
+    threadType: ThreadTypes
 }

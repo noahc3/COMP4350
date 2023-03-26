@@ -1,0 +1,29 @@
+.markdown-overrides h1 {
+    font-size:1.6rem;
+    text-align: left;
+}
+
+.markdown-overrides h2 {
+    font-size:1.35rem;
+    text-align: left;
+}
+
+.markdown-overrides h3 {
+    font-size:1.2rem;
+    text-align: left;
+}
+
+.markdown-overrides h4 {
+    font-size:1.1rem;
+    text-align: left;
+}
+
+.markdown-overrides h5 {
+    font-size:1.0rem;
+    text-align: left;
+}
+
+.markdown-overrides h6 {
+    font-size:0.9rem;
+    text-align: left;
+}

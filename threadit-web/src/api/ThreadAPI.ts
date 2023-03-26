@@ -1,5 +1,6 @@
 import { ApiEndpoint } from "../constants/ApiConstants";
 import { SortTypes } from "../constants/SortTypes";
+import { ThreadTypes } from "../constants/ThreadTypes";
 import { IThread } from "../models/Thread";
 import { IThreadFull } from "../models/ThreadFull";
 import { deleteWithAuth, get, postWithAuth } from "./Request";
@@ -22,12 +23,13 @@ export default class ThreadAPI {
         return await response.json();
     }
 
-    static async postThread(title: string, content: string, topic: string, spoolId: string): Promise<IThread> {
+    static async postThread(title: string, content: string, topic: string, spoolId: string, threadType: ThreadTypes): Promise<IThread> {
         const response = await postWithAuth(postThreadEndpoint, {
             title,
             content,
             topic,
             spoolId,
+            threadType
         });
     
         if (!response.ok) {

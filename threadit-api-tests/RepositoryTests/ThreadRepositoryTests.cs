@@ -35,7 +35,8 @@ public class ThreadRepositoryTests
             Title = "Thread Title",
             Content = "Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         // Ensure Thread is not in database
@@ -76,7 +77,8 @@ public class ThreadRepositoryTests
                 Title = "Thread Title 1",
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -85,7 +87,8 @@ public class ThreadRepositoryTests
                 Title = "Thread Title 2",
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-                SpoolId = "adadada-9031-4e9b-b712-6df32cd75641"
+                SpoolId = "adadada-9031-4e9b-b712-6df32cd75641",
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -94,7 +97,8 @@ public class ThreadRepositoryTests
                 Title = "Thread Title 3",
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+                SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             },
             new ThreaditAPI.Models.Thread()
             {
@@ -103,7 +107,8 @@ public class ThreadRepositoryTests
                 Title = "Thread Title 4",
                 Content = "Thread Content",
                 OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-                SpoolId = "67676-9031-4e9b-b712-6df32cd75641"
+                SpoolId = "67676-9031-4e9b-b712-6df32cd75641",
+                ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
             }
         };
 
@@ -143,7 +148,8 @@ public class ThreadRepositoryTests
             Title = "Test Thread Title",
             Content = "Test Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         // Ensure Thread is not in database
@@ -171,7 +177,8 @@ public class ThreadRepositoryTests
             Title = "Updated test title",
             Content = "Updated test content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         //update thread in the database
@@ -201,7 +208,8 @@ public class ThreadRepositoryTests
             Title = "Test Thread Title",
             Content = "Test Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         // Ensure Thread is not in database
@@ -229,7 +237,8 @@ public class ThreadRepositoryTests
             Title = "Test Thread Title",
             Content = "Test Thread Content",
             OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
-            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641"
+            SpoolId = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
 
         // Ensure Thread is not in database

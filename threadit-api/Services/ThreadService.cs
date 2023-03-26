@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using ThreaditAPI.Constants;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -60,7 +61,8 @@ namespace ThreaditAPI.Services
                     AuthorName = user.Username,
                     SpoolName = spool.Name,
                     CommentCount = await commentRepository.TotalThreadCommentCount(threads[i].Id),
-                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id)
+                    TopLevelCommentCount = await commentRepository.TopLevelThreadCommentCount(threads[i].Id),
+                    ThreadType = threads[i].ThreadType
                 };
                 fullThreads.Add(fullThread);
             }
@@ -145,6 +147,11 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length + ". Please Shorten content.");
             }
+            if (!ThreadTypes.types.Contains(thread.ThreadType)) {
+                throw new Exception($"Thread type must be one of {ThreadTypes.typesString}.");
+            }
+
+
 
             Models.Thread? dbThread = await this.threadRepository.GetThreadAsync(thread.Id);
             if (dbThread != null)

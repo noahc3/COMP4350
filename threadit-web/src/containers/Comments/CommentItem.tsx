@@ -1,5 +1,5 @@
 import { HStack, VStack } from "@chakra-ui/layout";
-import { Avatar, Box, Button, ButtonGroup, Flex, Spacer, Text, Textarea } from "@chakra-ui/react";
+import { Avatar, Box, Button, ButtonGroup, Flex, Spacer, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
@@ -13,6 +13,7 @@ import { CommentBox } from "./CommentBox";
 import { CommentTree, CommentTreeNode } from "./CommentTree";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools'
+import { ThreaditMarkdown } from "../Markdown/ThreaditMarkdown";
 
 export const CommentItem = observer(
     ({ spool, commentId, commentTree }: { spool: ISpool, commentId: string, commentTree: CommentTree }) => {
@@ -150,8 +151,8 @@ export const CommentItem = observer(
                         </HStack>
                         {!isEditing ? (
                             <>
-                                <Text marginTop={"14px"} whiteSpace='pre-wrap'>
-                                    {comment?.content}
+                                <Text marginTop={"14px"}>
+                                    <ThreaditMarkdown text={comment?.content ?? ""}/>
                                 </Text>
 
                                 <HStack alignItems={'center'} marginTop={"14px"}>
@@ -180,7 +181,22 @@ export const CommentItem = observer(
                             </>
                         ) : (
                             <>
-                                <Textarea w='100%' value={editText} onChange={((e) => { setEditText(e.target.value) })} />
+                                <Tabs w='100%'>
+                                    <TabList>
+                                        <Tab>Edit</Tab>
+                                        <Tab isDisabled={editText.length === 0}>Preview</Tab>
+                                    </TabList>
+                                    <TabPanels>
+                                        <TabPanel>
+                                            <Textarea disabled={disableInputs} value={editText} onChange={(e) => { setEditText(e.target.value) }} />
+                                        </TabPanel>
+                                        <TabPanel>
+                                            <Box border='1px' borderRadius={'5'} borderColor={'chakra-border-color'} padding={'3'}>
+                                                <ThreaditMarkdown text={editText}/>
+                                            </Box>
+                                        </TabPanel>
+                                    </TabPanels>
+                                </Tabs>
                                 <Flex direction={'row'} w='100%' marginTop={"14px"}>
                                     <Spacer />
                                     <ButtonGroup size={'sm'}>

@@ -82,7 +82,8 @@ namespace ThreaditAPI.Database {
                     SpoolId = "40cf2fd7-4c7b-422e-a9e7-3ee689e4d68c",
                     Content = "This needs at least some content lol",
                     DateCreated = DateTime.Parse("2023-02-15T10:16:39+00:00").ToUniversalTime(),
-                    Stitches = new List<string> { "3257a727-3e9c-4734-808e-42ff9725c779" }
+                    Stitches = new List<string> { "3257a727-3e9c-4734-808e-42ff9725c779" },
+                    ThreadType = ThreadTypes.TEXT
                 },
                 new Models.Thread { 
                     Id = "6649b329-44d8-49ed-be89-a9ce56d35d04",
@@ -90,7 +91,8 @@ namespace ThreaditAPI.Database {
                     OwnerId = "c55330ec-0977-4d01-8137-8cab28a2d7f6",
                     SpoolId = "40cf2fd7-4c7b-422e-a9e7-3ee689e4d68c",
                     Content = "Yay more content!",
-                    DateCreated = DateTime.Parse("2023-02-10T11:45:52+00:00").ToUniversalTime()
+                    DateCreated = DateTime.Parse("2023-02-10T11:45:52+00:00").ToUniversalTime(),
+                    ThreadType = ThreadTypes.TEXT
                 },
                 new Models.Thread {
                     Id = "4c60da7e-a692-44b3-acbb-7619db366d10",
@@ -98,7 +100,8 @@ namespace ThreaditAPI.Database {
                     OwnerId = "74b990e7-eed6-4cff-9769-5fbbf2fcaf56",
                     SpoolId = "7f527ccf-a2bc-4adb-a7da-970be1175525",
                     Content = "Personally, Karlsson. I think Nurse is overpaid and overvalued for what he brings to the ice.",
-                    DateCreated = DateTime.Parse("2023-02-15T17:50:55+00:00").ToUniversalTime()
+                    DateCreated = DateTime.Parse("2023-02-15T17:50:55+00:00").ToUniversalTime(),
+                    ThreadType = ThreadTypes.TEXT
                 }
             };
 

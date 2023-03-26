@@ -1029,7 +1029,8 @@ public class SpoolRepositoryTests
             Title = "Thread Title",
             Content = "Thread Content",
             OwnerId = testUser.Id,
-            SpoolId = testSpool.Id
+            SpoolId = testSpool.Id,
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
         };
         // Ensure Thread is not in database
         ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(testThread.Id);
