@@ -6,10 +6,10 @@ namespace ThreaditAPI.Constants {
         public const string LINK = "link";
         public const string IMAGE = "image";
 
-        public static string[] types = new string[] {
+        public static readonly string[] types = new string[] {
             TEXT, LINK, IMAGE
         };
 
-        public static string typesString = String.Join(", ", types);
+        public static readonly string typesString = String.Join(", ", types);
     }
 }

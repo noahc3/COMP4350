@@ -14,7 +14,7 @@ namespace ThreaditAPI.Controllers.v1 {
     [Route("v1/thread")]
     public class ThreadController : ControllerBase {
 
-        private async Task ValidateImageUrl(string url) {
+        private static async Task ValidateImageUrl(string url) {
             using (HttpClient client = new HttpClient()) {
                 HttpResponseMessage res;
 
@@ -47,7 +47,7 @@ namespace ThreaditAPI.Controllers.v1 {
             }
         }
 
-        private bool IsValidUrl(string url) {
+        private static bool IsValidUrl(string url) {
             try {
                 Uri? uriResult;
                 return Uri.TryCreate(url, UriKind.Absolute, out uriResult) 
@@ -71,10 +71,10 @@ namespace ThreaditAPI.Controllers.v1 {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
             try {
-                if (request.ThreadType == ThreadTypes.IMAGE) {
+                if (request.ThreadType == ThreadTypes.IMAGE && IsValidUrl(request.Content)) {
                     await ValidateImageUrl(request.Content);
                 } else if (request.ThreadType == ThreadTypes.LINK && !IsValidUrl(request.Content)) {
-                    return BadRequest("Could not find a page at the specified URL. Please make sure the URL is online and working.");
+                    return BadRequest("Could not find a page at the specified URL. Please make sure the URL is valid.");
                 }
             } catch (Exception e) {
                 return BadRequest(e.Message);
