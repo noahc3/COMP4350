@@ -53,11 +53,12 @@ export const Home = observer(() => {
 
   React.useEffect(() => {
     interestStore.refreshOtherInterests();
-  }, [isAuthenticated, interests]);
+  }, [isAuthenticated]);
 
   const addInterest = async (interestMod: string) => {
     await UserSettingsAPI.addUserInterest(interestMod);
     await spoolStore.refreshSuggestedSpools();
+    await interestStore.refreshOtherInterests();
   };
 
   const interestButtons = interests?.map(function (interest) {

@@ -33,16 +33,20 @@ export const UserSettings = observer(() => {
   React.useEffect(() => {
     interestStore.refreshJoinedInterests();
     interestStore.refreshOtherInterests();
-  }, [profile, isAuthenticated, userInterests]);
+  }, [profile, isAuthenticated]);
 
   const removeInterest = async (interestMod: string) => {
     await UserSettingsAPI.removeUserInterest(interestMod);
     await spoolStore.refreshSuggestedSpools();
+    await interestStore.refreshJoinedInterests();
+    await interestStore.refreshOtherInterests();
   };
 
   const addInterest = async (interestMod: string) => {
     await UserSettingsAPI.addUserInterest(interestMod);
     await spoolStore.refreshSuggestedSpools();
+    await interestStore.refreshJoinedInterests();
+    await interestStore.refreshOtherInterests();
   };
 
   const interested = userInterests?.map(function (interest) {
