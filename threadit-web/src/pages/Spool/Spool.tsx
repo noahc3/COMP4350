@@ -53,6 +53,7 @@ export const Spool = observer(() => {
     React.useEffect(() => {
         if (id) {
             SpoolAPI.getSpoolByName(id).then((spool) => {
+                setSelectOption([ {value: '', label: `Search for "" in s/${spool ? spool.name : ''}`}]);
                 setSpool(spool);
                 spoolUsersStore.refreshAllModerators(spool.id);
                 spoolStore.refreshSpool(spool);
