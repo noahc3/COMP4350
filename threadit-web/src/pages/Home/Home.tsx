@@ -15,12 +15,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React from "react";
 import UserSettingsAPI from "../../api/UserSettingsApi";
-import InterestAPI from "../../api/InterestAPI";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import { PostFeed } from "../../containers/Posts/PostFeed";
-import { IInterest } from "../../models/Interest";
 import { authStore } from "../../stores/AuthStore";
 import { spoolStore } from "../../stores/SpoolStore";
 import { navStore } from "../../stores/NavStore";

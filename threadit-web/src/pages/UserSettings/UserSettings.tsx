@@ -15,17 +15,12 @@ import {
   VStack,
   Text,
   Avatar,
-  Tag,
-  TagLabel,
-  TagRightIcon,
-  StackDivider,
 } from "@chakra-ui/react";
 
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
 import { interestStore } from "../../stores/InterestStore";
 import UserSettingsAPI from "../../api/UserSettingsApi";
-import { Search2Icon } from "@chakra-ui/icons";
 import { spoolStore } from "../../stores/SpoolStore";
 
 export const UserSettings = observer(() => {

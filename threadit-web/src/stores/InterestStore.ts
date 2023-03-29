@@ -5,7 +5,6 @@ import {
   computed,
   runInAction,
 } from "mobx";
-import { IInterest } from "../models/Interest";
 import { authStore } from "./AuthStore";
 import InterestAPI from "../api/InterestAPI";
 import UserSettingsAPI from "../api/UserSettingsApi";
