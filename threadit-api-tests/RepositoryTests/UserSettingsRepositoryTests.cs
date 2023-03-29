@@ -70,7 +70,7 @@ public class UserSettingsRepositoryTests
 		returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
 		Assert.That(returnedUser, Is.Not.Null);
 
-		//create a user Settings 
+		//create a user Settings
 		//UserSettings
 		UserSettings testUserSettings = new UserSettings()
 		{

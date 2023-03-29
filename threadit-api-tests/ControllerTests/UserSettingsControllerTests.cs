@@ -91,7 +91,7 @@ public class UserSettingsControllerTests
 		string interest1 = "interest1";
 		string interest2 = "interest2";
 
-		// add interest1, ensure its in the result, ensure its in the usersettings interests list, 
+		// add interest1, ensure its in the result, ensure its in the usersettings interests list,
 		// ensure belongs says user belongs to interest1
 		var endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest1);
 		var result = _client1.GetAsync(endpoint).Result;
@@ -111,7 +111,7 @@ public class UserSettingsControllerTests
 		var belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
 		Assert.IsTrue(belong);
 
-		// add interest2, ensure its in the result, ensure its in the usersettings interests list, 
+		// add interest2, ensure its in the result, ensure its in the usersettings interests list,
 		// ensure belongs says user belongs to interest1 and interest2
 		endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest2);
 		result = _client1.GetAsync(endpoint).Result;
@@ -139,7 +139,7 @@ public class UserSettingsControllerTests
 		belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
 		Assert.IsTrue(belong);
 
-		// remove interest1, ensure its not in the result, ensure its not in the usersettings interests list, 
+		// remove interest1, ensure its not in the result, ensure its not in the usersettings interests list,
 		// ensure belongs says user does not belong to interest1 but does to interest2
 		endpoint = String.Format(Endpoints.V1_USERSETTINGS_REMOVE_INTEREST, interest1);
 		result = _client1.GetAsync(endpoint).Result;
@@ -167,7 +167,7 @@ public class UserSettingsControllerTests
 		belong = bool.Parse(result.Content.ReadAsStringAsync().Result);
 		Assert.IsTrue(belong);
 
-		// remove interest2, ensure its not in the result, ensure its not in the usersettings interests list, 
+		// remove interest2, ensure its not in the result, ensure its not in the usersettings interests list,
 		// ensure belongs says user does not belong to interest1 or interest2
 		endpoint = String.Format(Endpoints.V1_USERSETTINGS_REMOVE_INTEREST, interest2);
 		result = _client1.GetAsync(endpoint).Result;
