@@ -34,6 +34,11 @@ This application should be able to respond to 1000 requests across 100 users per
 - GitHub Actions: CI/CD
 - Jira: Project Management
 
+## Coding Style
+
+Backend C# Files: [EditorConfig](https://editorconfig.org/)
+Typescript/CSS/Json: [Prettier](https://prettier.io/docs/en/configuration.html)
+
 ## User Stories
 
 **User Profiles**

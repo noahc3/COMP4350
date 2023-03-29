@@ -1,7 +1,7 @@
 namespace ThreaditAPI.Models.Requests
 {
-	public class SaveRulesRequest
-	{
-		public string Rules { get; set; } = "";
-	}
+    public class SaveRulesRequest
+    {
+        public string Rules { get; set; } = "";
+    }
 }

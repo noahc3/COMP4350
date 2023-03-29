@@ -1,12 +1,12 @@
 ﻿namespace ThreaditAPI.Models
 {
-	public class User : UserDTO
-	{
-		public string PasswordHash { get; set; } = "";
+    public class User : UserDTO
+    {
+        public string PasswordHash { get; set; } = "";
 
-		public User()
-		{
+        public User()
+        {
 
-		}
-	}
+        }
+    }
 }
