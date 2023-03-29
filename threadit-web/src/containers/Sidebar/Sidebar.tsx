@@ -158,8 +158,7 @@ export const Sidebar = observer(() => {
             <HStack marginLeft={"8.3px"} marginBottom={2}>
               <Avatar
                 size={"sm"}
-                name="Dan Abrahmov"
-                src="/img/avatar_placeholder.png"
+                src={profile.avatar}
               />
               <Text>{profile.username}</Text>
             </HStack>

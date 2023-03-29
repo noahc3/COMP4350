@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ThreaditAPI.Extensions;
 using ThreaditAPI.Middleware;
+using ThreaditAPI.Models;
+using System.Security.Cryptography;
 
 namespace ThreaditAPI.Controllers.v1
 {
@@ -12,7 +14,15 @@ namespace ThreaditAPI.Controllers.v1
         [AuthenticationRequired]
         public IActionResult GetProfile()
         {
-            return Ok(Request.HttpContext.GetUser());
+            UserDTO user = Request.HttpContext.GetUser();
+        
+            using (MD5 md5 = MD5.Create()) {
+                byte[] hash = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Email.Trim().ToLower()));
+                string gravatarHash = System.BitConverter.ToString(hash).Replace("-", "").ToLower();
+                user.Avatar = $"https://www.gravatar.com/avatar/{gravatarHash}.jpg";
+            }
+
+            return Ok(user);
         }
     }
 }

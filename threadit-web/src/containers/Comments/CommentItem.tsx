@@ -192,7 +192,7 @@ export const CommentItem = observer(
       <>
         <Flex flexDir={"row"} w="100%">
           <Flex flexDir={"column"}>
-            <Avatar size={"sm"} src="/img/avatar_placeholder.png" />
+            <Avatar size={"sm"} src={comment?.ownerAvatar} />
             <Box
               marginLeft={"13px"}
               marginRight={"13px"}

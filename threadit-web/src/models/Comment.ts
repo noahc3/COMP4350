@@ -8,5 +8,6 @@ export interface IComment {
   dateCreated: string;
   isDeleted: boolean;
   ownerName: string;
+  ownerAvatar: string;
   childCommentCount: number;
 }

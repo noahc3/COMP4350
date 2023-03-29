@@ -83,13 +83,14 @@ export const UserSettings = observer(() => {
                 <Text fontSize={"xl"}>Profile Picture:</Text>
                 <Avatar
                   size={"xxl"}
-                  name="Dan Abrahmov"
-                  src="/img/avatar_placeholder.png"
+                  src={profile?.avatar}
                 />
 
-                <Button size={"md"} colorScheme={"purple"}>
-                  <label>Change Profile Picture</label>
-                </Button>
+                <a href="https://www.gravatar.com/site/login" target='_blank' rel='noreferrer'>
+                    <Button size={"md"} colorScheme={"purple"}>
+                        <label>Change Profile Picture</label>
+                    </Button>
+                </a>
               </VStack>
               <HStack spacing={1} justifyContent={"center"} marginTop={50}>
                 <Text fontSize={"xl"}>Theme:</Text>
