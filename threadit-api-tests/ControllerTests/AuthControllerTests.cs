@@ -1,10 +1,10 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Models.Requests;
 
 namespace ThreaditTests.Controllers;
@@ -23,7 +23,8 @@ public class AuthControllerTests
         HttpClient client = Utils.GetHttpClient();
 
         string password = Utils.GetCleanUUIDString();
-        CreateAccountRequest req = new CreateAccountRequest() {
+        CreateAccountRequest req = new CreateAccountRequest()
+        {
             Email = Utils.GetCleanUUIDString() + "@test.com",
             Username = Utils.GetCleanUUIDString(),
             Password = password,
@@ -33,7 +34,8 @@ public class AuthControllerTests
         var response = client.PostAsync(Endpoints.V1_AUTH_REGISTER, new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "application/json")).Result;
         Assert.IsTrue(response.IsSuccessStatusCode);
 
-        LoginRequest loginReq = new LoginRequest() {
+        LoginRequest loginReq = new LoginRequest()
+        {
             Username = req.Username,
             Password = req.Password
         };
@@ -45,13 +47,14 @@ public class AuthControllerTests
 
         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
-        CheckSessionRequest checkReq = new CheckSessionRequest() {
+        CheckSessionRequest checkReq = new CheckSessionRequest()
+        {
             Token = token
         };
 
         response = client.PostAsync(Endpoints.V1_AUTH_CHECKSESSION, new StringContent(JsonSerializer.Serialize(checkReq), Encoding.UTF8, "application/json")).Result;
         Assert.IsTrue(response.IsSuccessStatusCode);
-        
+
         response = client.GetAsync(Endpoints.V1_AUTH_LOGOUT).Result;
         Assert.IsTrue(response.IsSuccessStatusCode);
 
@@ -65,7 +68,8 @@ public class AuthControllerTests
         HttpClient client = Utils.GetHttpClient();
 
         string password = Utils.GetCleanUUIDString();
-        CreateAccountRequest req = new CreateAccountRequest() {
+        CreateAccountRequest req = new CreateAccountRequest()
+        {
             Email = Utils.GetCleanUUIDString() + "@test.com",
             Username = Utils.GetCleanUUIDString(),
             Password = password,
@@ -77,7 +81,8 @@ public class AuthControllerTests
 
         // email already exists
         password = Utils.GetCleanUUIDString();
-        CreateAccountRequest req2 = new CreateAccountRequest() {
+        CreateAccountRequest req2 = new CreateAccountRequest()
+        {
             Email = req.Email,
             Username = Utils.GetCleanUUIDString(),
             Password = password,
@@ -89,7 +94,8 @@ public class AuthControllerTests
 
         // username already exists
         password = Utils.GetCleanUUIDString();
-        CreateAccountRequest req3 = new CreateAccountRequest() {
+        CreateAccountRequest req3 = new CreateAccountRequest()
+        {
             Email = Utils.GetCleanUUIDString(),
             Username = req.Username,
             Password = password,
@@ -106,7 +112,8 @@ public class AuthControllerTests
         HttpClient client = Utils.GetHttpClient();
 
         string password = Utils.GetCleanUUIDString();
-        CreateAccountRequest req = new CreateAccountRequest() {
+        CreateAccountRequest req = new CreateAccountRequest()
+        {
             Email = Utils.GetCleanUUIDString() + "@test.com",
             Username = Utils.GetCleanUUIDString(),
             Password = password,
@@ -117,7 +124,8 @@ public class AuthControllerTests
         Assert.IsTrue(response.IsSuccessStatusCode);
 
         // invalid username, correct password
-        LoginRequest loginReq = new LoginRequest() {
+        LoginRequest loginReq = new LoginRequest()
+        {
             Username = Utils.GetCleanUUIDString(),
             Password = req.Password
         };
@@ -126,7 +134,8 @@ public class AuthControllerTests
         Assert.IsFalse(response.IsSuccessStatusCode);
 
         // correct username, invalid password
-        loginReq = new LoginRequest() {
+        loginReq = new LoginRequest()
+        {
             Username = req.Username,
             Password = Utils.GetCleanUUIDString()
         };
@@ -135,7 +144,8 @@ public class AuthControllerTests
         Assert.IsFalse(response.IsSuccessStatusCode);
 
         // correct email, invalid password
-        loginReq = new LoginRequest() {
+        loginReq = new LoginRequest()
+        {
             Username = req.Email,
             Password = Utils.GetCleanUUIDString()
         };

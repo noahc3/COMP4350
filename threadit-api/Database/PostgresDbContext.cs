@@ -1,8 +1,9 @@
-﻿using ThreaditAPI.Constants;
+﻿using Microsoft.EntityFrameworkCore;
+using ThreaditAPI.Constants;
 using ThreaditAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
-namespace ThreaditAPI.Database {
+namespace ThreaditAPI.Database
+{
     public class PostgresDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
@@ -13,11 +14,13 @@ namespace ThreaditAPI.Database {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Interest> Interests { get; set; }
 
-        public PostgresDbContext() {
+        public PostgresDbContext()
+        {
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options) {
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
             base.OnConfiguring(options);
 
             string host = ExternalServicesConstants.DB_HOST;

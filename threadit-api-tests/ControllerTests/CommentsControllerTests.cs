@@ -1,14 +1,15 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ThreaditTests.Controllers;
 
-public class CommentsControllerTests {
+public class CommentsControllerTests
+{
     private Spool _spool;
     private ThreaditAPI.Models.Thread _thread;
     private UserDTO _user1;
@@ -50,12 +51,12 @@ public class CommentsControllerTests {
 
         string commentText1 = Utils.GetCleanUUIDString();
         var result = _client1.PostAsync(endpoint, Utils.WrapContent<string>(commentText1)).Result;
-        
+
         Assert.IsTrue(result.IsSuccessStatusCode);
         var comment1 = Utils.ParseResponse<Comment>(result);
         Assert.That(comment1, Is.Not.Null);
         Assert.IsTrue(commentText1.Equals(comment1.Content));
-        
+
         string commentText2 = Utils.GetCleanUUIDString();
         result = _client2.PostAsync(endpoint, Utils.WrapContent<string>(commentText2)).Result;
 
@@ -76,7 +77,7 @@ public class CommentsControllerTests {
 
         result = _client2.PatchAsync(endpoint, Utils.WrapContent<Comment>(comment1)).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
-        
+
         endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, comment1.Id);
         result = _client2.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
@@ -91,7 +92,8 @@ public class CommentsControllerTests {
     }
 
     [Test]
-    public void ModeratorAndSpoolOwnerDelete() {
+    public void ModeratorAndSpoolOwnerDelete()
+    {
         Comment c1 = Utils.CreateComment(_client2, _user1.Id, _thread.Id);
         Comment c2 = Utils.CreateComment(_client2, _user2.Id, _thread.Id);
 
@@ -119,7 +121,8 @@ public class CommentsControllerTests {
         var endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, _thread.Id, "");
         var comments = new List<Comment>();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++)
+        {
             string text = Utils.GetCleanUUIDString();
             result = _client1.PostAsync(endpoint, Utils.WrapContent<string>(text)).Result;
             Assert.IsTrue(result.IsSuccessStatusCode);
@@ -139,8 +142,9 @@ public class CommentsControllerTests {
         var commentsResponse = Utils.ParseResponse<List<Comment>>(result);
         Assert.That(commentsResponse, Is.Not.Null);
         Assert.That(commentsResponse.Count, Is.EqualTo(10));
-        
-        for (int i = 0; i < 10; i++) {
+
+        for (int i = 0; i < 10; i++)
+        {
             Assert.IsTrue(comments[i].Id == commentsResponse[i].Id);
         }
 
@@ -152,7 +156,8 @@ public class CommentsControllerTests {
         Assert.That(commentsResponse, Is.Not.Null);
         Assert.That(commentsResponse.Count, Is.EqualTo(11));
 
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 11; i++)
+        {
             Assert.IsTrue(comments[i + 9].Id == commentsResponse[i].Id);
         }
 
@@ -164,7 +169,8 @@ public class CommentsControllerTests {
         Assert.That(commentsResponse, Is.Not.Null);
         Assert.That(commentsResponse.Count, Is.EqualTo(11));
 
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 11; i++)
+        {
             Assert.IsTrue(comments[i + 19].Id == commentsResponse[i].Id);
         }
 
@@ -192,7 +198,8 @@ public class CommentsControllerTests {
         Assert.That(commentsResponse, Is.Not.Null);
         Assert.That(commentsResponse.Count, Is.EqualTo(6));
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
+        {
             Assert.IsTrue(comments[i].Id == commentsResponse[i].Id);
         }
     }
@@ -204,7 +211,8 @@ public class CommentsControllerTests {
         string endpoint;
         var comments = new List<Comment>();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++)
+        {
             endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, _thread.Id, "");
             string text = Utils.GetCleanUUIDString();
             result = _client1.PostAsync(endpoint, Utils.WrapContent<string>(text)).Result;
@@ -215,7 +223,8 @@ public class CommentsControllerTests {
 
             comments.Add(comment);
 
-            for (int j = 0; j < (i % 3) + 5; j++) {
+            for (int j = 0; j < (i % 3) + 5; j++)
+            {
                 string replyText = Utils.GetCleanUUIDString();
                 endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, _thread.Id, comment.Id);
                 result = _client1.PostAsync(endpoint, Utils.WrapContent<string>(replyText)).Result;
@@ -225,7 +234,8 @@ public class CommentsControllerTests {
 
                 comments.Add(reply);
 
-                for (int k = 0; k < 2; k++) {
+                for (int k = 0; k < 2; k++)
+                {
                     string replyText2 = Utils.GetCleanUUIDString();
                     endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, _thread.Id, reply.Id);
                     result = _client1.PostAsync(endpoint, Utils.WrapContent<string>(replyText2)).Result;
@@ -245,12 +255,14 @@ public class CommentsControllerTests {
         var commentsResponse = Utils.ParseResponse<List<Comment>>(result);
         Assert.That(commentsResponse, Is.Not.Null);
         Assert.That(commentsResponse.Count, Is.EqualTo(10 + (10 * 2)));
-        
-        foreach (Comment c in commentsResponse) {
+
+        foreach (Comment c in commentsResponse)
+        {
             Assert.IsTrue(comments.Any(x => x.Id == c.Id));
         }
 
-        foreach (Comment c in commentsResponse.Where((x) => x.ParentCommentId != null)) {
+        foreach (Comment c in commentsResponse.Where((x) => x.ParentCommentId != null))
+        {
             Assert.IsTrue(comments.Any(x => x.Id == c.ParentCommentId));
             Assert.IsTrue(commentsResponse.Any(x => x.Id == c.ParentCommentId));
 
@@ -262,14 +274,16 @@ public class CommentsControllerTests {
             Assert.That(commentsResponse2, Is.Not.Null);
             Assert.That(commentsResponse2.Count, Is.EqualTo(3));
 
-            foreach (Comment c2 in commentsResponse2) {
+            foreach (Comment c2 in commentsResponse2)
+            {
                 Assert.IsTrue(comments.Any(x => x.Id == c2.Id));
             }
 
             Assert.That(commentsResponse2.Count((x) => x.ParentCommentId == c.Id), Is.EqualTo(2));
         }
 
-        foreach (Comment c in commentsResponse.Where((x) => x.ParentCommentId == null)) {
+        foreach (Comment c in commentsResponse.Where((x) => x.ParentCommentId == null))
+        {
             var oldestReply = commentsResponse.Where((x) => x.ParentCommentId == c.Id).OrderBy((x) => x.DateCreated).First();
 
             endpoint = String.Format(Endpoints.V1_COMMENT_OLDER, _thread.Id, oldestReply.Id);
@@ -280,14 +294,16 @@ public class CommentsControllerTests {
             Assert.That(commentsResponse2, Is.Not.Null);
             Assert.That(commentsResponse2.Count, Is.EqualTo(4));
 
-            foreach (Comment c2 in commentsResponse2) {
+            foreach (Comment c2 in commentsResponse2)
+            {
                 Assert.IsTrue(comments.Any(x => x.Id == c2.Id));
             }
         }
     }
 
     [Test]
-    public void DeleteComment_ThreadMissing_ShouldFail() {
+    public void DeleteComment_ThreadMissing_ShouldFail()
+    {
         Comment comment = Utils.CreateComment(_client1, _user1.Id, _thread.Id);
         Assert.That(comment, Is.Not.Null);
 
@@ -299,7 +315,8 @@ public class CommentsControllerTests {
     }
 
     [Test]
-    public void DeleteComment_SpoolMissing_ShouldFail() {
+    public void DeleteComment_SpoolMissing_ShouldFail()
+    {
         Comment comment = Utils.CreateComment(_client1, _user1.Id, _thread.Id);
         Assert.That(comment, Is.Not.Null);
 
@@ -311,16 +328,19 @@ public class CommentsControllerTests {
     }
 
     [Test]
-    public void DeleteComment_NotExists_ShouldFail() {
+    public void DeleteComment_NotExists_ShouldFail()
+    {
         string endpoint = String.Format(Endpoints.V1_COMMENT_DELETE, _thread.Id, Utils.GetCleanUUIDString());
         var result = _client1.DeleteAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
     }
 
     [Test]
-    public void UpdateComment_NotExists_ShouldFail() {
+    public void UpdateComment_NotExists_ShouldFail()
+    {
         string endpoint = String.Format(Endpoints.V1_COMMENT_EDIT, _thread.Id);
-        var result = _client1.PatchAsync(endpoint, Utils.WrapContent<Comment>(new Comment() {
+        var result = _client1.PatchAsync(endpoint, Utils.WrapContent<Comment>(new Comment()
+        {
             OwnerId = _user1.Id,
             Id = Utils.GetCleanUUIDString(),
             Content = Utils.GetCleanUUIDString(),
@@ -331,7 +351,8 @@ public class CommentsControllerTests {
     }
 
     [Test]
-    public void InvalidSiblingCommentTests() {
+    public void InvalidSiblingCommentTests()
+    {
         string endpoint = String.Format(Endpoints.V1_COMMENT_OLDER, _thread.Id, Utils.GetCleanUUIDString());
         var result = _client1.GetAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);

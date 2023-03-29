@@ -28,7 +28,7 @@ public class UserSessionRepositoryTests
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };
         UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
-        
+
         Assert.That(returnedUserSession, Is.Null);
     }
 
@@ -110,7 +110,7 @@ public class UserSessionRepositoryTests
         Assert.That(returnedUserSession, Is.Not.Null);
         Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
         Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
-        
+
         // Delete UserSession from database
         await _userSessionRepository.DeleteUserSessionAsync(testUserSession.Id);
         returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);

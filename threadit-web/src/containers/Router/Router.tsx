@@ -9,25 +9,25 @@ import PostSpool from "../../pages/PostSpool/PostSpool";
 import { Thread } from "../../pages/Thread/Thread";
 import { Spool } from "../../pages/Spool/Spool";
 import { ManageSpool } from "../../pages/Spool/ManageSpool";
-import  { UserSettings } from "../../pages/UserSettings/UserSettings";
+import { UserSettings } from "../../pages/UserSettings/UserSettings";
 
 export const Router: React.FC = observer(() => {
-    const history = navStore.history;
+  const history = navStore.history;
 
-    return (
-        <HistoryRouter history={history}>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/:sortType" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/s/:spoolName/createthread" element={<PostThread />} />
-                <Route path="/createSpool" element={<PostSpool />} />
-                <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
-                <Route path="/s/:id" element={<Spool />} />
-                <Route path="/s/:id/:sortType" element={<Spool />}/>
-                <Route path="/s/:name/manage" element={<ManageSpool />} />
-                <Route path="/profile" element={<UserSettings />} />
-            </Routes>
-        </HistoryRouter>
-    )
-})
+  return (
+    <HistoryRouter history={history}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/:sortType" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/s/:spoolName/createthread" element={<PostThread />} />
+        <Route path="/createSpool" element={<PostSpool />} />
+        <Route path="/s/:spoolName/post/:threadId" element={<Thread />} />
+        <Route path="/s/:id" element={<Spool />} />
+        <Route path="/s/:id/:sortType" element={<Spool />} />
+        <Route path="/s/:name/manage" element={<ManageSpool />} />
+        <Route path="/profile" element={<UserSettings />} />
+      </Routes>
+    </HistoryRouter>
+  );
+});

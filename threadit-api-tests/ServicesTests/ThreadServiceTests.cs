@@ -62,7 +62,7 @@ public class ThreadServiceTests
             }
         };
 
-        foreach(var spool in spools)
+        foreach (var spool in spools)
         {
             await _spoolRepository.InsertSpoolAsync(spool);
         }
@@ -105,7 +105,7 @@ public class ThreadServiceTests
         };
 
         // Ensure Thread is not in database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread.Id));
         }
@@ -115,7 +115,7 @@ public class ThreadServiceTests
         Assert.That(returnedThreads, Is.Empty);
 
         // Add Thread to database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             await _threadService.InsertThreadAsync(thread);
         }
@@ -172,7 +172,7 @@ public class ThreadServiceTests
             }
         };
 
-        foreach(var spool in spools)
+        foreach (var spool in spools)
         {
             await _spoolRepository.InsertSpoolAsync(spool);
         }
@@ -215,7 +215,7 @@ public class ThreadServiceTests
         };
 
         // Ensure Thread is not in database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread.Id));
         }
@@ -225,7 +225,7 @@ public class ThreadServiceTests
         Assert.That(returnedThreads, Is.Empty);
 
         // Add Thread to database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             await _threadService.InsertThreadAsync(thread);
         }
@@ -246,7 +246,7 @@ public class ThreadServiceTests
     }
 
     [Test]
-    public async Task DeleteThread_Exists_ShouldPass() 
+    public async Task DeleteThread_Exists_ShouldPass()
     {
         // Create Thread
         ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()

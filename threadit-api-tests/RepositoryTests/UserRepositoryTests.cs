@@ -29,7 +29,7 @@ public class UserRepositoryTests
             Email = "doesNotExistUser@test.com"
         };
         UserDTO? returnedUser = await _userRepository.GetUserAsync(initialUser);
-        
+
         Assert.That(returnedUser, Is.Null);
     }
 

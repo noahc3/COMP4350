@@ -21,8 +21,10 @@ public class UserSessionServiceTests
     }
 
     [Test]
-    public async Task RetrieveUserSession_NotExists_ShouldFail() {
-        UserSession testUserSession = new UserSession() {
+    public async Task RetrieveUserSession_NotExists_ShouldFail()
+    {
+        UserSession testUserSession = new UserSession()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };
@@ -32,16 +34,19 @@ public class UserSessionServiceTests
     }
 
     [Test]
-    public async Task RetrieveUserSessionById_NotExists_ShouldFail() {
+    public async Task RetrieveUserSessionById_NotExists_ShouldFail()
+    {
         UserSession? returnedUserSession = await _userSessionService.GetUserSessionAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
 
         Assert.That(returnedUserSession, Is.Null);
     }
 
     [Test]
-    public async Task RetrieveUserSession_Exists_ShouldPass() {
+    public async Task RetrieveUserSession_Exists_ShouldPass()
+    {
         // Create UserSession
-        UserSession testUserSession = new UserSession() {
+        UserSession testUserSession = new UserSession()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };
@@ -57,9 +62,11 @@ public class UserSessionServiceTests
     }
 
     [Test]
-    public async Task RetrieveUserSessionById_Exists_ShouldPass() {
+    public async Task RetrieveUserSessionById_Exists_ShouldPass()
+    {
         // Create UserSession
-        UserSession testUserSession = new UserSession() {
+        UserSession testUserSession = new UserSession()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };
@@ -75,9 +82,11 @@ public class UserSessionServiceTests
     }
 
     [Test]
-    public async Task RetrieveUserBySessionId_Expired_ShouldFail() {
+    public async Task RetrieveUserBySessionId_Expired_ShouldFail()
+    {
         // Create UserSession
-        UserSession testUserSession = new UserSession() {
+        UserSession testUserSession = new UserSession()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
             DateExpires = DateTime.UtcNow.AddDays(-5)
@@ -92,9 +101,11 @@ public class UserSessionServiceTests
     }
 
     [Test]
-    public async Task DeleteUserSession_Exists_ShouldPass() {
+    public async Task DeleteUserSession_Exists_ShouldPass()
+    {
         // Create UserSession
-        UserSession testUserSession = new UserSession() {
+        UserSession testUserSession = new UserSession()
+        {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
             UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
         };

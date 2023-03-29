@@ -1,29 +1,29 @@
 .sidebar {
-    width: 18rem;
-    height: 100vh;
-    padding:1rem;
-    color: white;
-    text-align: left;
+  width: 18rem;
+  height: 100vh;
+  padding: 1rem;
+  color: white;
+  text-align: left;
 
-    img + hr {
-        margin-top:5px;
-        margin-bottom: 15px;
-    }
+  img + hr {
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
 
-    hr:not(img + hr) {
-        margin: 15px auto;
-    }
+  hr:not(img + hr) {
+    margin: 15px auto;
+  }
 
-    button {
-        width: 100%;
-        justify-content: start;
-    }
+  button {
+    width: 100%;
+    justify-content: start;
+  }
 
-    .selected button:not(:active) {
-        background-color: #6B46C1;
-    }
+  .selected button:not(:active) {
+    background-color: #6b46c1;
+  }
 
-    .logo {
-        padding:0.5rem;
-    }
+  .logo {
+    padding: 0.5rem;
+  }
 }

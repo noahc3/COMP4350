@@ -1,14 +1,14 @@
 
-using Microsoft.AspNetCore.Http.Json;
-using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using ThreaditAPI.Middleware;
 using ThreaditAPI.Constants;
 using ThreaditAPI.Database;
+using ThreaditAPI.Middleware;
 using ThreaditAPI.Services;
-using Microsoft.EntityFrameworkCore;
+using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 namespace ThreaditAPI
 {
@@ -45,7 +45,8 @@ namespace ThreaditAPI
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c => {
+            builder.Services.AddSwaggerGen(c =>
+            {
                 c.OperationFilter<OptionalRouteParameterOperationFilter>();
             });
             builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumMemberConverter()));

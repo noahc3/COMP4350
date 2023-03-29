@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ThreaditAPI.Database;
 
-public class CommonUtils {
-    public static PostgresDbContext GetDbContext() {
+public class CommonUtils
+{
+    public static PostgresDbContext GetDbContext()
+    {
         var context = new PostgresDbContext();
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
@@ -10,7 +12,8 @@ public class CommonUtils {
     }
 
     [OneTimeTearDown]
-    public void TearDown() {
+    public void TearDown()
+    {
         var context = new PostgresDbContext();
         context.Database.EnsureDeleted();
     }

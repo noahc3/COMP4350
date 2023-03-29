@@ -1,7 +1,7 @@
-﻿using ThreaditAPI.Database;
-using ThreaditAPI.Models;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using ThreaditAPI.Database;
+using ThreaditAPI.Models;
 
 namespace ThreaditAPI.Repositories
 {
@@ -42,7 +42,7 @@ namespace ThreaditAPI.Repositories
                 throw new Exception("Spool does not exist");
 
             string[] interests = dbSpool.Interests.ToArray();
-            foreach(string inter in interests)
+            foreach (string inter in interests)
             {
                 await this.RemoveUserInterestAsync(userId, inter);
             }
@@ -68,7 +68,7 @@ namespace ThreaditAPI.Repositories
             if (!resultSettings.SpoolsJoined.Contains(dbSpool!.Id))
             {
                 string[] interests = dbSpool.Interests.ToArray();
-                foreach(string inter in interests)
+                foreach (string inter in interests)
                 {
                     await this.AddUserInterestAsync(userId, inter);
                 }
@@ -139,10 +139,10 @@ namespace ThreaditAPI.Repositories
         {
             UserSettings? resultSettings = await this.GetUserSettingsAsync(userId);
             bool result = false;
-            if(resultSettings == null)
+            if (resultSettings == null)
                 throw new Exception("settings do not exist.");
-            
-            if(resultSettings.Interests.Contains(interest))
+
+            if (resultSettings.Interests.Contains(interest))
             {
                 result = true;
             }

@@ -1,5 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -44,7 +44,7 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool> InsertSpoolAsync(Spool spool)
         {
-            if (string.IsNullOrWhiteSpace(spool.Name) )
+            if (string.IsNullOrWhiteSpace(spool.Name))
             {
                 throw new Exception("Please enter a valid spool name.");
             }
@@ -67,7 +67,7 @@ namespace ThreaditAPI.Services
             }
             else
             {
-                if(spool.Name.Length > 32)
+                if (spool.Name.Length > 32)
                 {
                     throw new Exception("Spool name maximum is 32 characters. Please shorten name.");
                 }
@@ -83,14 +83,15 @@ namespace ThreaditAPI.Services
             Spool currentSpool = await this.GetSpoolAsync(spoolId);
             UserDTO spoolOwner = (await userRepository.GetUserAsync(currentSpool!.OwnerId))!;
 
-            if(spoolOwner.Username == userName)
+            if (spoolOwner.Username == userName)
             {
                 throw new Exception("Cannot add owner as moderator.");
             }
 
             UserDTO[] mods = (await this.spoolRepository.GetModeratorsAsync(spoolId))!;
             UserDTO newMod = (await userRepository.GetUserByLoginIdentifierAsync(userName))!;
-            if (mods.Any(m => m.Id == newMod.Id)) {
+            if (mods.Any(m => m.Id == newMod.Id))
+            {
                 throw new Exception("User is already a mod.");
             }
 
@@ -100,9 +101,9 @@ namespace ThreaditAPI.Services
 
         public async Task<Spool?> ChangeOwnerAsync(string spoolId, string userName)
         {
-            UserRepository userRepository = new UserRepository( new PostgresDbContext() );
+            UserRepository userRepository = new UserRepository(new PostgresDbContext());
             Spool? currentSpool = await spoolRepository.GetSpoolAsync(spoolId);
-            if(currentSpool == null)
+            if (currentSpool == null)
             {
                 throw new Exception("Spool does not exist");
             }
@@ -134,7 +135,7 @@ namespace ThreaditAPI.Services
             List<Spool> spools = await this.spoolRepository.GetJoinedSpoolsAsync(userId);
             return spools;
         }
-        
+
         public async Task<List<Spool>> GetSuggestedSpoolsAsync(string userId)
         {
             List<Spool> spools = await this.spoolRepository.GetSuggestedSpoolsAsync(userId);

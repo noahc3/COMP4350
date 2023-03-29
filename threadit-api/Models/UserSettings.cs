@@ -9,7 +9,7 @@
         //each string is a thread Id
         public List<string> Spins { get; set; } = new List<string>();
         //each string is a spool Id
-        public  List<string> SpoolsJoined { get; set; } = new List<string>();
+        public List<string> SpoolsJoined { get; set; } = new List<string>();
 
     }
 }

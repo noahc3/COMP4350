@@ -1,11 +1,15 @@
+using Microsoft.EntityFrameworkCore;
 using ThreaditAPI.Constants;
 using ThreaditAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
-namespace ThreaditAPI.Database {
-    public class DbInitializer {
-        public static void Initialize(PostgresDbContext context) {
-            if (context.Spools.Any()) {
+namespace ThreaditAPI.Database
+{
+    public class DbInitializer
+    {
+        public static void Initialize(PostgresDbContext context)
+        {
+            if (context.Spools.Any())
+            {
                 return;
             }
 
@@ -75,7 +79,7 @@ namespace ThreaditAPI.Database {
             context.SaveChanges();
 
             var threads = new Models.Thread[] {
-                new Models.Thread { 
+                new Models.Thread {
                     Id = "65976296-d7db-497c-b2a2-36af72c325b1",
                     Title = "What's the greatest episode of a tv show ever made?",
                     OwnerId = "3257a727-3e9c-4734-808e-42ff9725c779",
@@ -85,7 +89,7 @@ namespace ThreaditAPI.Database {
                     Stitches = new List<string> { "3257a727-3e9c-4734-808e-42ff9725c779" },
                     ThreadType = ThreadTypes.TEXT
                 },
-                new Models.Thread { 
+                new Models.Thread {
                     Id = "6649b329-44d8-49ed-be89-a9ce56d35d04",
                     Title = "Who's the worst main character we're supposed to sympathise with?",
                     OwnerId = "c55330ec-0977-4d01-8137-8cab28a2d7f6",

@@ -70,7 +70,7 @@ public class UserSettingsRepositoryTests
         returnedUser = await _userRepository.GetUserByLoginIdentifierAsync(testUser.Username);
         Assert.That(returnedUser, Is.Not.Null);
 
-        //create a user Settings 
+        //create a user Settings
         //UserSettings
         UserSettings testUserSettings = new UserSettings()
         {
@@ -261,7 +261,7 @@ public class UserSettingsRepositoryTests
             Assert.That(returnedSpool, Is.Not.Null);
 
 
-        //join spool for user
+            //join spool for user
             UserSettings returnedSettings = await _userSettingsRepository.JoinUserSettingsAsync(testUser.Id, testSpool.Id);
             Assert.Fail();
         }
@@ -441,7 +441,7 @@ public class UserSettingsRepositoryTests
             returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool);
 
 
-        //check spool for user
+            //check spool for user
             bool returnedValue = await _userSettingsRepository.CheckSpoolUserAsync(testUser.Id, testSpool.Id);
             Assert.Fail();
         }
@@ -599,7 +599,8 @@ public class UserSettingsRepositoryTests
     }
 
     [Test]
-    public void UserInterestInvalidTests() {
+    public void UserInterestInvalidTests()
+    {
         Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.AddUserInterestAsync("invalid", "invalid"); });
         Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.RemoveUserInterestAsync("invalid", "invalid"); });
         Assert.ThrowsAsync<Exception>(async () => { await _userSettingsRepository.BelongInterestAsync("invalid", "invalid"); });

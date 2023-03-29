@@ -1,115 +1,153 @@
-﻿using System.Net.Cache;
+﻿using System.Net;
+using System.Net.Cache;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using ThreaditAPI.Constants;
 using ThreaditAPI.Extensions;
 using ThreaditAPI.Middleware;
-using Microsoft.AspNetCore.Mvc;
 using ThreaditAPI.Models;
 using ThreaditAPI.Models.Requests;
 using ThreaditAPI.Services;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Net;
-using ThreaditAPI.Constants;
 
-namespace ThreaditAPI.Controllers.v1 {
+namespace ThreaditAPI.Controllers.v1
+{
     [ApiController]
     [Route("v1/thread")]
-    public class ThreadController : ControllerBase {
+    public class ThreadController : ControllerBase
+    {
 
-        private static async Task ValidateImageUrl(string url) {
-            using (HttpClient client = new HttpClient()) {
+        private static async Task ValidateImageUrl(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
                 HttpResponseMessage res;
 
-                try {
+                try
+                {
                     client.Timeout = TimeSpan.FromSeconds(10);
                     HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Head, url);
                     res = await client.SendAsync(msg);
-                } catch (Exception) {
+                }
+                catch (Exception)
+                {
                     throw new Exception("Could not find an image at the specified URL. Please make sure the URL is a direct link to an image.");
                 }
 
-                if (!res.IsSuccessStatusCode) {
+                if (!res.IsSuccessStatusCode)
+                {
                     throw new Exception("Website is offline or does not allow embedding this image. Consider using a link post to share this image.");
-                } else if (!(res.Content.Headers.ContentType?.MediaType?.StartsWith("image/") ?? false)) {
+                }
+                else if (!(res.Content.Headers.ContentType?.MediaType?.StartsWith("image/") ?? false))
+                {
                     throw new Exception("Could not find an image at the specified URL. Please make sure the URL is a direct link to an image.");
-                } else {
+                }
+                else
+                {
                     int length;
-                    if (res.Content.Headers.ContentLength.HasValue) {
+                    if (res.Content.Headers.ContentLength.HasValue)
+                    {
                         length = (int)res.Content.Headers.ContentLength.Value;
-                    } else {
+                    }
+                    else
+                    {
                         length = 0;
                     }
 
-                    if (length > 5000000) {
+                    if (length > 5000000)
+                    {
                         throw new Exception("For a smooth user experience, images cannot be larger than 5MB. Use a link post to share larger images.");
-                    } else if (length == 0) {
+                    }
+                    else if (length == 0)
+                    {
                         throw new Exception("Website does not allow embedding this image. Consider using a link post to share this image.");
                     }
                 }
             }
         }
 
-        private static bool IsValidUrl(string url) {
-            try {
+        private static bool IsValidUrl(string url)
+        {
+            try
+            {
                 Uri? uriResult;
-                return Uri.TryCreate(url, UriKind.Absolute, out uriResult) 
-                        && uriResult != null 
+                return Uri.TryCreate(url, UriKind.Absolute, out uriResult)
+                        && uriResult != null
                         && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
-            } catch {
+            }
+            catch
+            {
                 return false;
             }
         }
-        
+
         [HttpGet("{threadId}")]
-        public async Task<IActionResult> GetThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {            
+        public async Task<IActionResult> GetThread([FromRoute] string threadId, [FromServices] ThreadService threadService)
+        {
             Models.ThreadFull? threadFull = await threadService.GetThreadFullAsync(threadId);
             return Ok(threadFull);
         }
 
         [HttpPost("create")]
         [AuthenticationRequired]
-        public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService) {            
+        public async Task<IActionResult> PostThread([FromBody] PostThreadRequest request, [FromServices] ThreadService threadService)
+        {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
-            try {
-                if (request.ThreadType == ThreadTypes.IMAGE && IsValidUrl(request.Content)) {
+            try
+            {
+                if (request.ThreadType == ThreadTypes.IMAGE && IsValidUrl(request.Content))
+                {
                     await ValidateImageUrl(request.Content);
-                } else if (request.ThreadType == ThreadTypes.LINK && !IsValidUrl(request.Content)) {
+                }
+                else if (request.ThreadType == ThreadTypes.LINK && !IsValidUrl(request.Content))
+                {
                     return BadRequest("Could not find a page at the specified URL. Please make sure the URL is valid.");
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
-            
-            Models.Thread thread = new Models.Thread{
+
+            Models.Thread thread = new Models.Thread
+            {
                 Title = request.Title,
                 Content = request.Content,
                 Topic = request.Topic,
-                OwnerId = userDTO.Id, 
+                OwnerId = userDTO.Id,
                 SpoolId = request.SpoolId,
                 ThreadType = request.ThreadType
             };
 
-            try {
+            try
+            {
                 thread = await threadService.InsertThreadAsync(thread);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
             return Ok(thread);
         }
 
         [HttpGet("threads/{sortType?}")]
-        public async Task<IActionResult> GetThreads([FromServices] ThreadService threadService, [FromRoute] string? sortType = null, [FromQuery(Name = "q")] string? searchWord = null, [FromQuery(Name = "skip")] int? skip = null, [FromQuery(Name = "spoolId")] string? spoolId = null) {
+        public async Task<IActionResult> GetThreads([FromServices] ThreadService threadService, [FromRoute] string? sortType = null, [FromQuery(Name = "q")] string? searchWord = null, [FromQuery(Name = "skip")] int? skip = null, [FromQuery(Name = "spoolId")] string? spoolId = null)
+        {
             return Ok(await threadService.GetThreadsAsync(sortType, searchWord, skip, spoolId));
         }
 
         [HttpPost("edit")]
         [AuthenticationRequired]
-        public async Task<IActionResult> EditThread([FromServices] ThreadService threadService, [FromBody] Models.Thread thread) {
-            if (thread == null || String.IsNullOrWhiteSpace(thread.Id)) {
+        public async Task<IActionResult> EditThread([FromServices] ThreadService threadService, [FromBody] Models.Thread thread)
+        {
+            if (thread == null || String.IsNullOrWhiteSpace(thread.Id))
+            {
                 return BadRequest("Thread data is invalid.");
             }
 
-            if (thread.ThreadType != ThreadTypes.TEXT) {
+            if (thread.ThreadType != ThreadTypes.TEXT)
+            {
                 return BadRequest("Only text posts can be edited.");
             }
 
@@ -117,7 +155,8 @@ namespace ThreaditAPI.Controllers.v1 {
 
             Models.Thread threadFromDb = await threadService.GetThreadAsync(thread.Id);
 
-            if (threadFromDb.OwnerId != profile.Id) {
+            if (threadFromDb.OwnerId != profile.Id)
+            {
                 return Unauthorized();
             }
 
@@ -127,7 +166,8 @@ namespace ThreaditAPI.Controllers.v1 {
 
         [HttpDelete("{threadId}")]
         [AuthenticationRequired]
-        public async Task<IActionResult> DeleteThread([FromRoute] string threadId, [FromServices] ThreadService threadService) {
+        public async Task<IActionResult> DeleteThread([FromRoute] string threadId, [FromServices] ThreadService threadService)
+        {
             UserDTO profile = Request.HttpContext.GetUser();
 
             await threadService.DeleteThreadAsync(threadId, profile.Id);
@@ -136,17 +176,21 @@ namespace ThreaditAPI.Controllers.v1 {
 
         [HttpPost("stitch")]
         [AuthenticationRequired]
-        public async Task<IActionResult> StitchThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
+        public async Task<IActionResult> StitchThread([FromBody] string threadId, [FromServices] ThreadService threadService)
+        {
             UserDTO profile = Request.HttpContext.GetUser();
 
             Models.Thread threadFromDb;
-            try {
+            try
+            {
                 threadFromDb = await threadService.GetThreadAsync(threadId);
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 return BadRequest("Thread does not exist.");
             }
 
-            if(threadFromDb.Stitches.Contains(profile.Id))
+            if (threadFromDb.Stitches.Contains(profile.Id))
             {
                 threadFromDb.Stitches.Remove(profile.Id);
             }
@@ -155,7 +199,7 @@ namespace ThreaditAPI.Controllers.v1 {
                 threadFromDb.Stitches.Add(profile.Id);
             }
 
-            if(threadFromDb.Rips.Contains(profile.Id))
+            if (threadFromDb.Rips.Contains(profile.Id))
             {
                 threadFromDb.Rips.Remove(profile.Id);
             }
@@ -166,17 +210,21 @@ namespace ThreaditAPI.Controllers.v1 {
 
         [HttpPost("rip")]
         [AuthenticationRequired]
-        public async Task<IActionResult> RipThread([FromBody] string threadId, [FromServices] ThreadService threadService) {
+        public async Task<IActionResult> RipThread([FromBody] string threadId, [FromServices] ThreadService threadService)
+        {
             UserDTO profile = Request.HttpContext.GetUser();
 
             Models.Thread threadFromDb;
-            try {
+            try
+            {
                 threadFromDb = await threadService.GetThreadAsync(threadId);
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 return BadRequest("Thread does not exist.");
             }
 
-            if(threadFromDb.Rips.Contains(profile.Id))
+            if (threadFromDb.Rips.Contains(profile.Id))
             {
                 threadFromDb.Rips.Remove(profile.Id);
             }
@@ -185,7 +233,7 @@ namespace ThreaditAPI.Controllers.v1 {
                 threadFromDb.Rips.Add(profile.Id);
             }
 
-            if(threadFromDb.Stitches.Contains(profile.Id))
+            if (threadFromDb.Stitches.Contains(profile.Id))
             {
                 threadFromDb.Stitches.Remove(profile.Id);
             }

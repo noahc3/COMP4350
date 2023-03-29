@@ -1,9 +1,9 @@
-﻿using ThreaditAPI.Database;
-using ThreaditAPI.Models;
+﻿using System.Linq;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading;
-using System.Linq;
+using ThreaditAPI.Database;
+using ThreaditAPI.Models;
 
 namespace ThreaditAPI.Repositories
 {
@@ -33,15 +33,15 @@ namespace ThreaditAPI.Repositories
         public async Task InsertSpoolAsync(Spool spool)
         {
 
-            InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
-            UserSettingsRepository userSettingsRepository = new UserSettingsRepository(new PostgresDbContext()); 
+            InterestRepository interestRepository = new InterestRepository(new PostgresDbContext());
+            UserSettingsRepository userSettingsRepository = new UserSettingsRepository(new PostgresDbContext());
             //verify the mods exist
             List<string> moderatorIds = spool.Moderators;
             List<string> modsToRemove = new List<string>();
             foreach (var moderatorId in moderatorIds)
             {
                 UserDTO? dbUser = await db.Users.FirstOrDefaultAsync(u => u.Id == moderatorId);
-                if(dbUser == null)
+                if (dbUser == null)
                 {
                     modsToRemove.Add(moderatorId);
                 }
@@ -50,23 +50,23 @@ namespace ThreaditAPI.Repositories
                     //add spool to users joined list for the mod and adds the interests to the user's interests
                     UserSettings? modSettings = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == moderatorId);
                     modSettings?.SpoolsJoined.Add(spool.Id);
-                    foreach(string inter in spool.Interests)
+                    foreach (string inter in spool.Interests)
                     {
                         await userSettingsRepository.AddUserInterestAsync(moderatorId, inter);
                     }
                 }
             }
-            
-            foreach(var moderatorId in modsToRemove)
+
+            foreach (var moderatorId in modsToRemove)
             {
                 spool.Moderators.Remove(moderatorId);
             }
 
             //Adds the interests to the interest table if it doesn't exist, iterates SpoolCount if it does
-            foreach(string interest in spool.Interests)
-                {
-                    await interestRepository.AddInterestAsync(interest);
-                }
+            foreach (string interest in spool.Interests)
+            {
+                await interestRepository.AddInterestAsync(interest);
+            }
 
             //add spool to spools table
             await db.Spools.AddAsync(spool);
@@ -74,15 +74,15 @@ namespace ThreaditAPI.Repositories
             //add spool to users joined list for the owner
             UserSettings? setting = await db.UserSettings.FirstOrDefaultAsync(u => u.Id == spool.OwnerId);
 
-            if(setting == null)
+            if (setting == null)
             {
                 throw new Exception("User Does not have settings.");
             }
             setting.SpoolsJoined.Add(spool.Id);
-            foreach(string inter in spool.Interests)
-                {
-                    await userSettingsRepository.AddUserInterestAsync(spool.OwnerId, inter);
-                }
+            foreach (string inter in spool.Interests)
+            {
+                await userSettingsRepository.AddUserInterestAsync(spool.OwnerId, inter);
+            }
 
             await db.SaveChangesAsync();
         }
@@ -186,7 +186,7 @@ namespace ThreaditAPI.Repositories
             List<Spool> spools = new List<Spool>();
             if (interests != null && setting != null)
             {
-                
+
                 foreach (Spool dbspool in allSpools)
                 {
                     //we add things to the suggested feed if they are in the users interests and they are not already joined.
@@ -194,7 +194,7 @@ namespace ThreaditAPI.Repositories
                     {
                         spools.Add(dbspool);
                     }
-                    
+
                 }
             }
             return spools;
@@ -212,14 +212,14 @@ namespace ThreaditAPI.Repositories
                 }
 
                 //Removes the interests from the interest table if no more Spools carry that interest, deiterates SpoolCount if it still has references
-                InterestRepository interestRepository = new InterestRepository( new PostgresDbContext() );
-                foreach(string interest in dbSpool.Interests)
+                InterestRepository interestRepository = new InterestRepository(new PostgresDbContext());
+                foreach (string interest in dbSpool.Interests)
                 {
                     await interestRepository.RemoveInterestAsync(interest);
                 }
-                
+
                 UserDTO[] spoolUsers = await GetUsersForSpool(spoolId);
-                UserSettingsRepository userSettingsRepository = new UserSettingsRepository( new PostgresDbContext() );
+                UserSettingsRepository userSettingsRepository = new UserSettingsRepository(new PostgresDbContext());
                 foreach (var spoolUser in spoolUsers)
                 {
                     await userSettingsRepository.RemoveUserSettingsAsync(spoolUser.Id, dbSpool.Name);

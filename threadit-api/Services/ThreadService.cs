@@ -20,11 +20,13 @@ namespace ThreaditAPI.Services
             this.userRepository = new UserRepository(context);
         }
 
-        private async Task<ThreadFull> ConvertToThreadFull(Models.Thread thread) {
+        private async Task<ThreadFull> ConvertToThreadFull(Models.Thread thread)
+        {
             return (await ConvertToThreadFull(new Models.Thread[] { thread }))[0];
         }
 
-        private async Task<ThreadFull[]> ConvertToThreadFull(Models.Thread[] threads) {
+        private async Task<ThreadFull[]> ConvertToThreadFull(Models.Thread[] threads)
+        {
             Dictionary<string, Spool> spools = new Dictionary<string, Spool>();
             Dictionary<string, UserDTO> users = new Dictionary<string, UserDTO>();
             List<Models.ThreadFull> fullThreads = new List<Models.ThreadFull>();
@@ -33,16 +35,22 @@ namespace ThreaditAPI.Services
                 UserDTO user;
                 Spool spool;
 
-                if (users.ContainsKey(threads[i].OwnerId)) {
+                if (users.ContainsKey(threads[i].OwnerId))
+                {
                     user = users[threads[i].OwnerId];
-                } else {
+                }
+                else
+                {
                     user = (await userRepository.GetUserAsync(threads[i].OwnerId))!;
                     users[threads[i].OwnerId] = user;
                 }
 
-                if (spools.ContainsKey(threads[i].SpoolId)) {
+                if (spools.ContainsKey(threads[i].SpoolId))
+                {
                     spool = spools[threads[i].SpoolId];
-                } else {
+                }
+                else
+                {
                     spool = (await spoolRepository.GetSpoolAsync(threads[i].SpoolId))!;
                     spools[threads[i].SpoolId] = spool;
                 }
@@ -122,7 +130,7 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Spool does not exist.");
             }
-            
+
             Models.Thread[] threads = await this.threadRepository.GetThreadsAsync(sort, searchQuery, skip, spool.Id);
             return await ConvertToThreadFull(threads);
         }
@@ -147,7 +155,8 @@ namespace ThreaditAPI.Services
             {
                 throw new Exception("Thread content maximum is 2048 Characters. Current content length is: " + thread.Content.Length + ". Please Shorten content.");
             }
-            if (!ThreadTypes.types.Contains(thread.ThreadType)) {
+            if (!ThreadTypes.types.Contains(thread.ThreadType))
+            {
                 throw new Exception($"Thread type must be one of {ThreadTypes.typesString}.");
             }
 

@@ -1,7 +1,7 @@
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -711,7 +711,7 @@ public class SpoolRepositoryTests
             Name = "Spool",
             OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" },
-            Moderators = new List<string>() {  }
+            Moderators = new List<string>() { }
         };
         // Ensure Spool is not in database
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
@@ -856,7 +856,7 @@ public class SpoolRepositoryTests
             OwnerId = testUser.Id,
             Interests = new List<string>() { "Interest1", "Interest2" },
             Moderators = new List<string>() { },
-            Rules= "First Rules"
+            Rules = "First Rules"
         };
         // Ensure Spool is not in database
         Spool? returnedSpool = await _spoolRepository.GetSpoolAsync(testSpool.Id);
@@ -884,7 +884,7 @@ public class SpoolRepositoryTests
     [Test]
     public async Task SaveRules_SpoolNotExist_ShouldPass()
     {
-         // Create Spool
+        // Create Spool
         Spool testSpool = new Spool()
         {
             Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",

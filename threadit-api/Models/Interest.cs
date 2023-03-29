@@ -8,7 +8,7 @@ namespace ThreaditAPI.Models
 
         public Interest()
         {
-        
-        } 
+
+        }
     }
 }

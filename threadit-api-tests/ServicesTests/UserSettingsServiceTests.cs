@@ -21,7 +21,8 @@ public class UserSettingsServiceTests
     }
 
     [Test]
-    public void UserSettingsInvalidTest() {
+    public void UserSettingsInvalidTest()
+    {
         Assert.ThrowsAsync<Exception>(async () => { await _userSettingsService.GetUserSettingsAsync("00000000-0000-0000-0000-000000000000"); });
     }
 }

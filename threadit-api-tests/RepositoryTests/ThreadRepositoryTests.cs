@@ -113,7 +113,7 @@ public class ThreadRepositoryTests
         };
 
         // Ensure Thread is not in database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             ThreaditAPI.Models.Thread? returnedThread = await _threadRepository.GetThreadAsync(thread.Id);
             Assert.That(returnedThread, Is.Null);
@@ -124,7 +124,7 @@ public class ThreadRepositoryTests
         Assert.That(returnedThreads, Is.Empty);
 
         // Add Thread to database
-        foreach(var thread in threads)
+        foreach (var thread in threads)
         {
             await _threadRepository.InsertThreadAsync(thread);
         }
@@ -227,7 +227,7 @@ public class ThreadRepositoryTests
     }
 
     [Test]
-    public async Task DeleteThread_Exists_ShouldPass() 
+    public async Task DeleteThread_Exists_ShouldPass()
     {
         // Create Thread
         ThreaditAPI.Models.Thread testThread = new ThreaditAPI.Models.Thread()

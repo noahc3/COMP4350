@@ -31,7 +31,7 @@ public class UserServiceTests
         }
         catch (Exception)
         {
-            
+
         }
 
         //also check with giving it a user entity which has not been added
@@ -45,7 +45,7 @@ public class UserServiceTests
             UserDTO? returnedUser2 = await _userService.GetUserAsync(initialUser.Id);
             Assert.Fail();
         }
-        catch(Exception)
+        catch (Exception)
         {
             Assert.Pass();
         }
@@ -87,7 +87,7 @@ public class UserServiceTests
         //check it
         Assert.That(deletedUser, Is.Not.Null);
         Assert.IsTrue(deletedUser.Id.Equals(createdUser.Id));
-        
+
         //now try to get the user again
         try
         {
@@ -103,7 +103,8 @@ public class UserServiceTests
     [Test]
     public void DeleteUser_NotExists_ShouldPass()
     {
-        Assert.ThrowsAsync<Exception>(async () => {
+        Assert.ThrowsAsync<Exception>(async () =>
+        {
             await _userService.DeleteUserAsync("invalid123");
         });
     }

@@ -1,5 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;

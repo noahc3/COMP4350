@@ -12,7 +12,8 @@ public class HttpContextExtensionsTests
     }
 
     [Test]
-    public void UserSettingsInvalidTest() {
+    public void UserSettingsInvalidTest()
+    {
         HttpContext ctx = new DefaultHttpContext();
         Assert.Throws<Exception>(() => { ctx.GetUser(); });
     }

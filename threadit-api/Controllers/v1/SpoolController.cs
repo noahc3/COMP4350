@@ -1,16 +1,18 @@
 using System.Net.Cache;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using ThreaditAPI.Extensions;
 using ThreaditAPI.Middleware;
-using Microsoft.AspNetCore.Mvc;
 using ThreaditAPI.Models;
 using ThreaditAPI.Models.Requests;
 using ThreaditAPI.Services;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace ThreaditAPI.Controllers.v1 {
+namespace ThreaditAPI.Controllers.v1
+{
     [ApiController]
     [Route("v1/spool")]
-    public class SpoolController : ControllerBase {
+    public class SpoolController : ControllerBase
+    {
         [HttpGet("{spoolName}")]
         public async Task<IActionResult> GetSpool([FromRoute] string spoolName, [FromServices] SpoolService spoolService)
         {
@@ -20,7 +22,8 @@ namespace ThreaditAPI.Controllers.v1 {
 
         [HttpPost("create")]
         [AuthenticationRequired]
-        public async Task<IActionResult> PostSpool([FromBody] PostSpoolRequest request, [FromServices] SpoolService spoolService) {
+        public async Task<IActionResult> PostSpool([FromBody] PostSpoolRequest request, [FromServices] SpoolService spoolService)
+        {
             UserDTO? userDTO = Request.HttpContext.GetUser();
 
 
@@ -36,7 +39,8 @@ namespace ThreaditAPI.Controllers.v1 {
             {
                 spool = await spoolService.InsertSpoolAsync(spool);
                 return Ok(spool);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

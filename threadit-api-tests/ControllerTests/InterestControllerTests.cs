@@ -1,10 +1,10 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Models.Requests;
 
 namespace ThreaditTests.Controllers;
@@ -56,7 +56,7 @@ public class InterestControllerTests
 
         response = _client.GetAsync(String.Format(Endpoints.V1_INTEREST_REMOVE, interestName1)).Result;
         Assert.IsTrue(response.IsSuccessStatusCode);
-        
+
         response = _client.GetAsync(Endpoints.V1_INTEREST_ALL).Result;
         Assert.IsTrue(response.IsSuccessStatusCode);
         interests = Utils.ParseResponse<List<Interest>>(response)!;

@@ -1,4 +1,5 @@
-public static class Endpoints {
+public static class Endpoints
+{
     // Auth
     public const string V1_AUTH_REGISTER = "/v1/auth/register";
     public const string V1_AUTH_LOGIN = "/v1/auth/login";

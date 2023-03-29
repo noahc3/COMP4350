@@ -1,12 +1,12 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Models.Requests;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 
 namespace ThreaditTests.Controllers;
 public class SpoolControllerTests
@@ -179,18 +179,18 @@ public class SpoolControllerTests
         //slightly janky but for some reason there are 12 spools not 2 and they never stay in the same places. this works for now.
         bool firstFound = false;
         bool secondFound = false;
-        for(int i = 0; i<spools.Length; i++)
+        for (int i = 0; i < spools.Length; i++)
         {
             var spool = spools[i];
-            if(spool.Id == _spool1.Id)
+            if (spool.Id == _spool1.Id)
             {
                 firstFound = true;
             }
-            else if(spool.Id == _spool2.Id)
+            else if (spool.Id == _spool2.Id)
             {
                 secondFound = true;
             }
-            if(firstFound && secondFound)
+            if (firstFound && secondFound)
             {
                 break;
             }
@@ -207,7 +207,7 @@ public class SpoolControllerTests
         Assert.IsTrue(result.IsSuccessStatusCode);
         var spools = Utils.ParseResponse<List<Spool>>(result);
         Assert.IsFalse(spools.IsNullOrEmpty());
-        
+
         //contains doesnt work. have to do this for now
         bool firstFound = false;
         bool secondFound = false;
@@ -348,9 +348,10 @@ public class SpoolControllerTests
     }
 
     [Test]
-    public void SuggestedSpoolsTest() {
+    public void SuggestedSpoolsTest()
+    {
         string interest = Utils.GetCleanUUIDString();
-        var spool = Utils.CreateSpool(_client2, _user2.Id, new List<string> {interest});
+        var spool = Utils.CreateSpool(_client2, _user2.Id, new List<string> { interest });
         var endpoint = String.Format(Endpoints.V1_USERSETTINGS_ADD_INTEREST, interest);
         var result = _client1.GetAsync(endpoint).Result;
 

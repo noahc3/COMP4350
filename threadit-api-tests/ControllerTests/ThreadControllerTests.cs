@@ -1,11 +1,11 @@
 using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using System.Xml.Linq;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ThreaditTests.Controllers;
 public class ThreadControllerTests
@@ -98,7 +98,8 @@ public class ThreadControllerTests
     }
 
     [Test]
-    public void GetThreadTest() {
+    public void GetThreadTest()
+    {
         var endpoint = String.Format(Endpoints.V1_THREAD_GET, _thread.Id);
         var result = _client1.GetAsync(endpoint).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
@@ -112,7 +113,8 @@ public class ThreadControllerTests
     }
 
     [Test]
-    public void GetThreadInvalidTest() {
+    public void GetThreadInvalidTest()
+    {
         var endpoint = String.Format(Endpoints.V1_THREAD_GET, "invalid");
         var result = _client1.GetAsync(endpoint).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
@@ -138,7 +140,8 @@ public class ThreadControllerTests
     [Test]
     public void GetAllThreadsFilteredTest()
     {
-        foreach (string sortType in new string[] { "hot", "top", "controversial", "new" }) {
+        foreach (string sortType in new string[] { "hot", "top", "controversial", "new" })
+        {
             var endpoint = String.Format(Endpoints.V1_THREAD_GET_ALL_FILTERED, sortType);
 
             var result = _client1.GetAsync(endpoint).Result;
@@ -209,14 +212,14 @@ public class ThreadControllerTests
 
         // stitch thread
         endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Stitches.Count, 1);
         Assert.IsTrue(thread1.Stitches.Contains(_user1.Id));
 
         // stitch thread again to remove stitch
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Stitches.Count, 0);
@@ -224,7 +227,7 @@ public class ThreadControllerTests
 
         // rip thread
         endpoint = String.Format(Endpoints.V1_THREAD_RIP);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Rips.Count, 1);
@@ -232,7 +235,7 @@ public class ThreadControllerTests
 
         // stitch thread (also removes rip)
         endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Rips.Count, 0);
@@ -242,7 +245,7 @@ public class ThreadControllerTests
 
         // rip thread (also removes stitch)
         endpoint = String.Format(Endpoints.V1_THREAD_RIP);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Rips.Count, 1);
@@ -251,7 +254,7 @@ public class ThreadControllerTests
 
         // rip thread again to remove
         endpoint = String.Format(Endpoints.V1_THREAD_RIP);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(thread1.Id)).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(thread1.Id)).Result;
         Assert.IsTrue(result.IsSuccessStatusCode);
         thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
         Assert.AreEqual(thread1.Rips.Count, 0);
@@ -263,12 +266,12 @@ public class ThreadControllerTests
     {
         // stitch invalid thread id
         var endpoint = String.Format(Endpoints.V1_THREAD_STITCH);
-        var result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
+        var result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
 
         // rip invalid thread id
         endpoint = String.Format(Endpoints.V1_THREAD_RIP);
-        result = _client1.PostAsync(endpoint,  Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<String>(Utils.GetCleanUUIDString())).Result;
         Assert.IsFalse(result.IsSuccessStatusCode);
     }
 
@@ -299,7 +302,7 @@ public class ThreadControllerTests
         //should return unauthorized
         Assert.IsFalse(result.IsSuccessStatusCode);
 
-    // send with id being empty string
+        // send with id being empty string
         editedThread = new ThreaditAPI.Models.Thread()
         {
             Id = " ",

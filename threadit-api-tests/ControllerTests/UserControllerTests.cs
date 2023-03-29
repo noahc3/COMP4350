@@ -1,10 +1,10 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
-using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
 using ThreaditAPI.Models.Requests;
 
 namespace ThreaditTests.Controllers;
