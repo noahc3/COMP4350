@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ThreaditAPI.Constants;
 
 namespace ThreaditAPI.Models
 {
@@ -8,6 +10,9 @@ namespace ThreaditAPI.Models
         public required string Email { get; set; }
         public required string Username { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+
+        [NotMapped]
+        public string Avatar { get; set; } = UserConstants.DEFAULT_AVATAR_URL;
         public UserDTO()
         {
 

@@ -1,4 +1,5 @@
-﻿using ThreaditAPI.Constants;
+﻿using System.Security.Cryptography;
+using ThreaditAPI.Constants;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -40,26 +41,38 @@ namespace ThreaditAPI.Services
         private async Task<CommentFull[]> ConvertToCommentFull(IEnumerable<Comment> comments)
         {
             Dictionary<string, string> usernames = new Dictionary<string, string>();
+            Dictionary<string, string> avatars = new Dictionary<string, string>();
             List<CommentFull> results = new List<CommentFull>();
 
             foreach (Comment c in comments)
             {
                 int childCommentCount = await this.commentRepository.ImmediateChildCommentCountAsync(c.Id);
                 string username;
+                string avatar;
 
                 if (c.IsDeleted)
                 {
                     username = c.OwnerId;
+                    avatar = UserConstants.DEFAULT_AVATAR_URL;
                 }
                 else if (usernames.ContainsKey(c.OwnerId))
                 {
                     username = usernames[c.OwnerId];
+                    avatar = avatars[c.OwnerId];
                 }
                 else
                 {
                     UserDTO user = (await this.userRepository.GetUserAsync(c.OwnerId))!;
                     username = user.Username;
+
+                    using (MD5 md5 = MD5.Create()) {
+                        byte[] hash = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Email.Trim().ToLower()));
+                        string gravatarHash = System.BitConverter.ToString(hash).Replace("-", "").ToLower();
+                        avatar = $"https://www.gravatar.com/avatar/{gravatarHash}.jpg";
+                    }
+
                     usernames.Add(c.OwnerId, username);
+                    avatars.Add(c.OwnerId, avatar);
                 }
 
                 CommentFull full = new CommentFull()
@@ -69,6 +82,7 @@ namespace ThreaditAPI.Services
                     ParentCommentId = c.ParentCommentId,
                     OwnerId = c.OwnerId,
                     OwnerName = username,
+                    OwnerAvatar = avatar,
                     Content = c.Content,
                     DateCreated = c.DateCreated,
                     IsDeleted = c.IsDeleted,
