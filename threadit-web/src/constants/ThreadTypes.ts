@@ -1,5 +1,5 @@
 export enum ThreadTypes {
-    TEXT = 'text',
-    LINK = 'link',
-    IMAGE = 'image'
+  TEXT = "text",
+  LINK = "link",
+  IMAGE = "image",
 }

@@ -8,82 +8,95 @@ const joinSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/join/");
 const checkSpoolForUserEndpoint = ApiEndpoint("/v1/userSettings/check/");
 const getUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/interests");
 const addUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/addInterest/");
-const removeUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/removeInterest/");
-const belongUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/belong/")
+const removeUserInterestsEndpoint = ApiEndpoint(
+  "/v1/userSettings/removeInterest/"
+);
+const belongUserInterestsEndpoint = ApiEndpoint("/v1/userSettings/belong/");
 
 export default class UserSettingsAPI {
+  static async removeSpoolUser(spoolName: string): Promise<IUserSettings[]> {
+    const response = await getWithAuth(removeSpoolForUserEndpoint + spoolName);
 
-    static async removeSpoolUser(spoolName: string): Promise<IUserSettings[]> {
-        const response = await getWithAuth(removeSpoolForUserEndpoint + spoolName);
-
-        if (!response.ok) {
-            throw new Error(`Failed to remove the user from the spool: ${await response.text()}`);
-        }
-
-        spoolStore.refreshJoinedSpools();
-
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `Failed to remove the user from the spool: ${await response.text()}`
+      );
     }
 
-    static async joinSpoolUser(spoolName: string): Promise<IUserSettings[]> {
-        const response = await getWithAuth(joinSpoolForUserEndpoint + spoolName);
+    spoolStore.refreshJoinedSpools();
 
-        if (!response.ok) {
-            throw new Error(`Failed to add the user to the spool: ${await response.text()}`);
-        }
+    return await response.json();
+  }
 
-        spoolStore.refreshJoinedSpools();
+  static async joinSpoolUser(spoolName: string): Promise<IUserSettings[]> {
+    const response = await getWithAuth(joinSpoolForUserEndpoint + spoolName);
 
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add the user to the spool: ${await response.text()}`
+      );
     }
 
-    static async getJoinedSpool(spoolName: string): Promise<boolean> {
-        const response = await getWithAuth(checkSpoolForUserEndpoint + spoolName);
+    spoolStore.refreshJoinedSpools();
 
-        if (!response.ok) {
-            throw new Error(`Failed to check if the user is in the spool: ${await response.text()}`);
-        }
+    return await response.json();
+  }
 
-        return await response.json();
+  static async getJoinedSpool(spoolName: string): Promise<boolean> {
+    const response = await getWithAuth(checkSpoolForUserEndpoint + spoolName);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to check if the user is in the spool: ${await response.text()}`
+      );
     }
 
-    static async getUserInterests(): Promise<string[]> {
-        const response = await getWithAuth(getUserInterestsEndpoint);
+    return await response.json();
+  }
 
-        if (!response.ok) {
-            throw new Error(`Failed to get user interests: ${await response.text()}`);
-        }
+  static async getUserInterests(): Promise<string[]> {
+    const response = await getWithAuth(getUserInterestsEndpoint);
 
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(`Failed to get user interests: ${await response.text()}`);
     }
 
-    static async addUserInterest(interest: string): Promise<string[]> {
-        const response = await getWithAuth(addUserInterestsEndpoint + interest);
+    return await response.json();
+  }
 
-        if (!response.ok) {
-            throw new Error(`Failed to add new interest to user: ${await response.text()}`);
-        }
+  static async addUserInterest(interest: string): Promise<string[]> {
+    const response = await getWithAuth(addUserInterestsEndpoint + interest);
 
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add new interest to user: ${await response.text()}`
+      );
     }
 
-    static async removeUserInterest(interest: string): Promise<string[]> {
-        const response = await getWithAuth(removeUserInterestsEndpoint + interest);
+    return await response.json();
+  }
 
-        if (!response.ok) {
-            throw new Error(`Failed to remove interest from user: ${await response.text()}`);
-        }
+  static async removeUserInterest(interest: string): Promise<string[]> {
+    const response = await getWithAuth(removeUserInterestsEndpoint + interest);
 
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `Failed to remove interest from user: ${await response.text()}`
+      );
     }
 
-    static async belongUserInterest(interest: string): Promise<boolean> {
-        const response = await getWithAuth(belongUserInterestsEndpoint + interest);
+    return await response.json();
+  }
 
-        if(!response.ok) {
-            throw new Error(`Failed to check if user is interested in this interest: ${await response.text()}`)
-        }
+  static async belongUserInterest(interest: string): Promise<boolean> {
+    const response = await getWithAuth(belongUserInterestsEndpoint + interest);
 
-        return await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `Failed to check if user is interested in this interest: ${await response.text()}`
+      );
     }
+
+    return await response.json();
+  }
 }

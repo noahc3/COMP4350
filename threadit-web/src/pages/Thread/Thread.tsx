@@ -10,37 +10,38 @@ import { ISpool } from "../../models/Spool";
 import { IThreadFull } from "../../models/ThreadFull";
 import { ThreadPost } from "./ThreadPost";
 
-
 export const Thread = observer(() => {
-    const { threadId } = useParams();
-    const [thread, setThread] = React.useState<IThreadFull>();
-    const [spool, setSpool] = React.useState<ISpool>();
+  const { threadId } = useParams();
+  const [thread, setThread] = React.useState<IThreadFull>();
+  const [spool, setSpool] = React.useState<ISpool>();
 
-    React.useEffect(() => {
-        if (threadId) {
-            ThreadAPI.getThreadById(threadId).then((thread) => {
-                setThread(thread);
-            });
-        }
-    }, [threadId]);
+  React.useEffect(() => {
+    if (threadId) {
+      ThreadAPI.getThreadById(threadId).then((thread) => {
+        setThread(thread);
+      });
+    }
+  }, [threadId]);
 
-    React.useEffect(() => {
-        if (thread && thread.spoolName) {
-            SpoolAPI.getSpoolByName(thread.spoolName).then((spool) => {
-                setSpool(spool);
-            });
-        }
-    }, [thread, thread?.spoolName])
+  React.useEffect(() => {
+    if (thread && thread.spoolName) {
+      SpoolAPI.getSpoolByName(thread.spoolName).then((spool) => {
+        setSpool(spool);
+      });
+    }
+  }, [thread, thread?.spoolName]);
 
-    return (
-        <PageLayout title={"View thread"}>
-            <Container centerContent={false} maxW={"container.lg"}>
-                {(thread && spool) && <>
-                    <ThreadPost spool={spool} thread={thread} />
-                    <br/>
-                    <CommentFeed spool={spool} thread={thread} />
-                </>}   
-            </Container>
-        </PageLayout>
-    );
+  return (
+    <PageLayout title={"View thread"}>
+      <Container centerContent={false} maxW={"container.lg"}>
+        {thread && spool && (
+          <>
+            <ThreadPost spool={spool} thread={thread} />
+            <br />
+            <CommentFeed spool={spool} thread={thread} />
+          </>
+        )}
+      </Container>
+    </PageLayout>
+  );
 });

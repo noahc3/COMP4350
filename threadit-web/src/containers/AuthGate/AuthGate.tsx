@@ -1,20 +1,17 @@
 import { authStore } from "../../stores/AuthStore";
-import { observer } from "mobx-react"
+import { observer } from "mobx-react";
 
 interface IAuthGate {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export const AuthGate = observer(({children}: IAuthGate) => {
-    const needsAuthCheck = !authStore.isAuthenticated && !authStore.userNeedsAuthentication;
+export const AuthGate = observer(({ children }: IAuthGate) => {
+  const needsAuthCheck =
+    !authStore.isAuthenticated && !authStore.userNeedsAuthentication;
 
-    if (needsAuthCheck) {
-        authStore.checkAuthentication();
-    }
+  if (needsAuthCheck) {
+    authStore.checkAuthentication();
+  }
 
-    return (
-        <>
-            {children}
-        </>
-    )
-})
+  return <>{children}</>;
+});

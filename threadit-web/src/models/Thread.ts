@@ -1,7 +1,7 @@
 export interface IThread {
-    topic: string
-    title: string
-    content: string
-    spoolId: string
-    ownerId: string
+  topic: string;
+  title: string;
+  content: string;
+  spoolId: string;
+  ownerId: string;
 }
