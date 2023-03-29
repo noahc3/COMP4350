@@ -9,113 +9,113 @@ namespace ThreaditTests.Repositories;
 
 public class UserSessionRepositoryTests
 {
-    private UserSessionRepository _userSessionRepository;
-    private PostgresDbContext _dbContext;
+	private UserSessionRepository _userSessionRepository;
+	private PostgresDbContext _dbContext;
 
-    [SetUp]
-    public void Setup()
-    {
-        _dbContext = CommonUtils.GetDbContext();
-        _userSessionRepository = new UserSessionRepository(_dbContext);
-    }
+	[SetUp]
+	public void Setup()
+	{
+		_dbContext = CommonUtils.GetDbContext();
+		_userSessionRepository = new UserSessionRepository(_dbContext);
+	}
 
-    [Test]
-    public async Task RetrieveUserSession_NotExists_ShouldFail()
-    {
-        UserSession testUserSession = new UserSession()
-        {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
-        };
-        UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
-        
-        Assert.That(returnedUserSession, Is.Null);
-    }
+	[Test]
+	public async Task RetrieveUserSession_NotExists_ShouldFail()
+	{
+		UserSession testUserSession = new UserSession()
+		{
+			Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+			UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
+		};
+		UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
 
-    [Test]
-    public async Task RetrieveUserSessionById_NotExists_ShouldFail()
-    {
-        UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
+		Assert.That(returnedUserSession, Is.Null);
+	}
 
-        Assert.That(returnedUserSession, Is.Null);
-    }
+	[Test]
+	public async Task RetrieveUserSessionById_NotExists_ShouldFail()
+	{
+		UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
 
-    [Test]
-    public async Task RetrieveUserSession_Exists_ShouldPass()
-    {
-        // Create UserSession
-        UserSession testUserSession = new UserSession()
-        {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
-        };
+		Assert.That(returnedUserSession, Is.Null);
+	}
 
-        // Ensure UserSession is not in database
-        UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
-        Assert.That(returnedUserSession, Is.Null);
+	[Test]
+	public async Task RetrieveUserSession_Exists_ShouldPass()
+	{
+		// Create UserSession
+		UserSession testUserSession = new UserSession()
+		{
+			Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+			UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
+		};
 
-        // Add UserSession to database
-        await _userSessionRepository.InsertUserSessionAsync(testUserSession);
-        returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+		// Ensure UserSession is not in database
+		UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+		Assert.That(returnedUserSession, Is.Null);
 
-        // Ensure UserSession is added correctly
-        Assert.That(returnedUserSession, Is.Not.Null);
-        Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
-        Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
-    }
+		// Add UserSession to database
+		await _userSessionRepository.InsertUserSessionAsync(testUserSession);
+		returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
 
-    [Test]
-    public async Task RetrieveUserSessionById_Exists_ShouldPass()
-    {
-        // Create UserSession
-        UserSession testUserSession = new UserSession()
-        {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
-        };
+		// Ensure UserSession is added correctly
+		Assert.That(returnedUserSession, Is.Not.Null);
+		Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
+		Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
+	}
 
-        // Ensure UserSession is not in database
-        UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession.Id);
-        Assert.That(returnedUserSession, Is.Null);
+	[Test]
+	public async Task RetrieveUserSessionById_Exists_ShouldPass()
+	{
+		// Create UserSession
+		UserSession testUserSession = new UserSession()
+		{
+			Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+			UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
+		};
 
-        // Add UserSession to database
-        await _userSessionRepository.InsertUserSessionAsync(testUserSession);
-        returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession.Id);
+		// Ensure UserSession is not in database
+		UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession.Id);
+		Assert.That(returnedUserSession, Is.Null);
 
-        // Ensure UserSession is added correctly
-        Assert.That(returnedUserSession, Is.Not.Null);
-        Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
-        Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
-    }
+		// Add UserSession to database
+		await _userSessionRepository.InsertUserSessionAsync(testUserSession);
+		returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession.Id);
 
-    [Test]
-    public async Task DeleteUserSession_Exists_ShouldPass()
-    {
-        // Create UserSession
-        UserSession testUserSession = new UserSession()
-        {
-            Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
-            UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
-        };
+		// Ensure UserSession is added correctly
+		Assert.That(returnedUserSession, Is.Not.Null);
+		Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
+		Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
+	}
 
-        // Ensure UserSession is not in database
-        UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
-        Assert.That(returnedUserSession, Is.Null);
+	[Test]
+	public async Task DeleteUserSession_Exists_ShouldPass()
+	{
+		// Create UserSession
+		UserSession testUserSession = new UserSession()
+		{
+			Id = "bdf89c51-9031-4e9b-b712-6df32cd75641",
+			UserId = "d94ddc51-9031-4e9b-b712-6df32cd75641"
+		};
 
-        // Add UserSession to database
-        await _userSessionRepository.InsertUserSessionAsync(testUserSession);
-        returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+		// Ensure UserSession is not in database
+		UserSession? returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+		Assert.That(returnedUserSession, Is.Null);
 
-        // Ensure UserSession is added correctly
-        Assert.That(returnedUserSession, Is.Not.Null);
-        Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
-        Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
-        
-        // Delete UserSession from database
-        await _userSessionRepository.DeleteUserSessionAsync(testUserSession.Id);
-        returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+		// Add UserSession to database
+		await _userSessionRepository.InsertUserSessionAsync(testUserSession);
+		returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
 
-        // Ensure UserSession is deleted correctly
-        Assert.That(returnedUserSession, Is.Null);
-    }
+		// Ensure UserSession is added correctly
+		Assert.That(returnedUserSession, Is.Not.Null);
+		Assert.IsTrue(returnedUserSession.Id.Equals(testUserSession.Id));
+		Assert.IsTrue(returnedUserSession.UserId.Equals(testUserSession.UserId));
+
+		// Delete UserSession from database
+		await _userSessionRepository.DeleteUserSessionAsync(testUserSession.Id);
+		returnedUserSession = await _userSessionRepository.GetUserSessionAsync(testUserSession);
+
+		// Ensure UserSession is deleted correctly
+		Assert.That(returnedUserSession, Is.Null);
+	}
 }

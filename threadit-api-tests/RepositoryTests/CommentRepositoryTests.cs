@@ -7,104 +7,104 @@ namespace ThreaditTests.Repositories;
 
 public class CommentRepositoryTests
 {
-    private CommentRepository _commentRepository;
-    private PostgresDbContext _dbContext;
+	private CommentRepository _commentRepository;
+	private PostgresDbContext _dbContext;
 
-    [SetUp]
-    public void Setup()
-    {
-        _dbContext = CommonUtils.GetDbContext();
-        _commentRepository = new CommentRepository(_dbContext);
-    }
+	[SetUp]
+	public void Setup()
+	{
+		_dbContext = CommonUtils.GetDbContext();
+		_commentRepository = new CommentRepository(_dbContext);
+	}
 
-    [Test]
-    public async Task RetrieveCommentById_NotExists_ShouldFail()
-    {
-        Comment? returnedComment = await _commentRepository.GetCommentAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
+	[Test]
+	public async Task RetrieveCommentById_NotExists_ShouldFail()
+	{
+		Comment? returnedComment = await _commentRepository.GetCommentAsync("bdf89c51-9031-4e9b-b712-6df32cd75641");
 
-        Assert.That(returnedComment, Is.Null);
-    }
+		Assert.That(returnedComment, Is.Null);
+	}
 
-    [Test]
-    public async Task RetrieveCommentById_Exists_ShouldPass()
-    {
-        // Create Comment
-        Comment testComment = new Comment()
-        {
-            Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
-            Content = "Comment Content",
-            OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
-            ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
-            ParentCommentId = null
-        };
+	[Test]
+	public async Task RetrieveCommentById_Exists_ShouldPass()
+	{
+		// Create Comment
+		Comment testComment = new Comment()
+		{
+			Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
+			Content = "Comment Content",
+			OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
+			ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
+			ParentCommentId = null
+		};
 
-        // Ensure Comment is not in database
-        Comment? returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
-        Assert.That(returnedComment, Is.Null);
+		// Ensure Comment is not in database
+		Comment? returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
+		Assert.That(returnedComment, Is.Null);
 
-        // Add Comment to database
-        await _commentRepository.InsertCommentAsync(testComment);
-        returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
+		// Add Comment to database
+		await _commentRepository.InsertCommentAsync(testComment);
+		returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
 
-        // Ensure Comment is added correctly
-        Assert.That(returnedComment, Is.Not.Null);
-        Assert.IsTrue(returnedComment.Id.Equals(testComment.Id));
-        Assert.IsTrue(returnedComment.Content.Equals(testComment.Content));
-        Assert.IsTrue(returnedComment.OwnerId.Equals(testComment.OwnerId));
-        Assert.IsTrue(returnedComment.ThreadId.Equals(testComment.ThreadId));
-        Assert.That(returnedComment.ParentCommentId, Is.Null);
-    }
+		// Ensure Comment is added correctly
+		Assert.That(returnedComment, Is.Not.Null);
+		Assert.IsTrue(returnedComment.Id.Equals(testComment.Id));
+		Assert.IsTrue(returnedComment.Content.Equals(testComment.Content));
+		Assert.IsTrue(returnedComment.OwnerId.Equals(testComment.OwnerId));
+		Assert.IsTrue(returnedComment.ThreadId.Equals(testComment.ThreadId));
+		Assert.That(returnedComment.ParentCommentId, Is.Null);
+	}
 
-    [Test]
-    public async Task UpdateComment_Exists_ShouldPass()
-    {
-        // Create Comment
-        Comment testComment = new Comment()
-        {
-            Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
-            Content = "Comment Content",
-            OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
-            ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
-            ParentCommentId = null
-        };
+	[Test]
+	public async Task UpdateComment_Exists_ShouldPass()
+	{
+		// Create Comment
+		Comment testComment = new Comment()
+		{
+			Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
+			Content = "Comment Content",
+			OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
+			ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
+			ParentCommentId = null
+		};
 
-        // Ensure Comment is not in database
-        Comment? returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
-        Assert.That(returnedComment, Is.Null);
+		// Ensure Comment is not in database
+		Comment? returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
+		Assert.That(returnedComment, Is.Null);
 
-        // Add Comment to database
-        await _commentRepository.InsertCommentAsync(testComment);
-        returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
+		// Add Comment to database
+		await _commentRepository.InsertCommentAsync(testComment);
+		returnedComment = await _commentRepository.GetCommentAsync(testComment.Id);
 
-        // Ensure Comment is added correctly
-        Assert.That(returnedComment, Is.Not.Null);
-        Assert.IsTrue(returnedComment.Id.Equals(testComment.Id));
-        Assert.IsTrue(returnedComment.Content.Equals(testComment.Content));
-        Assert.IsTrue(returnedComment.OwnerId.Equals(testComment.OwnerId));
-        Assert.IsTrue(returnedComment.ThreadId.Equals(testComment.ThreadId));
-        Assert.That(returnedComment.ParentCommentId, Is.Null);
+		// Ensure Comment is added correctly
+		Assert.That(returnedComment, Is.Not.Null);
+		Assert.IsTrue(returnedComment.Id.Equals(testComment.Id));
+		Assert.IsTrue(returnedComment.Content.Equals(testComment.Content));
+		Assert.IsTrue(returnedComment.OwnerId.Equals(testComment.OwnerId));
+		Assert.IsTrue(returnedComment.ThreadId.Equals(testComment.ThreadId));
+		Assert.That(returnedComment.ParentCommentId, Is.Null);
 
-        //Create updated Comment
-        Comment updatedTestComment = new Comment()
-        {
-            Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
-            Content = "Update Comment Content",
-            OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
-            ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
-            ParentCommentId = null
-        };
+		//Create updated Comment
+		Comment updatedTestComment = new Comment()
+		{
+			Id = "64a59d99-c16c-4016-b113-25a2f62cf51f",
+			Content = "Update Comment Content",
+			OwnerId = "a2k6n2b6-0000-4016-b113-25a2f62cf51f",
+			ThreadId = "823ae618-0b9d-4f35-a3e4-9514b5651dbb",
+			ParentCommentId = null
+		};
 
-        //update comment in the database
-        Comment? updateReturnedComment = await _commentRepository.UpdateCommentAsync(updatedTestComment);
+		//update comment in the database
+		Comment? updateReturnedComment = await _commentRepository.UpdateCommentAsync(updatedTestComment);
 
-        //get the comment again
-        returnedComment = await _commentRepository.GetCommentAsync(updatedTestComment.Id);
+		//get the comment again
+		returnedComment = await _commentRepository.GetCommentAsync(updatedTestComment.Id);
 
-        //make sure comment has been updated properly
-        Assert.That(returnedComment, Is.Not.Null);
-        Assert.IsTrue(returnedComment.Id.Equals(updatedTestComment.Id));
-        Assert.IsTrue(returnedComment.Content.Equals(updatedTestComment.Content));
-        Assert.IsTrue(returnedComment.OwnerId.Equals(updatedTestComment.OwnerId));
-        Assert.IsTrue(returnedComment.ThreadId.Equals(updatedTestComment.ThreadId));
-    }
+		//make sure comment has been updated properly
+		Assert.That(returnedComment, Is.Not.Null);
+		Assert.IsTrue(returnedComment.Id.Equals(updatedTestComment.Id));
+		Assert.IsTrue(returnedComment.Content.Equals(updatedTestComment.Content));
+		Assert.IsTrue(returnedComment.OwnerId.Equals(updatedTestComment.OwnerId));
+		Assert.IsTrue(returnedComment.ThreadId.Equals(updatedTestComment.ThreadId));
+	}
 }

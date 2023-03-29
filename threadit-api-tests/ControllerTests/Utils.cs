@@ -1,196 +1,228 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using ThreaditAPI;
+using ThreaditAPI.Constants;
+using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Models.Requests;
-using System.Text.Json;
-using System.Text;
-using ThreaditAPI.Database;
-using ThreaditAPI.Constants;
 
-public static class Utils {
-    private static WebApplicationFactory<Program>? _factory;
-    private static JsonSerializerOptions serializerOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true
-    };
-    public static WebApplicationFactory<Program> GetWebApplicationFactory() {
-        if (_factory == null) {
-            var context = new PostgresDbContext();
-            context.Database.EnsureDeleted();
-            context.SaveChanges();
-            _factory = new WebApplicationFactory<Program>();
-        }
+public static class Utils
+{
+	private static WebApplicationFactory<Program>? _factory;
+	private static JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+	{
+		PropertyNameCaseInsensitive = true
+	};
+	public static WebApplicationFactory<Program> GetWebApplicationFactory()
+	{
+		if (_factory == null)
+		{
+			var context = new PostgresDbContext();
+			context.Database.EnsureDeleted();
+			context.SaveChanges();
+			_factory = new WebApplicationFactory<Program>();
+		}
 
-        return _factory;
-    }
+		return _factory;
+	}
 
-    public static HttpClient GetHttpClient() {
-        var factory = GetWebApplicationFactory();
-        return factory.CreateClient();
-    }
+	public static HttpClient GetHttpClient()
+	{
+		var factory = GetWebApplicationFactory();
+		return factory.CreateClient();
+	}
 
-    public static T? ParseResponse<T>(HttpResponseMessage response) {
-        var content = response.Content.ReadAsStringAsync().Result;
-        return JsonSerializer.Deserialize<T>(content, serializerOptions);
-    }
+	public static T? ParseResponse<T>(HttpResponseMessage response)
+	{
+		var content = response.Content.ReadAsStringAsync().Result;
+		return JsonSerializer.Deserialize<T>(content, serializerOptions);
+	}
 
-    public static HttpContent WrapContent<T>(T content) {
-        return new StringContent(JsonSerializer.Serialize<T>(content), Encoding.UTF8, "application/json");
-    }
+	public static HttpContent WrapContent<T>(T content)
+	{
+		return new StringContent(JsonSerializer.Serialize<T>(content), Encoding.UTF8, "application/json");
+	}
 
-    public static (HttpClient, UserDTO, string) CreateAndAuthenticateUser() {
-        CreateAccountRequest reqCreate = new CreateAccountRequest() {
-            Email = GetCleanUUIDString() + "@test.com",
-            Password = "password",
-            Username = GetCleanUUIDString()
-        };
+	public static (HttpClient, UserDTO, string) CreateAndAuthenticateUser()
+	{
+		CreateAccountRequest reqCreate = new CreateAccountRequest()
+		{
+			Email = GetCleanUUIDString() + "@test.com",
+			Password = "password",
+			Username = GetCleanUUIDString()
+		};
 
-        LoginRequest loginReq = new LoginRequest() {
-            Username = reqCreate.Email,
-            Password = reqCreate.Password
-        };
+		LoginRequest loginReq = new LoginRequest()
+		{
+			Username = reqCreate.Email,
+			Password = reqCreate.Password
+		};
 
-        var client = GetHttpClient();
+		var client = GetHttpClient();
 
-        var response = client.PostAsync(Endpoints.V1_AUTH_REGISTER, WrapContent(reqCreate)).Result;
+		var response = client.PostAsync(Endpoints.V1_AUTH_REGISTER, WrapContent(reqCreate)).Result;
 
-        var loginResponse = client.PostAsync(Endpoints.V1_AUTH_LOGIN, WrapContent(reqCreate)).Result;
-        var token = loginResponse.Content.ReadAsStringAsync().Result;
-        
-        CheckSessionRequest checkReq = new CheckSessionRequest() {
-            Token = token
-        };
+		var loginResponse = client.PostAsync(Endpoints.V1_AUTH_LOGIN, WrapContent(reqCreate)).Result;
+		var token = loginResponse.Content.ReadAsStringAsync().Result;
 
-        var checkResponse = client.PostAsync(Endpoints.V1_AUTH_CHECKSESSION, WrapContent(checkReq)).Result;
+		CheckSessionRequest checkReq = new CheckSessionRequest()
+		{
+			Token = token
+		};
 
-        if (checkResponse.StatusCode != System.Net.HttpStatusCode.OK) {
-            throw new Exception("Could not authenticate user");
-        }
+		var checkResponse = client.PostAsync(Endpoints.V1_AUTH_CHECKSESSION, WrapContent(checkReq)).Result;
 
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+		if (checkResponse.StatusCode != System.Net.HttpStatusCode.OK)
+		{
+			throw new Exception("Could not authenticate user");
+		}
 
-        var profileResponse = client.GetAsync(Endpoints.V1_USER_PROFILE).Result;
+		client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 
-        var profile = ParseResponse<UserDTO>(profileResponse);
+		var profileResponse = client.GetAsync(Endpoints.V1_USER_PROFILE).Result;
 
-        if (profile == null) {
-            throw new Exception("Could not get user profile");
-        }
+		var profile = ParseResponse<UserDTO>(profileResponse);
 
-        if (profile.Username != reqCreate.Username) {
-            throw new Exception("User profile does not match");
-        }
+		if (profile == null)
+		{
+			throw new Exception("Could not get user profile");
+		}
 
-        return (client, profile, token);
-    }
+		if (profile.Username != reqCreate.Username)
+		{
+			throw new Exception("User profile does not match");
+		}
 
-    public static Spool CreateSpool(HttpClient authenticatedClient, string ownerId, List<string>? interests = null, List<string>? moderators = null) {
-        if (interests == null) {
-            interests = new List<string> { "keyword" };
-        }
+		return (client, profile, token);
+	}
 
-        if (moderators == null) {
-            moderators = new List<string>();
-        }
+	public static Spool CreateSpool(HttpClient authenticatedClient, string ownerId, List<string>? interests = null, List<string>? moderators = null)
+	{
+		if (interests == null)
+		{
+			interests = new List<string> { "keyword" };
+		}
 
-        PostSpoolRequest req = new PostSpoolRequest() {
-            Name = GetCleanUUIDString(),
-            Interests = interests,
-            Moderators = moderators,
-            OwnerId = ownerId
-        };
+		if (moderators == null)
+		{
+			moderators = new List<string>();
+		}
 
-        var response = authenticatedClient.PostAsync(Endpoints.V1_SPOOL_CREATE, WrapContent(req)).Result;
+		PostSpoolRequest req = new PostSpoolRequest()
+		{
+			Name = GetCleanUUIDString(),
+			Interests = interests,
+			Moderators = moderators,
+			OwnerId = ownerId
+		};
 
-        var spool = ParseResponse<Spool>(response);
+		var response = authenticatedClient.PostAsync(Endpoints.V1_SPOOL_CREATE, WrapContent(req)).Result;
 
-        if (spool == null) {
-            throw new Exception("Could not create spool");
-        }
+		var spool = ParseResponse<Spool>(response);
 
-        return spool;
-    }
+		if (spool == null)
+		{
+			throw new Exception("Could not create spool");
+		}
 
-    public static void DeleteSpool(HttpClient authenticatedClient, string spoolId) {
-        var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_SPOOL_DELETE, spoolId)).Result;
+		return spool;
+	}
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK) {
-            throw new Exception("Could not delete spool");
-        }
-    }
+	public static void DeleteSpool(HttpClient authenticatedClient, string spoolId)
+	{
+		var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_SPOOL_DELETE, spoolId)).Result;
 
-    public static ThreaditAPI.Models.Thread CreateThread(HttpClient authenticatedClient, string ownerId, string spoolId, string? title = null, string? content = null, string? type = null) {
-        if (title == null) {
-            title = GetCleanUUIDString();
-        }
+		if (response.StatusCode != System.Net.HttpStatusCode.OK)
+		{
+			throw new Exception("Could not delete spool");
+		}
+	}
 
-        if (content == null) {
-            content = GetCleanUUIDString();
-        }
+	public static ThreaditAPI.Models.Thread CreateThread(HttpClient authenticatedClient, string ownerId, string spoolId, string? title = null, string? content = null, string? type = null)
+	{
+		if (title == null)
+		{
+			title = GetCleanUUIDString();
+		}
 
-        if (type == null) {
-            type = ThreadTypes.TEXT;
-        }
+		if (content == null)
+		{
+			content = GetCleanUUIDString();
+		}
 
-        PostThreadRequest req = new PostThreadRequest() {
-            Title = title,
-            Content = content,
-            OwnerId = ownerId,
-            SpoolId = spoolId,
-            ThreadType = type
-        };
+		if (type == null)
+		{
+			type = ThreadTypes.TEXT;
+		}
 
-        var response = authenticatedClient.PostAsync(Endpoints.V1_THREAD_CREATE, WrapContent(req)).Result;
+		PostThreadRequest req = new PostThreadRequest()
+		{
+			Title = title,
+			Content = content,
+			OwnerId = ownerId,
+			SpoolId = spoolId,
+			ThreadType = type
+		};
 
-        var thread = ParseResponse<ThreaditAPI.Models.Thread>(response);
+		var response = authenticatedClient.PostAsync(Endpoints.V1_THREAD_CREATE, WrapContent(req)).Result;
 
-        if (thread == null) {
-            throw new Exception("Could not create thread");
-        }
+		var thread = ParseResponse<ThreaditAPI.Models.Thread>(response);
 
-        return thread;
-    }
+		if (thread == null)
+		{
+			throw new Exception("Could not create thread");
+		}
 
-    public static void DeleteThread(HttpClient authenticatedClient, string threadId) {
-        var response = authenticatedClient.DeleteAsync(String.Format(Endpoints.V1_THREAD_DELETE, threadId)).Result;
+		return thread;
+	}
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK) {
-            throw new Exception("Could not delete thread");
-        }
-    }
+	public static void DeleteThread(HttpClient authenticatedClient, string threadId)
+	{
+		var response = authenticatedClient.DeleteAsync(String.Format(Endpoints.V1_THREAD_DELETE, threadId)).Result;
 
-    public static Comment CreateComment(HttpClient authenticatedClient, string ownerId, string threadId, string? content = null) {
-        if (content == null) {
-            content = GetCleanUUIDString();
-        }
+		if (response.StatusCode != System.Net.HttpStatusCode.OK)
+		{
+			throw new Exception("Could not delete thread");
+		}
+	}
 
-        var endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, threadId, "");
+	public static Comment CreateComment(HttpClient authenticatedClient, string ownerId, string threadId, string? content = null)
+	{
+		if (content == null)
+		{
+			content = GetCleanUUIDString();
+		}
 
-        var result = authenticatedClient.PostAsync(endpoint, Utils.WrapContent<string>(content)).Result;
-        var comment = Utils.ParseResponse<Comment>(result);
+		var endpoint = String.Format(Endpoints.V1_COMMENT_CREATE, threadId, "");
 
-        if (comment == null) {
-            throw new Exception("Could not create comment");
-        }
+		var result = authenticatedClient.PostAsync(endpoint, Utils.WrapContent<string>(content)).Result;
+		var comment = Utils.ParseResponse<Comment>(result);
 
-        return comment;
-    }
+		if (comment == null)
+		{
+			throw new Exception("Could not create comment");
+		}
 
-    public static UserSettings JoinSpool(HttpClient authenticatedClient, string spoolName)
-    {
-        var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_USERSETTINGS_JOIN, spoolName)).Result;
+		return comment;
+	}
 
-        var settings = ParseResponse<UserSettings>(response);
+	public static UserSettings JoinSpool(HttpClient authenticatedClient, string spoolName)
+	{
+		var response = authenticatedClient.GetAsync(String.Format(Endpoints.V1_USERSETTINGS_JOIN, spoolName)).Result;
 
-        if (settings == null)
-        {
-            throw new Exception("Could not join spool");
-        }
+		var settings = ParseResponse<UserSettings>(response);
 
-        return settings;
-    }
+		if (settings == null)
+		{
+			throw new Exception("Could not join spool");
+		}
 
-    public static string GetCleanUUIDString() {
-        return Guid.NewGuid().ToString().Replace("-", "");
-    }
+		return settings;
+	}
+
+	public static string GetCleanUUIDString()
+	{
+		return Guid.NewGuid().ToString().Replace("-", "");
+	}
 }
