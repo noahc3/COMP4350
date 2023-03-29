@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { PageLayout } from "../../containers/PageLayout/PageLayout";
 import {
   Box,
@@ -16,42 +17,55 @@ import {
   Avatar,
   Tag,
   TagLabel,
-  TagCloseButton,
+  TagRightIcon,
+  StackDivider,
 } from "@chakra-ui/react";
 
 import { userStore } from "../../stores/UserStore";
 import { authStore } from "../../stores/AuthStore";
+import { interestStore } from "../../stores/InterestStore";
 import UserSettingsAPI from "../../api/UserSettingsApi";
+import { Search2Icon } from "@chakra-ui/icons";
+import { spoolStore } from "../../stores/SpoolStore";
 
 export const UserSettings = observer(() => {
   const profile = userStore.userProfile;
   const isAuthenticated = authStore.isAuthenticated;
   const { colorMode, toggleColorMode } = useColorMode();
-  const [interests, setInterests] = React.useState<string[]>([]);
+  const userInterests = interestStore.joinedInterests;
+  const otherInterests = interestStore.otherInterests;
 
   React.useEffect(() => {
-    UserSettingsAPI.getUserInterests().then((interest) => {
-      setInterests(interest);
-    });
-  }, [profile, isAuthenticated]);
+    interestStore.refreshJoinedInterests();
+    interestStore.refreshOtherInterests();
+  }, [profile, isAuthenticated, userInterests]);
 
   const removeInterest = async (interestMod: string) => {
-    UserSettingsAPI.removeUserInterest(interestMod).then((interests) => {
-      setInterests(interests);
-    });
+    await UserSettingsAPI.removeUserInterest(interestMod);
+    await spoolStore.refreshSuggestedSpools();
   };
 
-  const interested = interests?.map(function (interest) {
+  const addInterest = async (interestMod: string) => {
+    await UserSettingsAPI.addUserInterest(interestMod);
+    await spoolStore.refreshSuggestedSpools();
+  };
+
+  const interested = userInterests?.map(function (interest) {
     return (
-      <HStack spacing={1} justifyContent={"center"} marginTop={50}>
-        <Tag size={"lg"} colorScheme={"purple"} variant={"solid"}>
-          <TagLabel>{interest}</TagLabel>
-          <TagCloseButton
-            onClick={() => {
-              removeInterest(interest);
-            }}
-          ></TagCloseButton>
-        </Tag>
+      <HStack spacing={1} justifyContent={"left"} marginTop={50}>
+        <Button rightIcon={<MinusIcon/>} colorScheme={"purple"} variant={"solid"} onClick={() => {removeInterest(interest);}}>
+          <label>{interest}</label>
+        </Button>
+      </HStack>
+    );
+  });
+
+  const notInterested = otherInterests?.map(function (interest) {
+    return (
+      <HStack spacing={1} justifyContent={"left"} marginTop={50}>
+        <Button rightIcon={<AddIcon/>} colorScheme={"purple"} variant={"outline"} onClick={() => {addInterest(interest);}}>
+          <label>{interest}</label>
+        </Button>
       </HStack>
     );
   });
@@ -75,7 +89,7 @@ export const UserSettings = observer(() => {
                 />
 
                 <Button size={"md"} colorScheme={"purple"}>
-                  Change Profile Picture
+                  <label>Change Profile Picture</label>
                 </Button>
               </VStack>
               <HStack spacing={1} justifyContent={"center"} marginTop={50}>
@@ -90,9 +104,13 @@ export const UserSettings = observer(() => {
               </HStack>
             </TabPanel>
             <TabPanel>
-              <VStack spacing={5} justifyContent={"center"}>
-                <Text fontSize={"xl"}>Interests:</Text>
+              <VStack spacing={5}>
+                <Text fontSize={"xl"}>User Interests:</Text>
                 {interested}
+              </VStack>
+              <VStack spacing={5} marginTop={15}>
+                <Text fontSize={"xl"}>Other Interests:</Text>
+                {notInterested}
               </VStack>
             </TabPanel>
           </TabPanels>

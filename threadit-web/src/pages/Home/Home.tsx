@@ -27,11 +27,12 @@ import { navStore } from "../../stores/NavStore";
 import { Select, SingleValue, ActionMeta } from "chakra-react-select";
 import { useColorMode } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
+import { interestStore } from "../../stores/InterestStore";
 
 export const Home = observer(() => {
   const isAuthenticated = authStore.isAuthenticated;
   const { colorMode } = useColorMode();
-  const [interests, setInterests] = useState<IInterest[]>([]);
+  const interests = interestStore.otherInterests;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const allSpools = spoolStore.allSpools;
@@ -53,13 +54,11 @@ export const Home = observer(() => {
   };
 
   React.useEffect(() => {
-    InterestAPI.getAllInterests().then((interests) => {
-      setInterests(interests);
-    });
-  }, []);
+    interestStore.refreshOtherInterests();
+  }, [isAuthenticated, interests]);
 
-  const addInterest = async (interestMod: IInterest) => {
-    await UserSettingsAPI.addUserInterest(interestMod.name);
+  const addInterest = async (interestMod: string) => {
+    await UserSettingsAPI.addUserInterest(interestMod);
     await spoolStore.refreshSuggestedSpools();
   };
 
@@ -75,7 +74,7 @@ export const Home = observer(() => {
             addInterest(interest);
           }}
         >
-          <label>{interest.name}</label>
+          <label>{interest}</label>
         </Button>
       </HStack>
     );
