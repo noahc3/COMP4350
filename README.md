@@ -36,8 +36,7 @@ This application should be able to respond to 1000 requests across 100 users per
 
 ## Coding Style
 
-Backend C# Files: [EditorConfig](https://editorconfig.org/)
-Typescript/CSS/Json: [Prettier](https://prettier.io/docs/en/configuration.html)
+We are using [Prettier](https://prettier.io/docs/en/configuration.html) to format Typescript, CSS, and Json files, and [EditorConfig](https://editorconfig.org/) to format C# files. 
 
 ## User Stories
 
