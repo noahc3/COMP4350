@@ -52,7 +52,14 @@ export const UserSettings = observer(() => {
   const interested = userInterests?.map(function (interest) {
     return (
       <HStack spacing={1} justifyContent={"left"} marginTop={50}>
-        <Button rightIcon={<MinusIcon/>} colorScheme={"purple"} variant={"solid"} onClick={() => {removeInterest(interest);}}>
+        <Button
+          rightIcon={<MinusIcon />}
+          colorScheme={"purple"}
+          variant={"solid"}
+          onClick={() => {
+            removeInterest(interest);
+          }}
+        >
           <label>{interest}</label>
         </Button>
       </HStack>
@@ -62,7 +69,14 @@ export const UserSettings = observer(() => {
   const notInterested = otherInterests?.map(function (interest) {
     return (
       <HStack spacing={1} justifyContent={"left"} marginTop={50}>
-        <Button rightIcon={<AddIcon/>} colorScheme={"purple"} variant={"outline"} onClick={() => {addInterest(interest);}}>
+        <Button
+          rightIcon={<AddIcon />}
+          colorScheme={"purple"}
+          variant={"outline"}
+          onClick={() => {
+            addInterest(interest);
+          }}
+        >
           <label>{interest}</label>
         </Button>
       </HStack>
@@ -81,15 +95,16 @@ export const UserSettings = observer(() => {
             <TabPanel>
               <VStack spacing={10} justifyContent={"center"}>
                 <Text fontSize={"xl"}>Profile Picture:</Text>
-                <Avatar
-                  size={"xxl"}
-                  src={profile?.avatar}
-                />
+                <Avatar size={"xxl"} src={profile?.avatar} />
 
-                <a href="https://www.gravatar.com/site/login" target='_blank' rel='noreferrer'>
-                    <Button size={"md"} colorScheme={"purple"}>
-                        <label>Change Profile Picture</label>
-                    </Button>
+                <a
+                  href="https://www.gravatar.com/site/login"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button size={"md"} colorScheme={"purple"}>
+                    <label>Change Profile Picture</label>
+                  </Button>
                 </a>
               </VStack>
               <HStack spacing={1} justifyContent={"center"} marginTop={50}>
