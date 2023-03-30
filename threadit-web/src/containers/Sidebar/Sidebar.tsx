@@ -156,10 +156,7 @@ export const Sidebar = observer(() => {
           <Divider />
           <Box>
             <HStack marginLeft={"8.3px"} marginBottom={2}>
-              <Avatar
-                size={"sm"}
-                src={profile.avatar}
-              />
+              <Avatar size={"sm"} src={profile.avatar} />
               <Text>{profile.username}</Text>
             </HStack>
             <NavLink to={"/profile"}>

@@ -65,7 +65,8 @@ namespace ThreaditAPI.Services
                     UserDTO user = (await this.userRepository.GetUserAsync(c.OwnerId))!;
                     username = user.Username;
 
-                    using (MD5 md5 = MD5.Create()) {
+                    using (MD5 md5 = MD5.Create())
+                    {
                         byte[] hash = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Email.Trim().ToLower()));
                         string gravatarHash = System.BitConverter.ToString(hash).Replace("-", "").ToLower();
                         avatar = $"https://www.gravatar.com/avatar/{gravatarHash}.jpg";

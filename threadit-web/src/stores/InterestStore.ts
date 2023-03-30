@@ -9,7 +9,7 @@ import { authStore } from "./AuthStore";
 import InterestAPI from "../api/InterestAPI";
 import UserSettingsAPI from "../api/UserSettingsApi";
 
-export class InterestStore{
+export class InterestStore {
   @observable
   _allInterests?: string[] = undefined;
 
@@ -21,15 +21,15 @@ export class InterestStore{
 
   constructor() {
     makeObservable(this);
-  } 
+  }
 
   @action
   async refreshAllInterests() {
     const interests = await InterestAPI.getAllInterests();
     runInAction(() => {
       const array = [];
-      for(let i = 0; i < interests.length; i++){
-            array.push(interests[i].name);
+      for (let i = 0; i < interests.length; i++) {
+        array.push(interests[i].name);
       }
       this._allInterests = array;
     });
@@ -38,33 +38,31 @@ export class InterestStore{
 
   @action
   async refreshJoinedInterests() {
-    if(authStore.isAuthenticated){
+    if (authStore.isAuthenticated) {
       const interests = await UserSettingsAPI.getUserInterests();
       runInAction(() => {
         this._joinedInterests = interests;
-    });
-    }
-    else{
-        this._joinedInterests = [];
+      });
+    } else {
+      this._joinedInterests = [];
     }
     return this._joinedInterests;
   }
 
   @action
   async refreshOtherInterests() {
-    if(authStore.isAuthenticated){
+    if (authStore.isAuthenticated) {
       const userInterests = await UserSettingsAPI.getUserInterests();
       const interests = await InterestAPI.getAllInterests();
       runInAction(() => {
         const array = [];
-        for(let i = 0; i < interests.length; i++){
+        for (let i = 0; i < interests.length; i++) {
           array.push(interests[i].name);
         }
-        this._otherInterests = array.filter(x => !userInterests.includes(x));
-    });
-    }
-    else{
-        this._otherInterests = [];
+        this._otherInterests = array.filter((x) => !userInterests.includes(x));
+      });
+    } else {
+      this._otherInterests = [];
     }
     return this._otherInterests;
   }
