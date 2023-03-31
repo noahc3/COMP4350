@@ -27,7 +27,6 @@ Users should have spools suggested to them based on the spools that they are alr
 This application should be able to respond to 1000 requests across 100 users per minute concurrently.
 
 ## Technologies
-
 - .NET: Backend REST API
 - React.js: Web Frontend
 - Postgres: Database
@@ -37,6 +36,22 @@ This application should be able to respond to 1000 requests across 100 users per
 ## Coding Style
 
 We are using [Prettier](https://prettier.io/docs/en/configuration.html) to format Typescript, CSS, and Json files, and [EditorConfig](https://editorconfig.org/) to format C# files. 
+
+Prettier Default Formatting Rules (Front-end)
+- 2 space indentation
+- Max 80 character line length
+- Single quotes
+- Remove unnecessary semi-colons
+- Remove unnecessary whitespace
+- Use arrow functions by default
+
+EditorConfig Default Formatting Rules (Back-end C#)
+- 4 space indentation
+- Max 80 character line length
+- Insert final newline
+- Disallow trailing whitespace
+- Unix-style line endings
+- utf-8 character set
 
 ## User Stories
 
