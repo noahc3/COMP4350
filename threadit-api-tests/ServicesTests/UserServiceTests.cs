@@ -84,6 +84,15 @@ public class UserServiceTests
         {
 
         }
+        try
+        {
+            UserDTO? returnedUser = await _userService.GetUserAsync("user name", "1234");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
     }
 
     [Test]

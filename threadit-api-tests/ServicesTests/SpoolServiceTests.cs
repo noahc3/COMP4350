@@ -88,7 +88,7 @@ public class SpoolServiceTests
         spool = new Spool()
         {
             Id = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
-            Name = "qr5t9c51-9031-4e9b-b712-6df32cd75641-2345-2345-76326",
+            Name = "qr5t9c5190314e9bb7126df32cd75641234523457632612345678909876543",
             OwnerId = testUser.Id,
         };
         Assert.ThrowsAsync<Exception>(async () => await _spoolService.InsertSpoolAsync(spool));
