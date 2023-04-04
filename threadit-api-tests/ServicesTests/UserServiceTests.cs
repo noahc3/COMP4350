@@ -52,6 +52,116 @@ public class UserServiceTests
     }
 
     [Test]
+    public async Task UserService_RetrieveUser_Exists_TooLong_ShouldFail()
+    {
+        //both null/empty
+        try
+        {
+            UserDTO? returnedUser = await _userService.GetUserAsync("", "");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+
+        //also check with giving it one or the other blank
+        try
+        {
+            UserDTO? returnedUser = await _userService.GetUserAsync("00000000-0000-0000-0000-000000000000", "");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        try
+        {
+            UserDTO? returnedUser = await _userService.GetUserAsync("", "1234");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+    }
+
+    [Test]
+    public async Task UserService_CreateUser_NotValid_ShouldFail()
+    {
+        //username null
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("", "email", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //email null
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("username", "", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //username and email null
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("", "", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //username with whitespace
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("user name", "email", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //email with whitespace
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("username", "em ail", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //username over 32 characters
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("username9123456789098676767676767", "email", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+        //email with over 41 characters
+        try
+        {
+            UserDTO? returnedUser = await _userService.CreateUserAsync("username", "username9123456789091348676767676767@gmail.com", "password");
+            Assert.Fail();
+        }
+        catch (Exception)
+        {
+
+        }
+    }
+
+    [Test]
     public async Task UserService_RetrieveUser_Exists_ShouldPass()
     {
         //add to the database
