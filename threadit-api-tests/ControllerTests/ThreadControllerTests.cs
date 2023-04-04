@@ -48,6 +48,31 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void EditNonTextThreadTest()
+    {
+        //get the endpoint
+        var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
+
+        ThreaditAPI.Models.Thread _threadLocal = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString(), type: "image");
+
+
+        //create the thread
+        var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(_threadLocal)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.IsTrue(thread1.OwnerId.Equals(_user1.Id));
+        Assert.IsTrue(thread1.SpoolId.Equals(_spool.Id));
+        Assert.IsTrue(thread1.Content.Equals(_threadLocal.Content));
+        Assert.IsTrue(thread1.Title.Equals(_threadLocal.Title));
+
+        //update the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_EDIT);
+        result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(_threadLocal)).Result;
+        Assert.False(result.IsSuccessStatusCode);
+    }
+
+    [Test]
     public void CreateUpdateDeleteThreadTest()
     {
         //get the endpoint
