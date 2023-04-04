@@ -12,7 +12,7 @@ Users should be able to create, edit, and destroy threads. Users should also be 
 
 **Organize Threads**
 
-Users should be able to create and subscribe to spools so that they can see related threads in an organized fashion. Spool creators should have privileges in the spools that they create.
+Users should be able to create and subscribe/join to spools so that they can see related threads in an organized fashion. Spool creators should have privileges in the spools that they create.
 
 **Home Feed**
 
@@ -153,13 +153,6 @@ EditorConfig Default Formatting Rules (Back-end C#)
     - Then I should see my feed get sorted and organized in accordance with the selections
   - Priority: Low
   - Points: 10
-- As a user, I want to be able to collapse the sidebar so I have more screen space
-  - Acceptance Criteria 
-    - Given I am a user
-    - When I click into my home page and click the arrow on the menu
-    - Then the menu should collapse
-  - Priority: Low
-  - Points: 8
 
 **Spool Suggestions**
 - As a user I want to have spools suggested to me based on my interests so that I can subscribe to new spools
@@ -169,10 +162,4 @@ EditorConfig Default Formatting Rules (Back-end C#)
     - Then I should expect to see accurate suggestions on spools based on my interests
   - Priority: Low
   - Points: 10
-- As a user, I want to complete a short quiz about my interests to allow my recommended spools to be relevant to me.
-  - Acceptance Criteria
-    - Given I am a first time user of Threadit
-    - When I first log into Threadit
-    - Then I should be prompted with a quick quiz to gauge my interests for suggestions, and then see suggestions based off the answers given
-  - Priority: Low
-  - Points: 15
+
