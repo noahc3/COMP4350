@@ -14,6 +14,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Tooltip,
 } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
@@ -58,9 +59,7 @@ export const ThreadPost = observer(
         ? spool?.moderators.includes(userStore.userProfile!.id)
         : false;
     const canEdit =
-      thread &&
-      thread.threadType === ThreadTypes.TEXT &&
-      (isThreadOwner || isSpoolOwner || isModerator);
+      thread && thread.threadType === ThreadTypes.TEXT && isThreadOwner;
     const canDelete = thread && (isThreadOwner || isSpoolOwner || isModerator);
     const disableInputs = isSaving || isDeleting;
     const profile = userStore.userProfile;
@@ -245,26 +244,43 @@ export const ThreadPost = observer(
             )}
 
             <HStack>
-              <ButtonGroup size={"sm"} isAttached>
-                <Button
-                  leftIcon={<ArrowUpIcon />}
-                  onClick={() => {
-                    stitchThread();
-                  }}
-                  colorScheme={isStitched ? "blue" : "gray"}
-                >
-                  {thread.stitches.length}
-                </Button>
-                <Button
-                  leftIcon={<ArrowDownIcon />}
-                  onClick={() => {
-                    ripThread();
-                  }}
-                  colorScheme={isRipped ? "red" : "gray"}
-                >
-                  {thread.rips.length}
-                </Button>
-              </ButtonGroup>
+              {isAuthenticated && profile ? (
+                <>
+                  <ButtonGroup size={"sm"} isAttached>
+                    <Button
+                      leftIcon={<ArrowUpIcon />}
+                      onClick={() => {
+                        stitchThread();
+                      }}
+                      colorScheme={isStitched ? "blue" : "gray"}
+                    >
+                      {thread.stitches.length}
+                    </Button>
+                    <Button
+                      leftIcon={<ArrowDownIcon />}
+                      onClick={() => {
+                        ripThread();
+                      }}
+                      colorScheme={isRipped ? "red" : "gray"}
+                    >
+                      {thread.rips.length}
+                    </Button>
+                  </ButtonGroup>
+                </>
+              ) : (
+                <>
+                  <Tooltip label="You must be logged in to vote">
+                    <ButtonGroup size={"sm"} isAttached>
+                      <Button cursor={"default"} leftIcon={<ArrowUpIcon />}>
+                        {thread.stitches.length}
+                      </Button>
+                      <Button cursor={"default"} leftIcon={<ArrowDownIcon />}>
+                        {thread.rips.length}
+                      </Button>
+                    </ButtonGroup>
+                  </Tooltip>
+                </>
+              )}
               <Button size={"sm"} leftIcon={<IoArrowRedo />} onClick={onCopy}>
                 {hasCopied ? "Copied Link!" : "Share"}
               </Button>
