@@ -55,6 +55,7 @@ export const ManageSpool = observer(() => {
   const [ownerToAdd, setOwnerToAdd] = useState<string>("");
   const [addError, setAddError] = React.useState("");
   const [changeError, setChangeError] = React.useState("");
+  const [rulesError, setRulesError] = React.useState("");
 
   React.useEffect(() => {
     if (spoolName) {
@@ -146,7 +147,16 @@ export const ManageSpool = observer(() => {
 
   const save = async () => {
     if (spool) {
-      await SpoolAPI.saveSpool(spool.id, rules);
+        setRulesError("");
+        try {
+            await SpoolAPI.saveSpool(spool.id, rules);
+        } catch (e) {
+            if (e instanceof Error) {
+                setRulesError("Spool rules maximum is 2048 characters.");
+            }
+        } finally {
+            //do nothing
+        }
     }
   };
 
@@ -164,6 +174,14 @@ export const ManageSpool = observer(() => {
             >
               <FormControl>
                 <FormLabel>Rules and Description:</FormLabel>
+                {rulesError.length > 0 && (
+                    <Container p="0.5rem">
+                        <Alert status="error">
+                            <AlertIcon />
+                            {rulesError}
+                        </Alert>
+                    </Container>
+                )}
                 <InputGroup size="md">
                   <Textarea
                     size="lg"
