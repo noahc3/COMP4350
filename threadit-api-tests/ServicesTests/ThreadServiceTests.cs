@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ThreaditAPI.Database;
 using ThreaditAPI.Models;
 using ThreaditAPI.Repositories;
@@ -14,6 +11,8 @@ public class ThreadServiceTests
     private SpoolRepository _spoolRepository;
     private UserRepository _userRepository;
     private PostgresDbContext _dbContext;
+    private string longText = "luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non enim praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas integer eget aliquet nibh praesent tristique magna sit amet purus gravida quis blandit turpis cursus in hac habitasse platea dictumst quisque sagittis purus sit amet volutpat consequat mauris nunc congue nisi vitae suscipit tellus mauris a diam maecenas sed enim ut sem viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt dui ut ornare lectus sit amet est placerat in egestas erat imperdiet sed euismod nisi porta lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor id eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet risus nullam eget felis eget nunc lobortis mattis aliquam faucibus purus inplacerat in egestas erat imperdiet sed euismod nisi porta lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor id eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet risus nullam eget felis eget nunc lobortis mattis aliquam faucibus purus in";
+    private string longTitle = "luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non enim praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa ";
 
     [SetUp]
     public void Setup()
@@ -22,6 +21,168 @@ public class ThreadServiceTests
         _threadService = new ThreadService(_dbContext);
         _spoolRepository = new SpoolRepository(_dbContext);
         _userRepository = new UserRepository(_dbContext);
+    }
+
+    [Test]
+    public async Task InsertThread_NotValid_ShouldFail()
+    {
+        // Create User
+        var user = new User()
+        {
+            Id = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Username = "TestUser",
+            Email = "test@test.com",
+            PasswordHash = "password",
+        };
+
+        var spool = new Spool()
+        {
+            Id = "qr5t9c51-9031-4e9b-b712-6df32cd75641",
+            Name = "Spool1",
+            OwnerId = "d94ddc51-9031-4e9b-b712-6df32cd75641",
+            Interests = new List<string>() { "Interest1", "Interest2" },
+            Moderators = new List<string>() { "d94ddc51-9031-4e9b-b712-6df32cd75641" }
+        };
+
+        //empty title
+        var thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = "",
+            Content = "Thread Content",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.InsertThreadAsync(thread));
+
+        //title over 256 characters
+        thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = longTitle,
+            Content = "Thread Content",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.InsertThreadAsync(thread));
+
+        //content over 2048 characters
+        thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = "Thread Title 1",
+            Content = longText,
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.InsertThreadAsync(thread));
+
+        //type is not correct type
+        thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = "Thread Title 1",
+            Content = "Thread Content",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = "not valid"
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.InsertThreadAsync(thread));
+
+        //ID already in use
+        thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic",
+            Title = "Thread Title 1",
+            Content = "Thread Content",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+
+        // Ensure Thread is not in database
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread.Id));
+
+        // Add Thread to database
+        await _threadService.InsertThreadAsync(thread);
+        var returnedThread = await _threadService.GetThreadAsync(thread.Id);
+
+        // Ensure Thread is added correctly
+        Assert.That(returnedThread, Is.Not.Null);
+        Assert.IsTrue(returnedThread!.Id.Equals(thread.Id));
+        Assert.IsTrue(returnedThread.Topic.Equals(thread.Topic));
+        Assert.IsTrue(returnedThread.Title.Equals(thread.Title));
+        Assert.IsTrue(returnedThread.Content.Equals(thread.Content));
+        Assert.IsTrue(returnedThread.OwnerId.Equals(thread.OwnerId));
+        Assert.IsTrue(returnedThread.SpoolId.Equals(thread.SpoolId));
+
+        thread = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75641",
+            Topic = "Thread Topic1",
+            Title = "Thread Title 11",
+            Content = "Thread Content1",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.InsertThreadAsync(thread));
+
+        //update content too long
+        var thread2 = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75642",
+            Topic = "Thread Topic",
+            Title = "Thread Title 1",
+            Content = "Thread Content",
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+
+        // Ensure Thread is not in database
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.GetThreadAsync(thread2.Id));
+
+        // Add Thread to database
+        await _threadService.InsertThreadAsync(thread2);
+        returnedThread = await _threadService.GetThreadAsync(thread2.Id);
+
+        // Ensure Thread is added correctly
+        Assert.That(returnedThread, Is.Not.Null);
+        Assert.IsTrue(returnedThread!.Id.Equals(thread2.Id));
+        Assert.IsTrue(returnedThread.Topic.Equals(thread2.Topic));
+        Assert.IsTrue(returnedThread.Title.Equals(thread2.Title));
+        Assert.IsTrue(returnedThread.Content.Equals(thread2.Content));
+        Assert.IsTrue(returnedThread.OwnerId.Equals(thread2.OwnerId));
+        Assert.IsTrue(returnedThread.SpoolId.Equals(thread2.SpoolId));
+
+        thread2 = new ThreaditAPI.Models.Thread()
+        {
+            Id = "643634634-9031-4e9b-b712-6df32cd75642",
+            Topic = "Thread Topic1",
+            Title = "Thread Title 11",
+            Content = longText,
+            OwnerId = user.Id,
+            SpoolId = spool.Id,
+            DateCreated = DateTime.Parse("2021-01-01 00:00:00").ToUniversalTime(),
+            ThreadType = ThreaditAPI.Constants.ThreadTypes.TEXT
+        };
+        Assert.ThrowsAsync<Exception>(async () => await _threadService.UpdateThreadAsync(thread2));
     }
 
     [Test]
