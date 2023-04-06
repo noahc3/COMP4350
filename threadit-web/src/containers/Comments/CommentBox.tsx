@@ -35,6 +35,10 @@ export const CommentBox = observer(
     const [content, setContent] = React.useState<string>("");
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const tabsRef = React.useRef<any>(null);
+    const countColor =
+      content.length > 2048
+        ? mode("red", "red.600")(colorMode)
+        : mode("blackAlpha.600", "gray.500")(colorMode);
 
     const disableInputs = isSubmitting;
 
@@ -93,6 +97,9 @@ export const CommentBox = observer(
                   commenting.
                 </Text>
                 <Spacer />
+                <Text color={countColor} marginRight={"1rem"}>
+                  {content.length}/2048
+                </Text>
                 <ButtonGroup size={"sm"}>
                   {cancelCallback && (
                     <Button
@@ -106,7 +113,11 @@ export const CommentBox = observer(
                   )}
                   <Button
                     isLoading={isSubmitting}
-                    disabled={disableInputs || content.length === 0}
+                    disabled={
+                      disableInputs ||
+                      content.length === 0 ||
+                      content.length > 2048
+                    }
                     colorScheme={"purple"}
                     onClick={() => {
                       submit();

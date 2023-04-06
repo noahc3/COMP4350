@@ -216,7 +216,7 @@ export const CommentItem = observer(
             </HStack>
             {!isEditing ? (
               <>
-                <Text marginTop={"14px"}>
+                <Text maxWidth={"95%"} marginTop={"14px"}>
                   <ThreaditMarkdown text={comment?.content ?? ""} />
                 </Text>
 
