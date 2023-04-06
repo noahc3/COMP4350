@@ -183,13 +183,13 @@ export default class SpoolAPI {
     spoolStore.refreshJoinedSpools();
   }
 
-  static async saveSpool(spoolId: string, rules: string): Promise<void> {
-    const response = await postWithAuth(saveSpoolEndpoint + spoolId, {
-      rules,
-    });
+    static async saveSpool(spoolId: string, rules: string): Promise<void> {
+        const response = await postWithAuth(saveSpoolEndpoint + spoolId, {
+            rules,
+        });
 
-    if (!response.ok) {
-      console.error(`Failed to save the spool: ${await response.text()}`);
-    }
+        if (!response.ok) {
+            throw new Error(`Failed to save the rules: ${await response.text()}`);
+        }
   }
 }
