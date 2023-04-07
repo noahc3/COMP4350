@@ -3,5 +3,3 @@
     - Given I am a user who wants to get suggested spools based on my interests
     - When I am browsing Threadit
     - Then I should expect to see accurate suggestions on spools based on my interests
-  - Priority: Low
-  - Points: 10
