@@ -15,11 +15,11 @@
     - Then I should be prompted to write a comment on the thread
 - As a user I want to upvote(stitch) or downvote(rip) a thread so that I can contribute to what others see
   - Acceptance Criteria
-    - Given I am a user who wants to upvote or downvote a thread
-    - When I click on the upvote or downvote button
-    - Then I should expect to see the vote count to change based on input
+    - Given I am a logged in user who wants to upvote or downvote a thread
+    - When I click on the stitch or rip button
+    - Then I should expect to see the vote count change based on input
 - As a user I want to share a thread so that I can show other people what I am interested in
   - Acceptance Criteria
     - Given I am a user who wants to share a thread to others
     - When I click on the share button
-    - Then I should be given either a link to the thread or a prompt to share directly within Threadit
+    - Then I should have the link to the thread copied to my clipboard

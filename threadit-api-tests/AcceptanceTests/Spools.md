@@ -2,14 +2,14 @@
   - Acceptance Criteria
     - Given I am a user who wants to create a spool
     - When I click the create spool button
-    - Then I should be redirected to a page where I can add various threads to my spools
-- As a user I want to subscribe (spin) to a spool so that I can stay up to date with related content
+    - Then I should be redirected to a page where I can add spool information and finally create a spool
+- As a user I want to join a spool so that I can stay up to date with related content
   - Acceptance Criteria
-    - Given I am a user who wants to subscribe to a spool
-    - When I click the subscribe button
-    - Then I should expect to see the spool added to my subscriptions and subscription feed
+    - Given I am a user who wants to join a spool
+    - When I click the join button
+    - Then I should expect to see the spool added to my joined spools list
 - As a spool creator, I want to be able to give others special privileges over the spool so that I do not have to manage everything alone
   - Acceptance Criteria
     - Given I am a spool creator who wants to give others special privileges
-    - When I promote a user in my spool
-    - Then I should see a special notation next to their username and they should have access to elevated privileges
+    - When I add a user as a mod to my spool
+    - Then the user is added to the list of mods and they can delete other's comments and threads
