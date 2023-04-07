@@ -1,0 +1,14 @@
+- As a user I want to be able to see a personalized feed of threads so that I can browse content easily
+  - Acceptance Criteria
+    - Given I am a user with a personalized feed
+    - When I click into my home page
+    - Then I should see my personalized feed of threads from subscribed spools
+  - Priority: High
+  - Points: 15
+- As a user I want to be able to sort and filter my feed so that I can adjust which content I see first
+  - Acceptance Criteria
+    - Given I am a user who wants to sort and filter their feed
+    - When I select sort and filter options on the page
+    - Then I should see my feed get sorted and organized in accordance with the selections
+  - Priority: Low
+  - Points: 10

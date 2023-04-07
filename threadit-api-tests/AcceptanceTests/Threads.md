@@ -1,0 +1,35 @@
+- As a user, I want to be able to create a thread so that I can share my thoughts and views with other users
+  - Acceptance Criteria
+    - Given I am a user who wants to create a thread
+    - When I click the create thread button
+    - Then I should be prompted with a thread creation page with the appropriate fields required
+  - Priority: High
+  - Points: 18
+- As a user, I want to be able to edit and delete my own threads so that I can modify what I have previously shared or remove posts that I have previously shared
+  - Acceptance Criteria
+    - Given I am a user who wants to edit a thread
+    - When I click on the edit thread button
+    - Then I should be brought to a edit thread page where I can adjust my thread to my liking
+  - Priority: Medium
+  - Points: 10
+- As a user I want to comment on a thread so that I can discuss content with interested parties
+  - Acceptance Criteria
+    - Given I am a user who wants to comment on a thread
+    - When I click on the comment button on a thread
+    - Then I should be prompted to write a comment on the thread
+  - Priority: High
+  - Points: 16
+- As a user I want to upvote(stitch) or downvote(rip) a thread so that I can contribute to what others see
+  - Acceptance Criteria
+    - Given I am a user who wants to upvote or downvote a thread
+    - When I click on the upvote or downvote button
+    - Then I should expect to see the vote count to change based on input
+  - Priority: Medium
+  - Points: 10
+- As a user I want to share a thread so that I can show other people what I am interested in
+  - Acceptance Criteria
+    - Given I am a user who wants to share a thread to others
+    - When I click on the share button
+    - Then I should be given either a link to the thread or a prompt to share directly within Threadit
+  - Priority: Low
+  - Points: 12
