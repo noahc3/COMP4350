@@ -1,0 +1,15 @@
+- As a new user, I want to create an account so that I can begin exploring Threadit and have information saved
+  - Acceptance Criteria
+    - Given that I want to create an account on Threadit
+    - When I follow the account creation process
+    - Then I should have successfully created a new account and can login to gain access to Threadit
+- As a returning user, I want to login to my account so that I can view my personalized content
+  - Acceptance Criteria
+    - Given that I want to login to my existing Threadit account for my personalized content
+    - When I enter my username and password to login
+    - Then I should be successful in logging into my Threadit account
+- As a logged-in user I want to be able to customize my profile so that I am distinguishable from other users
+  - Acceptance Criteria
+    - Given that I want to customize my personal Threadit account
+    - When I navigate to the customization page and start applying customizations such as darkmode, profile picture and custom interest lists
+    - Then I should see these customizations reflected on my user profile persistently
