@@ -111,3 +111,35 @@
 - Cody: write controller tests
 - Nathan: fix display issues, write controller tests
 - Noah: small fixes, auth controller tests
+
+## Meeting 7
+
+| Date| Time | Length
+| --- | --- | --- |
+| 28 Mar, 2023 | 11:30-12:00 | 0.5 hours |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Delegate sprint 4 tasks
+
+**Assigned Tasks:**
+- Anthony: gravatar support
+- Cody: input validation, security analysis
+- Nathan: lint code, set up load testing
+- Noah: markdown support, thread pagination, bug fixes
+
+## Meeting 8
+
+| Date| Time | Length
+| --- | --- | --- |
+| 6 Apr, 2023 | 10:45-11:30am | 0.75 hours |
+
+**Attendance:** Anthony, Cody, Nathan, Noah
+
+**Agenda:**
+- Run through the presentation
+- Ensure the presentation demo is good to go
+
+**Assigned Tasks:**
+- No tasks assigned
