@@ -9,6 +9,7 @@ import {
   Heading,
   useColorMode,
   Image,
+  Tooltip,
 } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
@@ -24,6 +25,7 @@ import { BiLinkExternal } from "react-icons/bi";
 import { FaCommentDots } from "react-icons/fa";
 import React from "react";
 import { ThreaditMarkdown } from "../Markdown/ThreaditMarkdown";
+import { authStore } from "../../stores/AuthStore";
 
 export const FeedPostItem = observer(
   ({ thread }: { thread: IThreadFull | any }) => {
@@ -38,6 +40,7 @@ export const FeedPostItem = observer(
     const renderedMd = useRef<any>();
     const [renderedHeight, setRenderedHeight] = useState(0);
     const dateString = <Moment fromNow>{thread.dateCreated}</Moment>;
+    const isAuthenticated = authStore.isAuthenticated;
 
     const stitchThread = async () => {
       if (thread) {
@@ -164,26 +167,44 @@ export const FeedPostItem = observer(
             {threadHeader}
             {threadContent}
             <HStack>
-              <ButtonGroup size={"sm"} isAttached>
-                <Button
-                  leftIcon={<ArrowUpIcon />}
-                  onClick={() => {
-                    stitchThread();
-                  }}
-                  colorScheme={isStitched ? "blue" : "gray"}
-                >
-                  {thread.stitches.length}
-                </Button>
-                <Button
-                  leftIcon={<ArrowDownIcon />}
-                  onClick={() => {
-                    ripThread();
-                  }}
-                  colorScheme={isRipped ? "red" : "gray"}
-                >
-                  {thread.rips.length}
-                </Button>
-              </ButtonGroup>
+              {isAuthenticated && profile ? (
+                <>
+                  <ButtonGroup size={"sm"} isAttached>
+                    <Button
+                      leftIcon={<ArrowUpIcon />}
+                      onClick={() => {
+                        stitchThread();
+                      }}
+                      colorScheme={isStitched ? "blue" : "gray"}
+                    >
+                      {thread.stitches.length}
+                    </Button>
+                    <Button
+                      leftIcon={<ArrowDownIcon />}
+                      onClick={() => {
+                        ripThread();
+                      }}
+                      colorScheme={isRipped ? "red" : "gray"}
+                    >
+                      {thread.rips.length}
+                    </Button>
+                  </ButtonGroup>
+                </>
+              ) : (
+                <>
+                  <Tooltip label="You must be logged in to vote">
+                    <ButtonGroup size={"sm"} isAttached>
+                      <Button cursor={"default"} leftIcon={<ArrowUpIcon />}>
+                        {thread.stitches.length}
+                      </Button>
+                      <Button cursor={"default"} leftIcon={<ArrowDownIcon />}>
+                        {thread.rips.length}
+                      </Button>
+                    </ButtonGroup>
+                  </Tooltip>
+                </>
+              )}
+
               <Link to={threadUrl}>
                 <Button size={"sm"} leftIcon={<FaCommentDots />}>
                   View Comments
