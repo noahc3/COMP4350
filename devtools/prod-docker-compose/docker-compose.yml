@@ -1,0 +1,41 @@
+---
+version: '3.4'
+
+services:
+  postgresqldb:
+    image: docker.io/library/postgres:12-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: "20s"
+      interval: "30s"
+      retries: 5
+      timeout: "5s"
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=threadit
+      - POSTGRES_DB=threadit
+    ports:
+      - "5432:5432"
+  api:
+    image: noahc3/threadit-api:latest
+    restart: "no"
+    command: "/bin/sh -c './ThreaditAPI'"
+    environment:
+      dbUser: "threadit"
+      dbPassword: "1234"
+      dbName: "threadit"
+      dbHost: "postgresqldb:5432"
+    ports:
+      - "2990:80"
+  web:
+    image: noahc3/threadit-web:latest
+    restart: unless-stopped
+    ports:
+      - "2991:80"
+
+volumes:
+  database:
+    driver: local
