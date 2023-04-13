@@ -43,23 +43,15 @@ namespace ThreaditAPI.Controllers.v1
                 }
                 else
                 {
-                    int length;
+                    int length = 0;
                     if (res.Content.Headers.ContentLength.HasValue)
                     {
                         length = (int)res.Content.Headers.ContentLength.Value;
                     }
-                    else
-                    {
-                        length = 0;
-                    }
 
-                    if (length > 5000000)
+                    if (length == 0 || length > 5000000)
                     {
                         throw new Exception("For a smooth user experience, images cannot be larger than 5MB. Use a link post to share larger images.");
-                    }
-                    else if (length == 0)
-                    {
-                        throw new Exception("Website does not allow embedding this image. Consider using a link post to share this image.");
                     }
                 }
             }
@@ -67,18 +59,10 @@ namespace ThreaditAPI.Controllers.v1
 
         private static bool IsValidUrl(string url)
         {
-            try
-            {
-                Uri? uriResult;
-                return Uri.TryCreate(url, UriKind.Absolute, out uriResult)
-                        && uriResult != null
-                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-
-            }
-            catch
-            {
-                return false;
-            }
+            Uri? uriResult;
+            return Uri.TryCreate(url, UriKind.Absolute, out uriResult)
+                    && uriResult != null
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
 
         [HttpGet("{threadId}")]
@@ -96,8 +80,12 @@ namespace ThreaditAPI.Controllers.v1
 
             try
             {
-                if (request.ThreadType == ThreadTypes.IMAGE && IsValidUrl(request.Content))
+                if (request.ThreadType == ThreadTypes.IMAGE)
                 {
+                    if (!IsValidUrl(request.Content)) {
+                        return BadRequest("Could not find an image at the specified URL. Please make sure the URL is a direct link to an image.");
+                    }
+                    
                     await ValidateImageUrl(request.Content);
                 }
                 else if (request.ThreadType == ThreadTypes.LINK && !IsValidUrl(request.Content))
