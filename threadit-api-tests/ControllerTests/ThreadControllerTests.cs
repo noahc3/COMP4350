@@ -12,6 +12,8 @@ public class ThreadControllerTests
 {
     private Spool _spool;
     private ThreaditAPI.Models.Thread _thread;
+    private ThreaditAPI.Models.Thread _threadImage;
+    private ThreaditAPI.Models.Thread _threadURL;
     private UserDTO _user1;
     private UserDTO _user2;
     private UserDTO _user3;
@@ -44,6 +46,8 @@ public class ThreadControllerTests
 
         _spool = Utils.CreateSpool(_client1, _user1.Id, null, new List<string> { _user3.Id });
         _thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString());
+        _threadImage = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://i.imgur.com/d0pizZL.png", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        _threadURL = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://minecraft.net", type: ThreaditAPI.Constants.ThreadTypes.LINK);
         _sortType = "new";
     }
 
@@ -53,7 +57,7 @@ public class ThreadControllerTests
         //get the endpoint
         var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
 
-        ThreaditAPI.Models.Thread _threadLocal = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: Utils.GetCleanUUIDString(), type: "image");
+        ThreaditAPI.Models.Thread _threadLocal = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://i.imgur.com/d0pizZL.png", type: "image");
 
 
         //create the thread
@@ -123,6 +127,116 @@ public class ThreadControllerTests
     }
 
     [Test]
+    public void CreateImageThreadTest()
+    {
+        //get the endpoint
+        var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
+
+        //create the thread
+        var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(_threadImage)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.IsTrue(thread1.OwnerId.Equals(_user1.Id));
+        Assert.IsTrue(thread1.SpoolId.Equals(_spool.Id));
+        Assert.IsTrue(thread1.Content.Equals(_threadImage.Content));
+        Assert.IsTrue(thread1.Title.Equals(_threadImage.Title));
+
+        //get the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_GET, _threadImage.Id);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.That(thread1.Id.Equals(_threadImage.Id));
+
+        //delete the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _threadImage.Id);
+        result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+
+        //get the thread to ensure its been deleted
+        endpoint = String.Format(Endpoints.V1_THREAD_GET, _threadImage.Id);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void CreateURLThreadTest()
+    {
+        //get the endpoint
+        var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
+
+        //create the thread
+        var result = _client1.PostAsync(endpoint, Utils.WrapContent<ThreaditAPI.Models.Thread>(_threadURL)).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        var thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.IsTrue(thread1.OwnerId.Equals(_user1.Id));
+        Assert.IsTrue(thread1.SpoolId.Equals(_spool.Id));
+        Assert.IsTrue(thread1.Content.Equals(_threadURL.Content));
+        Assert.IsTrue(thread1.Title.Equals(_threadURL.Title));
+
+        //get the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_GET, _threadURL.Id);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+        thread1 = Utils.ParseResponse<ThreaditAPI.Models.Thread>(result);
+        Assert.That(thread1, Is.Not.Null);
+        Assert.That(thread1.Id.Equals(_threadURL.Id));
+
+        //delete the thread
+        endpoint = String.Format(Endpoints.V1_THREAD_DELETE, _threadURL.Id);
+        result = _client1.DeleteAsync(endpoint).Result;
+        Assert.IsTrue(result.IsSuccessStatusCode);
+
+        //get the thread to ensure its been deleted
+        endpoint = String.Format(Endpoints.V1_THREAD_GET, _threadURL.Id);
+        result = _client1.GetAsync(endpoint).Result;
+        Assert.IsFalse(result.IsSuccessStatusCode);
+    }
+
+    [Test]
+    public void CreateInvalidImageThreadTest()
+    {
+        //get the endpoint
+        var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "gadsgdasgdsagdsgsdgsdg", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://thisisnotreallmaooothreadit.com", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://github.com/fasfsafasfsafasfasf", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://google.com", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "https://blog.tripbaa.com/wp-content/uploads/2018/10/The_night_view_from_Mt_Hakodate-1-10MB.jpg", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+
+        Assert.Throws<JsonException>(() => {
+            Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: "", content: "https://i.imgur.com/d0pizZL.png", type: ThreaditAPI.Constants.ThreadTypes.IMAGE);
+        });
+    }
+
+    [Test]
+    public void CreateInvalidURLThreadTest()
+    {
+        //get the endpoint
+        var endpoint = String.Format(Endpoints.V1_THREAD_CREATE);
+        var thread = Assert.Throws<JsonException>(() => {
+            var thread = Utils.CreateThread(_client1, _user1.Id, _spool.Id, title: Utils.GetCleanUUIDString(), content: "gadsgdasgdsagdsgsdgsdg", type: ThreaditAPI.Constants.ThreadTypes.LINK);
+        });
+    }
+
+    [Test]
     public void GetThreadTest()
     {
         var endpoint = String.Format(Endpoints.V1_THREAD_GET, _thread.Id);
@@ -154,12 +268,11 @@ public class ThreadControllerTests
         Assert.IsTrue(result.IsSuccessStatusCode);
         var threads = Utils.ParseResponse<ThreaditAPI.Models.Thread[]>(result);
         Assert.That(!threads.IsNullOrEmpty());
-        var thread = threads!.First();
-        Assert.That(thread.Id.Equals(_thread.Id));
-        Assert.That(thread.OwnerId.Equals(_thread.OwnerId));
-        Assert.That(thread.SpoolId.Equals(_thread.SpoolId));
-        Assert.That(thread.Title.Equals(_thread.Title));
-        Assert.That(thread.Topic.Equals(_thread.Topic));
+        Assert.That(threads.Any((thread) => thread.Id.Equals(_thread.Id)));
+        Assert.That(threads.Any((thread) => thread.OwnerId.Equals(_thread.OwnerId)));
+        Assert.That(threads.Any((thread) => thread.SpoolId.Equals(_thread.SpoolId)));
+        Assert.That(threads.Any((thread) => thread.Title.Equals(_thread.Title)));
+        Assert.That(threads.Any((thread) => thread.Topic.Equals(_thread.Topic)));
     }
 
     [Test]
